@@ -31,6 +31,11 @@ import 'package:simulator/features/analytics/presentation/ai_financial_insights_
 import 'package:simulator/features/analytics/presentation/transaction_intelligence_screen.dart';
 import 'package:simulator/features/analytics/presentation/notification_intelligence_screen.dart';
 import 'package:simulator/features/analytics/presentation/widget_quick_actions_screen.dart';
+import 'package:simulator/features/sme/presentation/sme_dashboard_screen.dart';
+import 'package:simulator/features/sme/presentation/sme_new_invoice_screen.dart';
+import 'package:simulator/features/sme/presentation/programmable_money_detail_screen.dart';
+import 'package:simulator/features/sme/presentation/programmable_money_verify_screen.dart';
+import 'package:simulator/features/sme/presentation/programmable_money_rejected_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -372,6 +377,52 @@ class WidgetQuickActionsRoute extends GoRouteData with $WidgetQuickActionsRoute 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const WidgetQuickActionsScreen();
+}
+
+// Phase 5 SME & Invoicing Page Routes
+@TypedGoRoute<SMEDashboardRoute>(path: '/sme/dashboard')
+class SMEDashboardRoute extends GoRouteData with $SMEDashboardRoute {
+  const SMEDashboardRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SMEDashboardScreen();
+}
+
+@TypedGoRoute<SMENewInvoiceRoute>(path: '/sme/invoices/new')
+class SMENewInvoiceRoute extends GoRouteData with $SMENewInvoiceRoute {
+  const SMENewInvoiceRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SMENewInvoiceScreen();
+}
+
+@TypedGoRoute<ProgrammableMoneyDetailRoute>(path: '/sme/programmable-money/detail')
+class ProgrammableMoneyDetailRoute extends GoRouteData with $ProgrammableMoneyDetailRoute {
+  const ProgrammableMoneyDetailRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ProgrammableMoneyDetailScreen();
+}
+
+@TypedGoRoute<ProgrammableMoneyVerifyRoute>(path: '/sme/programmable-money/verify')
+class ProgrammableMoneyVerifyRoute extends GoRouteData with $ProgrammableMoneyVerifyRoute {
+  const ProgrammableMoneyVerifyRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ProgrammableMoneyVerifyScreen();
+}
+
+@TypedGoRoute<ProgrammableMoneyRejectedRoute>(path: '/sme/programmable-money/rejected')
+class ProgrammableMoneyRejectedRoute extends GoRouteData with $ProgrammableMoneyRejectedRoute {
+  const ProgrammableMoneyRejectedRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ProgrammableMoneyRejectedScreen();
 }
 
 // Global router config instance

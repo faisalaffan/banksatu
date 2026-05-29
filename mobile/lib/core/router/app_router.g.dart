@@ -32,6 +32,11 @@ List<RouteBase> get $appRoutes => [
   $transactionIntelligenceRoute,
   $notificationIntelligenceRoute,
   $widgetQuickActionsRoute,
+  $sMEDashboardRoute,
+  $sMENewInvoiceRoute,
+  $programmableMoneyDetailRoute,
+  $programmableMoneyVerifyRoute,
+  $programmableMoneyRejectedRoute,
 ];
 
 RouteBase get $appShellRouteData => StatefulShellRouteData.$route(
@@ -811,6 +816,139 @@ mixin $WidgetQuickActionsRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/analytics/widgets');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sMEDashboardRoute => GoRouteData.$route(
+  path: '/sme/dashboard',
+  factory: $SMEDashboardRoute._fromState,
+);
+
+mixin $SMEDashboardRoute on GoRouteData {
+  static SMEDashboardRoute _fromState(GoRouterState state) =>
+      const SMEDashboardRoute();
+
+  @override
+  String get location => GoRouteData.$location('/sme/dashboard');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sMENewInvoiceRoute => GoRouteData.$route(
+  path: '/sme/invoices/new',
+  factory: $SMENewInvoiceRoute._fromState,
+);
+
+mixin $SMENewInvoiceRoute on GoRouteData {
+  static SMENewInvoiceRoute _fromState(GoRouterState state) =>
+      const SMENewInvoiceRoute();
+
+  @override
+  String get location => GoRouteData.$location('/sme/invoices/new');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $programmableMoneyDetailRoute => GoRouteData.$route(
+  path: '/sme/programmable-money/detail',
+  factory: $ProgrammableMoneyDetailRoute._fromState,
+);
+
+mixin $ProgrammableMoneyDetailRoute on GoRouteData {
+  static ProgrammableMoneyDetailRoute _fromState(GoRouterState state) =>
+      const ProgrammableMoneyDetailRoute();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/sme/programmable-money/detail');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $programmableMoneyVerifyRoute => GoRouteData.$route(
+  path: '/sme/programmable-money/verify',
+  factory: $ProgrammableMoneyVerifyRoute._fromState,
+);
+
+mixin $ProgrammableMoneyVerifyRoute on GoRouteData {
+  static ProgrammableMoneyVerifyRoute _fromState(GoRouterState state) =>
+      const ProgrammableMoneyVerifyRoute();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/sme/programmable-money/verify');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $programmableMoneyRejectedRoute => GoRouteData.$route(
+  path: '/sme/programmable-money/rejected',
+  factory: $ProgrammableMoneyRejectedRoute._fromState,
+);
+
+mixin $ProgrammableMoneyRejectedRoute on GoRouteData {
+  static ProgrammableMoneyRejectedRoute _fromState(GoRouterState state) =>
+      const ProgrammableMoneyRejectedRoute();
+
+  @override
+  String get location =>
+      GoRouteData.$location('/sme/programmable-money/rejected');
 
   @override
   void go(BuildContext context) => context.go(location);
