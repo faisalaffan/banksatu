@@ -86,19 +86,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ],
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: AppTheme.primaryBlue.withOpacity(0.06),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Platform.isIOS
-                                  ? CupertinoIcons.bell
-                                  : Icons.notifications_none_outlined,
-                              color: AppTheme.primaryBlue,
-                              size: 24,
-                            ),
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.primaryBlue.withOpacity(0.06),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Platform.isIOS
+                                      ? CupertinoIcons.bell
+                                      : Icons.notifications_none_outlined,
+                                  color: AppTheme.primaryBlue,
+                                  size: 24,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              GestureDetector(
+                                onTap: () => const ProfileRoute().push(context),
+                                child: Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        AppTheme.primaryBlue,
+                                        AppTheme.primaryBlueDark,
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    boxShadow: AppTheme.premiumShadow,
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'FA',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -189,24 +223,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       ? CupertinoIcons.paperplane_fill
                                       : Icons.send_rounded,
                                   label: 'Kirim',
+                                  onTap: () => const TransferRoute().push(context),
                                 ),
                                 _buildBalanceAction(
                                   icon: Platform.isIOS
                                       ? CupertinoIcons.viewfinder
                                       : Icons.qr_code_scanner_rounded,
                                   label: 'QRIS Pay',
+                                  onTap: () => const QRISScanRoute().push(context),
                                 ),
                                 _buildBalanceAction(
                                   icon: Platform.isIOS
                                       ? CupertinoIcons.plus_circle_fill
                                       : Icons.add_rounded,
                                   label: 'Isi Saldo',
+                                  onTap: () => const ScheduledTransferRoute().push(context),
                                 ),
                                 _buildBalanceAction(
                                   icon: Platform.isIOS
                                       ? CupertinoIcons.ellipsis
                                       : Icons.more_horiz_rounded,
                                   label: 'Lainnya',
+                                  onTap: () => const PayBillsRoute().push(context),
                                 ),
                               ],
                             ),
@@ -370,27 +408,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildBalanceAction({
     required IconData icon,
     required String label,
+    required VoidCallback onTap,
   }) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(16),
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: Colors.white, size: 22),
           ),
-          child: Icon(icon, color: Colors.white, size: 22),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            color: Colors.white,
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              color: Colors.white,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
