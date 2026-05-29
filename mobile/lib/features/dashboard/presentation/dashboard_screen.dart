@@ -51,8 +51,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             if (state is DashboardLoading) {
               return Center(
                 child: Platform.isIOS
-                    ? const CupertinoActivityIndicator(color: AppTheme.primaryBlue, radius: 14)
-                    : const CircularProgressIndicator(color: AppTheme.primaryBlue),
+                    ? const CupertinoActivityIndicator(
+                        color: AppTheme.primaryBlue,
+                        radius: 14,
+                      )
+                    : const CircularProgressIndicator(
+                        color: AppTheme.primaryBlue,
+                      ),
               );
             }
 
@@ -61,7 +66,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 slivers: [
                   // App Bar / Premium Greeting
                   SliverPadding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 8),
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      top: 16,
+                      bottom: 8,
+                    ),
                     sliver: SliverToBoxAdapter(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +81,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             children: [
                               Text(
                                 'Selamat Pagi,',
-                                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                style: Theme.of(context).textTheme.labelMedium
+                                    ?.copyWith(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -79,7 +90,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               const SizedBox(height: 2),
                               Text(
                                 'Faisal Affan',
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -88,18 +100,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.primaryBlue.withOpacity(0.06),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Platform.isIOS
-                                      ? CupertinoIcons.bell
-                                      : Icons.notifications_none_outlined,
-                                  color: AppTheme.primaryBlue,
-                                  size: 24,
+                              GestureDetector(
+                                onTap: () =>
+                                    const NotificationIntelligenceRoute().push(
+                                      context,
+                                    ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.primaryBlue.withOpacity(
+                                      0.06,
+                                    ),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Platform.isIOS
+                                        ? CupertinoIcons.bell
+                                        : Icons.notifications_none_outlined,
+                                    color: AppTheme.primaryBlue,
+                                    size: 24,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -141,13 +161,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   // Total Balance Card (Frosted Glass Blue Gradient)
                   SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                     sliver: SliverToBoxAdapter(
                       child: Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [AppTheme.primaryBlue, AppTheme.primaryBlueDark],
+                            colors: [
+                              AppTheme.primaryBlue,
+                              AppTheme.primaryBlueDark,
+                            ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
@@ -176,7 +202,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: Colors.white.withOpacity(0.15),
                                     borderRadius: BorderRadius.circular(100),
@@ -223,28 +252,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       ? CupertinoIcons.paperplane_fill
                                       : Icons.send_rounded,
                                   label: 'Kirim',
-                                  onTap: () => const TransferRoute().push(context),
+                                  onTap: () =>
+                                      const TransferRoute().push(context),
                                 ),
                                 _buildBalanceAction(
                                   icon: Platform.isIOS
                                       ? CupertinoIcons.viewfinder
                                       : Icons.qr_code_scanner_rounded,
                                   label: 'QRIS Pay',
-                                  onTap: () => const QRISScanRoute().push(context),
+                                  onTap: () =>
+                                      const QRISScanRoute().push(context),
                                 ),
                                 _buildBalanceAction(
                                   icon: Platform.isIOS
                                       ? CupertinoIcons.plus_circle_fill
                                       : Icons.add_rounded,
                                   label: 'Isi Saldo',
-                                  onTap: () => const ScheduledTransferRoute().push(context),
+                                  onTap: () => const ScheduledTransferRoute()
+                                      .push(context),
                                 ),
                                 _buildBalanceAction(
                                   icon: Platform.isIOS
                                       ? CupertinoIcons.ellipsis
                                       : Icons.more_horiz_rounded,
                                   label: 'Lainnya',
-                                  onTap: () => const PayBillsRoute().push(context),
+                                  onTap: () =>
+                                      const PayBillsRoute().push(context),
                                 ),
                               ],
                             ),
@@ -256,22 +289,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   // Natural Language Search Bar
                   SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                     sliver: SliverToBoxAdapter(
                       child: Platform.isIOS
                           ? Container(
                               decoration: BoxDecoration(
                                 color: AppTheme.surfaceCard,
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: const Color(0xFFE3E8F9), width: 1),
+                                border: Border.all(
+                                  color: const Color(0xFFE3E8F9),
+                                  width: 1,
+                                ),
                                 boxShadow: AppTheme.premiumShadow,
                               ),
                               child: CupertinoSearchTextField(
                                 controller: _searchController,
                                 onChanged: (val) {
-                                  context.read<DashboardBloc>().add(SearchTransactions(val));
+                                  context.read<DashboardBloc>().add(
+                                    SearchTransactions(val),
+                                  );
                                 },
-                                placeholder: 'Cari kata kunci: "F&B", "Gaji", "BCA", dll...',
+                                placeholder:
+                                    'Cari kata kunci: "F&B", "Gaji", "BCA", dll...',
                                 style: GoogleFonts.inter(
                                   color: AppTheme.textDark,
                                   fontSize: 14,
@@ -284,7 +326,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                prefixInsets: const EdgeInsets.only(left: 14, right: 6),
+                                prefixInsets: const EdgeInsets.only(
+                                  left: 14,
+                                  right: 6,
+                                ),
                                 suffixInsets: const EdgeInsets.only(right: 14),
                               ),
                             )
@@ -292,27 +337,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               decoration: BoxDecoration(
                                 color: AppTheme.surfaceCard,
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: const Color(0xFFE3E8F9), width: 1),
+                                border: Border.all(
+                                  color: const Color(0xFFE3E8F9),
+                                  width: 1,
+                                ),
                                 boxShadow: AppTheme.premiumShadow,
                               ),
                               child: TextField(
                                 controller: _searchController,
                                 onChanged: (val) {
-                                  context.read<DashboardBloc>().add(SearchTransactions(val));
+                                  context.read<DashboardBloc>().add(
+                                    SearchTransactions(val),
+                                  );
                                 },
                                 decoration: InputDecoration(
-                                  hintText: 'Cari kata kunci: "F&B", "Gaji", "BCA", dll...',
+                                  hintText:
+                                      'Cari kata kunci: "F&B", "Gaji", "BCA", dll...',
                                   hintStyle: GoogleFonts.inter(
                                     color: AppTheme.textLightGray,
                                     fontSize: 14,
                                   ),
-                                  prefixIcon: const Icon(Icons.search, color: AppTheme.primaryBlue),
+                                  prefixIcon: const Icon(
+                                    Icons.search,
+                                    color: AppTheme.primaryBlue,
+                                  ),
                                   suffixIcon: _searchController.text.isNotEmpty
                                       ? IconButton(
-                                          icon: const Icon(Icons.clear, color: AppTheme.textLightGray),
+                                          icon: const Icon(
+                                            Icons.clear,
+                                            color: AppTheme.textLightGray,
+                                          ),
                                           onPressed: () {
                                             _searchController.clear();
-                                            context.read<DashboardBloc>().add(SearchTransactions(''));
+                                            context.read<DashboardBloc>().add(
+                                              SearchTransactions(''),
+                                            );
                                             setState(() {});
                                           },
                                         )
@@ -328,14 +387,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   // Transactions List Header
                   SliverPadding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 8),
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      top: 16,
+                      bottom: 8,
+                    ),
                     sliver: SliverToBoxAdapter(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            state.searchQuery.isEmpty ? 'Riwayat Transaksi' : 'Hasil Pencarian',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            state.searchQuery.isEmpty
+                                ? 'Riwayat Transaksi'
+                                : 'Hasil Pencarian',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -363,7 +430,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Platform.isIOS ? CupertinoIcons.search_circle : Icons.search_off,
+                                  Platform.isIOS
+                                      ? CupertinoIcons.search_circle
+                                      : Icons.search_off,
                                   size: 64,
                                   color: AppTheme.textDisabled,
                                 ),
@@ -381,19 +450,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         )
                       : SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              final tx = state.filteredTransactions[index];
-                              return _buildTransactionItem(context, tx);
-                            },
-                            childCount: state.filteredTransactions.length,
-                          ),
+                          delegate: SliverChildBuilderDelegate((
+                            context,
+                            index,
+                          ) {
+                            final tx = state.filteredTransactions[index];
+                            return _buildTransactionItem(context, tx);
+                          }, childCount: state.filteredTransactions.length),
                         ),
 
                   // Bottom padding spacer to avoid persistent floating navigation bar clipping
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 120),
-                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 120)),
                 ],
               );
             }
@@ -469,7 +536,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 child: Icon(
                   _getCategoryIcon(tx.category),
-                  color: isNegative ? AppTheme.primaryBlue : AppTheme.shariaGreen,
+                  color: isNegative
+                      ? AppTheme.primaryBlue
+                      : AppTheme.shariaGreen,
                   size: 20,
                 ),
               ),
@@ -513,7 +582,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: isNegative ? AppTheme.textDark : AppTheme.shariaGreen,
+                      color: isNegative
+                          ? AppTheme.textDark
+                          : AppTheme.shariaGreen,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -547,9 +618,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 'bills':
         return isIos ? CupertinoIcons.doc_text : Icons.receipt_long_outlined;
       case 'subscription':
-        return isIos ? CupertinoIcons.arrow_2_circlepath : Icons.autorenew_outlined;
+        return isIos
+            ? CupertinoIcons.arrow_2_circlepath
+            : Icons.autorenew_outlined;
       default:
-        return isIos ? CupertinoIcons.arrow_right_arrow_left : Icons.swap_horiz_rounded;
+        return isIos
+            ? CupertinoIcons.arrow_right_arrow_left
+            : Icons.swap_horiz_rounded;
     }
   }
 
