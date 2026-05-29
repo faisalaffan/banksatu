@@ -36,6 +36,11 @@ import 'package:simulator/features/sme/presentation/sme_new_invoice_screen.dart'
 import 'package:simulator/features/sme/presentation/programmable_money_detail_screen.dart';
 import 'package:simulator/features/sme/presentation/programmable_money_verify_screen.dart';
 import 'package:simulator/features/sme/presentation/programmable_money_rejected_screen.dart';
+import 'package:simulator/features/accessibility/presentation/accessibility_settings_screen.dart';
+import 'package:simulator/features/accessibility/presentation/theme_customizer_screen.dart';
+import 'package:simulator/features/accessibility/presentation/biometrics_setup_screen.dart';
+import 'package:simulator/features/accessibility/presentation/language_selector_screen.dart';
+import 'package:simulator/features/accessibility/presentation/security_logs_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -423,6 +428,52 @@ class ProgrammableMoneyRejectedRoute extends GoRouteData with $ProgrammableMoney
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const ProgrammableMoneyRejectedScreen();
+}
+
+// Phase 6 Accessibility & Customization Page Routes
+@TypedGoRoute<AccessibilitySettingsRoute>(path: '/settings/accessibility')
+class AccessibilitySettingsRoute extends GoRouteData with $AccessibilitySettingsRoute {
+  const AccessibilitySettingsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const AccessibilitySettingsScreen();
+}
+
+@TypedGoRoute<ThemeCustomizerRoute>(path: '/settings/themes')
+class ThemeCustomizerRoute extends GoRouteData with $ThemeCustomizerRoute {
+  const ThemeCustomizerRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ThemeCustomizerScreen();
+}
+
+@TypedGoRoute<BiometricsSetupRoute>(path: '/settings/biometrics')
+class BiometricsSetupRoute extends GoRouteData with $BiometricsSetupRoute {
+  const BiometricsSetupRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const BiometricsSetupScreen();
+}
+
+@TypedGoRoute<LanguageSelectorRoute>(path: '/settings/languages')
+class LanguageSelectorRoute extends GoRouteData with $LanguageSelectorRoute {
+  const LanguageSelectorRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const LanguageSelectorScreen();
+}
+
+@TypedGoRoute<SecurityLogsRoute>(path: '/settings/security-logs')
+class SecurityLogsRoute extends GoRouteData with $SecurityLogsRoute {
+  const SecurityLogsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SecurityLogsScreen();
 }
 
 // Global router config instance

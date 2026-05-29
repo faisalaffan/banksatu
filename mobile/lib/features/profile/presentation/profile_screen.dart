@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simulator/core/theme/app_theme.dart';
+import 'package:simulator/core/router/app_router.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -12,10 +13,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool _biometricEnabled = true;
-  bool _twoFactorEnabled = false;
-  bool _elderlyMode = false;
-  bool _darkMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 28),
 
-            // Section: Security Toggles
+            // Section: Security & Customization
             _buildSectionHeader('Keamanan Akun'),
             Container(
               decoration: BoxDecoration(
@@ -201,28 +198,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               child: Column(
                 children: [
-                  _buildToggleRow(
+                  _buildNavigationRow(
                     Platform.isIOS ? CupertinoIcons.person_crop_circle : Icons.fingerprint,
-                    'Login Biometrik',
-                    'Akses cepat menggunakan sidik jari/wajah.',
-                    _biometricEnabled,
-                    (value) {
-                      setState(() {
-                        _biometricEnabled = value;
-                      });
-                    },
+                    'Login Biometrik & FaceID',
+                    'Akses cepat biometrik & kunci PIN.',
+                    () => const BiometricsSetupRoute().push(context),
                   ),
                   const Divider(height: 1, color: Color(0xFFF1F3FF)),
-                  _buildToggleRow(
+                  _buildNavigationRow(
                     Platform.isIOS ? CupertinoIcons.shield_fill : Icons.security,
-                    'Otorisasi 2-Langkah',
-                    'Verifikasi transaksi lebih aman dengan 2FA.',
-                    _twoFactorEnabled,
-                    (value) {
-                      setState(() {
-                        _twoFactorEnabled = value;
-                      });
-                    },
+                    'Jejak Keamanan & Sesi',
+                    'Periksa login aktif & log device.',
+                    () => const SecurityLogsRoute().push(context),
                   ),
                 ],
               ),
@@ -240,28 +227,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               child: Column(
                 children: [
-                  _buildToggleRow(
+                  _buildNavigationRow(
                     Platform.isIOS ? CupertinoIcons.textformat_size : Icons.accessibility,
-                    'Mode Lansia (Teks Besar)',
-                    'Tampilan dengan kontras tinggi & teks besar.',
-                    _elderlyMode,
-                    (value) {
-                      setState(() {
-                        _elderlyMode = value;
-                      });
-                    },
+                    'Aksesibilitas & Ukuran Font',
+                    'Atur teks besar, kontras & audio guide.',
+                    () => const AccessibilitySettingsRoute().push(context),
                   ),
                   const Divider(height: 1, color: Color(0xFFF1F3FF)),
-                  _buildToggleRow(
+                  _buildNavigationRow(
                     Platform.isIOS ? CupertinoIcons.moon_fill : Icons.dark_mode,
-                    'Mode Gelap',
-                    'Aktifkan tema gelap pada layar aplikasi.',
-                    _darkMode,
-                    (value) {
-                      setState(() {
-                        _darkMode = value;
-                      });
-                    },
+                    'Kustomisasi Tema Premium',
+                    'Ganti tema HSL, gradien & glassmorphism.',
+                    () => const ThemeCustomizerRoute().push(context),
+                  ),
+                  const Divider(height: 1, color: Color(0xFFF1F3FF)),
+                  _buildNavigationRow(
+                    Platform.isIOS ? CupertinoIcons.globe : Icons.language,
+                    'Pilihan Bahasa',
+                    'Bahasa Indonesia, Jawa, Sunda, English.',
+                    () => const LanguageSelectorRoute().push(context),
                   ),
                 ],
               ),
@@ -361,53 +345,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildToggleRow(
+  Widget _buildNavigationRow(
     IconData icon,
     String title,
     String subtitle,
-    bool value,
-    ValueChanged<bool> onChanged,
+    VoidCallback onTap,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: AppTheme.primaryBlue,
-            size: 20,
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.inter(
-                    color: AppTheme.textDark,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: GoogleFonts.inter(
-                    color: AppTheme.textLightGray,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: AppTheme.primaryBlue,
+              size: 20,
             ),
-          ),
-          Switch.adaptive(
-            value: value,
-            activeColor: AppTheme.shariaGreen,
-            onChanged: onChanged,
-          ),
-        ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.inter(
+                      color: AppTheme.textDark,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.inter(
+                      color: AppTheme.textLightGray,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Platform.isIOS ? CupertinoIcons.chevron_right : Icons.chevron_right,
+              color: AppTheme.textLightGray,
+              size: 16,
+            ),
+          ],
+        ),
       ),
     );
   }

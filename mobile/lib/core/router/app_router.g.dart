@@ -37,6 +37,11 @@ List<RouteBase> get $appRoutes => [
   $programmableMoneyDetailRoute,
   $programmableMoneyVerifyRoute,
   $programmableMoneyRejectedRoute,
+  $accessibilitySettingsRoute,
+  $themeCustomizerRoute,
+  $biometricsSetupRoute,
+  $languageSelectorRoute,
+  $securityLogsRoute,
 ];
 
 RouteBase get $appShellRouteData => StatefulShellRouteData.$route(
@@ -949,6 +954,136 @@ mixin $ProgrammableMoneyRejectedRoute on GoRouteData {
   @override
   String get location =>
       GoRouteData.$location('/sme/programmable-money/rejected');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $accessibilitySettingsRoute => GoRouteData.$route(
+  path: '/settings/accessibility',
+  factory: $AccessibilitySettingsRoute._fromState,
+);
+
+mixin $AccessibilitySettingsRoute on GoRouteData {
+  static AccessibilitySettingsRoute _fromState(GoRouterState state) =>
+      const AccessibilitySettingsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings/accessibility');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $themeCustomizerRoute => GoRouteData.$route(
+  path: '/settings/themes',
+  factory: $ThemeCustomizerRoute._fromState,
+);
+
+mixin $ThemeCustomizerRoute on GoRouteData {
+  static ThemeCustomizerRoute _fromState(GoRouterState state) =>
+      const ThemeCustomizerRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings/themes');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $biometricsSetupRoute => GoRouteData.$route(
+  path: '/settings/biometrics',
+  factory: $BiometricsSetupRoute._fromState,
+);
+
+mixin $BiometricsSetupRoute on GoRouteData {
+  static BiometricsSetupRoute _fromState(GoRouterState state) =>
+      const BiometricsSetupRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings/biometrics');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $languageSelectorRoute => GoRouteData.$route(
+  path: '/settings/languages',
+  factory: $LanguageSelectorRoute._fromState,
+);
+
+mixin $LanguageSelectorRoute on GoRouteData {
+  static LanguageSelectorRoute _fromState(GoRouterState state) =>
+      const LanguageSelectorRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings/languages');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $securityLogsRoute => GoRouteData.$route(
+  path: '/settings/security-logs',
+  factory: $SecurityLogsRoute._fromState,
+);
+
+mixin $SecurityLogsRoute on GoRouteData {
+  static SecurityLogsRoute _fromState(GoRouterState state) =>
+      const SecurityLogsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings/security-logs');
 
   @override
   void go(BuildContext context) => context.go(location);
