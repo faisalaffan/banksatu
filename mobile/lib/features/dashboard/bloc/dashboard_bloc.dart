@@ -1,52 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simulator/features/dashboard/models/transaction.dart';
+import 'package:simulator/features/dashboard/bloc/dashboard_event.dart';
+import 'package:simulator/features/dashboard/bloc/dashboard_state.dart';
 
-// Events
-abstract class DashboardEvent {}
+export 'dashboard_event.dart';
+export 'dashboard_state.dart';
 
-class LoadDashboard extends DashboardEvent {}
-
-class SearchTransactions extends DashboardEvent {
-  final String query;
-  SearchTransactions(this.query);
-}
-
-// States
-abstract class DashboardState {}
-
-class DashboardLoading extends DashboardState {}
-
-class DashboardLoaded extends DashboardState {
-  final double balance;
-  final List<Transaction> transactions;
-  final List<Transaction> filteredTransactions;
-  final String searchQuery;
-
-  DashboardLoaded({
-    required this.balance,
-    required this.transactions,
-    required this.filteredTransactions,
-    required this.searchQuery,
-  });
-
-  DashboardLoaded copyWith({
-    double? balance,
-    List<Transaction>? transactions,
-    List<Transaction>? filteredTransactions,
-    String? searchQuery,
-  }) {
-    return DashboardLoaded(
-      balance: balance ?? this.balance,
-      transactions: transactions ?? this.transactions,
-      filteredTransactions: filteredTransactions ?? this.filteredTransactions,
-      searchQuery: searchQuery ?? this.searchQuery,
-    );
-  }
-}
-
-// Bloc
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
-  DashboardBloc() : super(DashboardLoading()) {
+  DashboardBloc() : super(const DashboardState.loading()) {
     on<LoadDashboard>(_onLoadDashboard);
     on<SearchTransactions>(_onSearchTransactions);
   }
@@ -128,8 +89,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       ),
     ];
 
-    emit(DashboardLoaded(
-      balance: 24137500.00, // starting balance after transactions
+    emit(DashboardState.loaded(
+      balance: 24137500.00,
       transactions: mockTransactions,
       filteredTransactions: mockTransactions,
       searchQuery: '',
@@ -137,8 +98,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   void _onSearchTransactions(SearchTransactions event, Emitter<DashboardState> emit) {
-    if (state is DashboardLoaded) {
-      final currentState = state as DashboardLoaded;
+    if (state case DashboardLoaded currentState) {
       final query = event.query.toLowerCase();
 
       if (query.isEmpty) {

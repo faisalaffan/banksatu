@@ -1,34 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simulator/features/subscriptions/models/subscription.dart';
+import 'package:simulator/features/subscriptions/bloc/subscription_event.dart';
+import 'package:simulator/features/subscriptions/bloc/subscription_state.dart';
 
-// Events
-abstract class SubscriptionEvent {}
+export 'subscription_event.dart';
+export 'subscription_state.dart';
 
-class LoadSubscriptions extends SubscriptionEvent {}
-
-class CancelSubscription extends SubscriptionEvent {
-  final String subscriptionId;
-  CancelSubscription(this.subscriptionId);
-}
-
-// States
-abstract class SubscriptionState {}
-
-class SubscriptionLoading extends SubscriptionState {}
-
-class SubscriptionLoaded extends SubscriptionState {
-  final List<Subscription> subscriptions;
-  final double totalCommitment;
-
-  SubscriptionLoaded({
-    required this.subscriptions,
-    required this.totalCommitment,
-  });
-}
-
-// Bloc
 class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
-  SubscriptionBloc() : super(SubscriptionLoading()) {
+  SubscriptionBloc() : super(const SubscriptionState.loading()) {
     on<LoadSubscriptions>(_onLoadSubscriptions);
     on<CancelSubscription>(_onCancelSubscription);
   }
@@ -72,15 +51,14 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
 
     final total = mockSubs.fold<double>(0, (sum, sub) => sum + sub.monthlyFee);
 
-    emit(SubscriptionLoaded(
+    emit(SubscriptionState.loaded(
       subscriptions: mockSubs,
       totalCommitment: total,
     ));
   }
 
   void _onCancelSubscription(CancelSubscription event, Emitter<SubscriptionState> emit) {
-    if (state is SubscriptionLoaded) {
-      final currentState = state as SubscriptionLoaded;
+    if (state case SubscriptionLoaded currentState) {
       final updatedList = currentState.subscriptions.map((sub) {
         if (sub.id == event.subscriptionId) {
           return sub.copyWith(isActive: false);
@@ -92,7 +70,7 @@ class SubscriptionBloc extends Bloc<SubscriptionEvent, SubscriptionState> {
           .where((sub) => sub.isActive)
           .fold<double>(0, (sum, sumSub) => sum + sumSub.monthlyFee);
 
-      emit(SubscriptionLoaded(
+      emit(currentState.copyWith(
         subscriptions: updatedList,
         totalCommitment: newTotal,
       ));

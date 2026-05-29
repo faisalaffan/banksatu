@@ -1,58 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simulator/features/future_rails/models/future_rails_data.dart';
+import 'package:simulator/features/future_rails/bloc/future_rails_event.dart';
+import 'package:simulator/features/future_rails/bloc/future_rails_state.dart';
 
-// Events
-abstract class FutureRailsEvent {}
+export 'future_rails_event.dart';
+export 'future_rails_state.dart';
 
-class LoadFutureRails extends FutureRailsEvent {}
-
-class MintCbdcTokens extends FutureRailsEvent {
-  final double amount;
-  MintCbdcTokens(this.amount);
-}
-
-class BackupCustodyKeys extends FutureRailsEvent {}
-
-class SpendBansosAid extends FutureRailsEvent {
-  final double amount;
-  final String category;
-  SpendBansosAid({required this.amount, required this.category});
-}
-
-class ResetTransactionState extends FutureRailsEvent {}
-
-// States
-abstract class FutureRailsState {}
-
-class FutureRailsLoading extends FutureRailsState {}
-
-class FutureRailsLoaded extends FutureRailsState {
-  final FutureRailsData data;
-  final String? transactionStatusMessage;
-  final bool isTransactionSuccessful;
-
-  FutureRailsLoaded({
-    required this.data,
-    this.transactionStatusMessage,
-    this.isTransactionSuccessful = true,
-  });
-
-  FutureRailsLoaded copyWith({
-    FutureRailsData? data,
-    String? transactionStatusMessage,
-    bool? isTransactionSuccessful,
-  }) {
-    return FutureRailsLoaded(
-      data: data ?? this.data,
-      transactionStatusMessage: transactionStatusMessage,
-      isTransactionSuccessful: isTransactionSuccessful ?? this.isTransactionSuccessful,
-    );
-  }
-}
-
-// Bloc
 class FutureRailsBloc extends Bloc<FutureRailsEvent, FutureRailsState> {
-  FutureRailsBloc() : super(FutureRailsLoading()) {
+  FutureRailsBloc() : super(const FutureRailsState.loading()) {
     on<LoadFutureRails>(_onLoadFutureRails);
     on<MintCbdcTokens>(_onMintCbdcTokens);
     on<BackupCustodyKeys>(_onBackupCustodyKeys);
@@ -61,25 +16,24 @@ class FutureRailsBloc extends Bloc<FutureRailsEvent, FutureRailsState> {
   }
 
   void _onLoadFutureRails(LoadFutureRails event, Emitter<FutureRailsState> emit) {
-    emit(FutureRailsLoaded(
-      data: const FutureRailsData(
-        cbdcBalance: 1250000.00, // Rp 1.25jt
+    emit(const FutureRailsState.loaded(
+      data: FutureRailsData(
+        cbdcBalance: 1250000.00,
         cryptoAssets: {
           'USDT': 150.00,
           'USDC': 75.00,
         },
         isSecureCustodyBackupDone: false,
-        bansosBalance: 600000.00, // Rp 600k
+        bansosBalance: 600000.00,
         bansosLockedCategory: 'Sembako & Kebutuhan Pokok',
-        educationBalance: 1500000.00, // Rp 1.5jt
+        educationBalance: 1500000.00,
         educationLockedCategory: 'Biaya Sekolah / Kuliah',
       ),
     ));
   }
 
   void _onMintCbdcTokens(MintCbdcTokens event, Emitter<FutureRailsState> emit) {
-    if (state is FutureRailsLoaded) {
-      final currentState = state as FutureRailsLoaded;
+    if (state case FutureRailsLoaded currentState) {
       emit(currentState.copyWith(
         data: currentState.data.copyWith(
           cbdcBalance: currentState.data.cbdcBalance + event.amount,
@@ -91,8 +45,7 @@ class FutureRailsBloc extends Bloc<FutureRailsEvent, FutureRailsState> {
   }
 
   void _onBackupCustodyKeys(BackupCustodyKeys event, Emitter<FutureRailsState> emit) {
-    if (state is FutureRailsLoaded) {
-      final currentState = state as FutureRailsLoaded;
+    if (state case FutureRailsLoaded currentState) {
       emit(currentState.copyWith(
         data: currentState.data.copyWith(
           isSecureCustodyBackupDone: true,
@@ -104,10 +57,7 @@ class FutureRailsBloc extends Bloc<FutureRailsEvent, FutureRailsState> {
   }
 
   void _onSpendBansosAid(SpendBansosAid event, Emitter<FutureRailsState> emit) {
-    if (state is FutureRailsLoaded) {
-      final currentState = state as FutureRailsLoaded;
-      
-      // Strict programmable spending lock logic
+    if (state case FutureRailsLoaded currentState) {
       if (event.category != currentState.data.bansosLockedCategory) {
         emit(currentState.copyWith(
           transactionStatusMessage: 'Transaksi Ditolak! Dana Bansos terkunci hanya untuk kategori "${currentState.data.bansosLockedCategory}".',
@@ -131,9 +81,8 @@ class FutureRailsBloc extends Bloc<FutureRailsEvent, FutureRailsState> {
   }
 
   void _onResetTransactionState(ResetTransactionState event, Emitter<FutureRailsState> emit) {
-    if (state is FutureRailsLoaded) {
-      final currentState = state as FutureRailsLoaded;
-      emit(FutureRailsLoaded(
+    if (state case FutureRailsLoaded currentState) {
+      emit(FutureRailsState.loaded(
         data: currentState.data,
       ));
     }

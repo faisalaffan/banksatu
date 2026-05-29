@@ -1,38 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simulator/features/syariah/models/syariah_state_data.dart';
+import 'package:simulator/features/syariah/bloc/syariah_event.dart';
+import 'package:simulator/features/syariah/bloc/syariah_state.dart';
 
-// Events
-abstract class SyariahEvent {}
+export 'syariah_event.dart';
+export 'syariah_state.dart';
 
-class LoadSyariah extends SyariahEvent {}
-
-class CleanseSyubhat extends SyariahEvent {}
-
-class ToggleZakatAutoDebit extends SyariahEvent {}
-
-class SignAkad extends SyariahEvent {
-  final String akadName;
-  SignAkad(this.akadName);
-}
-
-class PayZakatNow extends SyariahEvent {
-  final double amount;
-  PayZakatNow(this.amount);
-}
-
-// States
-abstract class SyariahState {}
-
-class SyariahLoading extends SyariahState {}
-
-class SyariahLoaded extends SyariahState {
-  final SyariahStateData data;
-  SyariahLoaded(this.data);
-}
-
-// Bloc
 class SyariahBloc extends Bloc<SyariahEvent, SyariahState> {
-  SyariahBloc() : super(SyariahLoading()) {
+  SyariahBloc() : super(const SyariahState.loading()) {
     on<LoadSyariah>(_onLoadSyariah);
     on<CleanseSyubhat>(_onCleanseSyubhat);
     on<ToggleZakatAutoDebit>(_onToggleZakatAutoDebit);
@@ -41,11 +16,11 @@ class SyariahBloc extends Bloc<SyariahEvent, SyariahState> {
   }
 
   void _onLoadSyariah(LoadSyariah event, Emitter<SyariahState> emit) {
-    emit(SyariahLoaded(
-      const SyariahStateData(
-        halalBalance: 23750000.00, // Saldo Halal
-        syubhatBalance: 387500.00, // Saldo Syubhat (reward/bunga/discount)
-        zakatDue: 593750.00,       // 2.5% of total wealth
+    emit(const SyariahState.loaded(
+      SyariahStateData(
+        halalBalance: 23750000.00,
+        syubhatBalance: 387500.00,
+        zakatDue: 593750.00,
         isAkadSigned: false,
         selectedAkad: 'Belum Terpilih',
         availableAkads: [
@@ -59,11 +34,9 @@ class SyariahBloc extends Bloc<SyariahEvent, SyariahState> {
   }
 
   void _onCleanseSyubhat(CleanseSyubhat event, Emitter<SyariahState> emit) {
-    if (state is SyariahLoaded) {
-      final currentState = state as SyariahLoaded;
-      emit(SyariahLoaded(
+    if (state case SyariahLoaded currentState) {
+      emit(SyariahState.loaded(
         currentState.data.copyWith(
-          // Syubhat balance successfully cleansed (moved into Zakat/Charity)
           syubhatBalance: 0.00,
         ),
       ));
@@ -71,9 +44,8 @@ class SyariahBloc extends Bloc<SyariahEvent, SyariahState> {
   }
 
   void _onToggleZakatAutoDebit(ToggleZakatAutoDebit event, Emitter<SyariahState> emit) {
-    if (state is SyariahLoaded) {
-      final currentState = state as SyariahLoaded;
-      emit(SyariahLoaded(
+    if (state case SyariahLoaded currentState) {
+      emit(SyariahState.loaded(
         currentState.data.copyWith(
           zakatAutoDebitEnabled: !currentState.data.zakatAutoDebitEnabled,
         ),
@@ -82,9 +54,8 @@ class SyariahBloc extends Bloc<SyariahEvent, SyariahState> {
   }
 
   void _onSignAkad(SignAkad event, Emitter<SyariahState> emit) {
-    if (state is SyariahLoaded) {
-      final currentState = state as SyariahLoaded;
-      emit(SyariahLoaded(
+    if (state case SyariahLoaded currentState) {
+      emit(SyariahState.loaded(
         currentState.data.copyWith(
           isAkadSigned: true,
           selectedAkad: event.akadName,
@@ -94,10 +65,9 @@ class SyariahBloc extends Bloc<SyariahEvent, SyariahState> {
   }
 
   void _onPayZakatNow(PayZakatNow event, Emitter<SyariahState> emit) {
-    if (state is SyariahLoaded) {
-      final currentState = state as SyariahLoaded;
+    if (state case SyariahLoaded currentState) {
       final remainingZakat = currentState.data.zakatDue - event.amount;
-      emit(SyariahLoaded(
+      emit(SyariahState.loaded(
         currentState.data.copyWith(
           halalBalance: currentState.data.halalBalance - event.amount,
           zakatDue: remainingZakat < 0 ? 0.00 : remainingZakat,
