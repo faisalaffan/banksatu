@@ -133,7 +133,9 @@ class _KYCIdentityScreenState extends State<KYCIdentityScreen>
                       aspectRatio: 85.6 / 53.98, // Standard card shape
                       child: Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF131722), // Sleek camera background
+                          color: const Color(
+                            0xFF131722,
+                          ), // Sleek camera background
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: AppTheme.floatingShadow,
                         ),
@@ -165,34 +167,45 @@ class _KYCIdentityScreenState extends State<KYCIdentityScreen>
                               ),
 
                               // Simulated Scanner Line Animation
-                              AnimatedBuilder(
-                                animation: _scannerAnimation,
-                                builder: (context, child) {
-                                  return Positioned(
-                                    top: (context.size?.height ?? 220) * _scannerAnimation.value,
-                                    left: 8,
-                                    right: 8,
-                                    child: Container(
-                                      height: 3,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            AppTheme.shariaGreenLight.withOpacity(0),
-                                            AppTheme.shariaGreenLight,
-                                            AppTheme.shariaGreenLight.withOpacity(0),
-                                          ],
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: AppTheme.shariaGreenLight.withOpacity(0.8),
-                                            blurRadius: 10,
-                                            spreadRadius: 2,
-                                          ),
-                                        ],
+                              Positioned.fill(
+                                child: AnimatedBuilder(
+                                  animation: _scannerAnimation,
+                                  builder: (context, child) {
+                                    return Align(
+                                      alignment: Alignment(
+                                        0,
+                                        -1.0 + 2.0 * _scannerAnimation.value,
                                       ),
-                                    ),
-                                  );
-                                },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0,
+                                        ),
+                                        child: Container(
+                                          height: 3,
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                AppTheme.shariaGreenLight
+                                                    .withOpacity(0),
+                                                AppTheme.shariaGreenLight,
+                                                AppTheme.shariaGreenLight
+                                                    .withOpacity(0),
+                                              ],
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: AppTheme.shariaGreenLight
+                                                    .withOpacity(0.8),
+                                                blurRadius: 10,
+                                                spreadRadius: 2,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
 
                               // Position Indicator
@@ -201,7 +214,9 @@ class _KYCIdentityScreenState extends State<KYCIdentityScreen>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
-                                      Platform.isIOS ? CupertinoIcons.creditcard : Icons.credit_card,
+                                      Platform.isIOS
+                                          ? CupertinoIcons.creditcard
+                                          : Icons.credit_card,
                                       color: Colors.white.withOpacity(0.7),
                                       size: 48,
                                     ),
@@ -246,7 +261,9 @@ class _KYCIdentityScreenState extends State<KYCIdentityScreen>
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
-                              Platform.isIOS ? CupertinoIcons.doc_text_viewfinder : Icons.document_scanner,
+                              Platform.isIOS
+                                  ? CupertinoIcons.doc_text_viewfinder
+                                  : Icons.document_scanner,
                               color: AppTheme.primaryBlue,
                               size: 20,
                             ),
@@ -274,7 +291,9 @@ class _KYCIdentityScreenState extends State<KYCIdentityScreen>
                                   ),
                                 ),
                                 const SizedBox(height: 12),
-                                _buildExtractionItem('NIK (National Identity Number)'),
+                                _buildExtractionItem(
+                                  'NIK (National Identity Number)',
+                                ),
                                 const SizedBox(height: 6),
                                 _buildExtractionItem('Full Legal Name'),
                                 const SizedBox(height: 6),
@@ -323,7 +342,9 @@ class _KYCIdentityScreenState extends State<KYCIdentityScreen>
                 ),
               ),
               icon: Icon(
-                Platform.isIOS ? CupertinoIcons.camera_fill : Icons.photo_camera,
+                Platform.isIOS
+                    ? CupertinoIcons.camera_fill
+                    : Icons.photo_camera,
                 size: 20,
               ),
               label: Text(
@@ -343,11 +364,7 @@ class _KYCIdentityScreenState extends State<KYCIdentityScreen>
   Widget _buildExtractionItem(String label) {
     return Row(
       children: [
-        const Icon(
-          Icons.check_circle,
-          color: AppTheme.shariaGreen,
-          size: 14,
-        ),
+        const Icon(Icons.check_circle, color: AppTheme.shariaGreen, size: 14),
         const SizedBox(width: 8),
         Text(
           label,
@@ -378,80 +395,48 @@ class ViewfinderCorners extends StatelessWidget {
         Positioned(
           top: 0,
           left: 0,
-          child: Container(
-            width: length,
-            height: stroke,
-            color: color,
-          ),
+          child: Container(width: length, height: stroke, color: color),
         ),
         Positioned(
           top: 0,
           left: 0,
-          child: Container(
-            width: stroke,
-            height: length,
-            color: color,
-          ),
+          child: Container(width: stroke, height: length, color: color),
         ),
 
         // Top Right
         Positioned(
           top: 0,
           right: 0,
-          child: Container(
-            width: length,
-            height: stroke,
-            color: color,
-          ),
+          child: Container(width: length, height: stroke, color: color),
         ),
         Positioned(
           top: 0,
           right: 0,
-          child: Container(
-            width: stroke,
-            height: length,
-            color: color,
-          ),
+          child: Container(width: stroke, height: length, color: color),
         ),
 
         // Bottom Left
         Positioned(
           bottom: 0,
           left: 0,
-          child: Container(
-            width: length,
-            height: stroke,
-            color: color,
-          ),
+          child: Container(width: length, height: stroke, color: color),
         ),
         Positioned(
           bottom: 0,
           left: 0,
-          child: Container(
-            width: stroke,
-            height: length,
-            color: color,
-          ),
+          child: Container(width: stroke, height: length, color: color),
         ),
 
         // Bottom Right
         Positioned(
           bottom: 0,
           right: 0,
-          child: Container(
-            width: length,
-            height: stroke,
-            color: color,
-          ),
+          child: Container(width: length, height: stroke, color: color),
         ),
         Positioned(
           bottom: 0,
           right: 0,
-          child: Container(
-            width: stroke,
-            height: length,
-            color: color,
-          ),
+          child: Container(width: stroke, height: length, color: color),
         ),
       ],
     );
