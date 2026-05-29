@@ -83,7 +83,6 @@ part 'app_router.g.dart';
 class AppShellRouteData extends StatefulShellRouteData {
   const AppShellRouteData();
 
-  @override
   Widget build(
     BuildContext context,
     GoRouterState state,

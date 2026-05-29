@@ -16,7 +16,6 @@ class OnboardingScreen extends StatelessWidget {
         bottom: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final double height = constraints.maxHeight;
             return Column(
               children: [
                 // Illustration & Branding Area (Top Half)

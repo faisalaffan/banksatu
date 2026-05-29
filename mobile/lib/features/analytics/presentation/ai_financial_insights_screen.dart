@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:go_router/go_router.dart';
 import 'package:simulator/core/theme/app_theme.dart';
 
 class AIFinancialInsightsScreen extends StatefulWidget {

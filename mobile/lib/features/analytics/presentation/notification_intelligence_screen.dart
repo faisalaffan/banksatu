@@ -105,7 +105,7 @@ class _NotificationIntelligenceScreenState extends State<NotificationIntelligenc
                          style: GoogleFonts.inter(
                            color: pColor,
                            fontSize: 8,
-                           fontWeight: FontWeight.w950,
+                           fontWeight: FontWeight.w900,
                          ),
                        ),
                      ),
