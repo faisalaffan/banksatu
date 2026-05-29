@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:simulator/core/di/service_locator.dart';
 import 'package:simulator/core/router/app_router.dart';
 import 'package:simulator/core/theme/app_theme.dart';
@@ -9,7 +10,9 @@ import 'package:simulator/features/subscriptions/bloc/subscription_bloc.dart';
 import 'package:simulator/features/syariah/bloc/syariah_bloc.dart';
 import 'package:simulator/features/future_rails/bloc/future_rails_bloc.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
   setupLocator();
   runApp(const MyApp());
 }
