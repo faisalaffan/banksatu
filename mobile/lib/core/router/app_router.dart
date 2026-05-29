@@ -25,6 +25,12 @@ import 'package:simulator/features/wealth/presentation/time_deposit_screen.dart'
 import 'package:simulator/features/wealth/presentation/shared_vault_screen.dart';
 import 'package:simulator/features/wealth/presentation/roundup_screen.dart';
 import 'package:simulator/features/wealth/presentation/roundup_instruments_screen.dart';
+import 'package:simulator/features/analytics/presentation/ai_assistant_screen.dart';
+import 'package:simulator/features/analytics/presentation/ai_assistant_search_screen.dart';
+import 'package:simulator/features/analytics/presentation/ai_financial_insights_screen.dart';
+import 'package:simulator/features/analytics/presentation/transaction_intelligence_screen.dart';
+import 'package:simulator/features/analytics/presentation/notification_intelligence_screen.dart';
+import 'package:simulator/features/analytics/presentation/widget_quick_actions_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -311,6 +317,61 @@ class RoundUpInstrumentsRoute extends GoRouteData with $RoundUpInstrumentsRoute 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const RoundUpInstrumentsScreen();
+}
+
+// Phase 4 AI & Analytics Page Routes
+@TypedGoRoute<AIAssistantRoute>(path: '/analytics/chat')
+class AIAssistantRoute extends GoRouteData with $AIAssistantRoute {
+  const AIAssistantRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const AIAssistantScreen();
+}
+
+@TypedGoRoute<AIAssistantSearchRoute>(path: '/analytics/search')
+class AIAssistantSearchRoute extends GoRouteData with $AIAssistantSearchRoute {
+  const AIAssistantSearchRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const AIAssistantSearchScreen();
+}
+
+@TypedGoRoute<AIFinancialInsightsRoute>(path: '/analytics/insights')
+class AIFinancialInsightsRoute extends GoRouteData with $AIFinancialInsightsRoute {
+  const AIFinancialInsightsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const AIFinancialInsightsScreen();
+}
+
+@TypedGoRoute<TransactionIntelligenceRoute>(path: '/analytics/intelligence')
+class TransactionIntelligenceRoute extends GoRouteData with $TransactionIntelligenceRoute {
+  const TransactionIntelligenceRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const TransactionIntelligenceScreen();
+}
+
+@TypedGoRoute<NotificationIntelligenceRoute>(path: '/analytics/notification')
+class NotificationIntelligenceRoute extends GoRouteData with $NotificationIntelligenceRoute {
+  const NotificationIntelligenceRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const NotificationIntelligenceScreen();
+}
+
+@TypedGoRoute<WidgetQuickActionsRoute>(path: '/analytics/widgets')
+class WidgetQuickActionsRoute extends GoRouteData with $WidgetQuickActionsRoute {
+  const WidgetQuickActionsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const WidgetQuickActionsScreen();
 }
 
 // Global router config instance

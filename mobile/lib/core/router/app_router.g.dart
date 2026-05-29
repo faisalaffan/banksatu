@@ -26,6 +26,12 @@ List<RouteBase> get $appRoutes => [
   $sharedVaultRoute,
   $roundUpRoute,
   $roundUpInstrumentsRoute,
+  $aIAssistantRoute,
+  $aIAssistantSearchRoute,
+  $aIFinancialInsightsRoute,
+  $transactionIntelligenceRoute,
+  $notificationIntelligenceRoute,
+  $widgetQuickActionsRoute,
 ];
 
 RouteBase get $appShellRouteData => StatefulShellRouteData.$route(
@@ -649,6 +655,162 @@ mixin $RoundUpInstrumentsRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/wealth/roundup/instruments');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $aIAssistantRoute => GoRouteData.$route(
+  path: '/analytics/chat',
+  factory: $AIAssistantRoute._fromState,
+);
+
+mixin $AIAssistantRoute on GoRouteData {
+  static AIAssistantRoute _fromState(GoRouterState state) =>
+      const AIAssistantRoute();
+
+  @override
+  String get location => GoRouteData.$location('/analytics/chat');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $aIAssistantSearchRoute => GoRouteData.$route(
+  path: '/analytics/search',
+  factory: $AIAssistantSearchRoute._fromState,
+);
+
+mixin $AIAssistantSearchRoute on GoRouteData {
+  static AIAssistantSearchRoute _fromState(GoRouterState state) =>
+      const AIAssistantSearchRoute();
+
+  @override
+  String get location => GoRouteData.$location('/analytics/search');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $aIFinancialInsightsRoute => GoRouteData.$route(
+  path: '/analytics/insights',
+  factory: $AIFinancialInsightsRoute._fromState,
+);
+
+mixin $AIFinancialInsightsRoute on GoRouteData {
+  static AIFinancialInsightsRoute _fromState(GoRouterState state) =>
+      const AIFinancialInsightsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/analytics/insights');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $transactionIntelligenceRoute => GoRouteData.$route(
+  path: '/analytics/intelligence',
+  factory: $TransactionIntelligenceRoute._fromState,
+);
+
+mixin $TransactionIntelligenceRoute on GoRouteData {
+  static TransactionIntelligenceRoute _fromState(GoRouterState state) =>
+      const TransactionIntelligenceRoute();
+
+  @override
+  String get location => GoRouteData.$location('/analytics/intelligence');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $notificationIntelligenceRoute => GoRouteData.$route(
+  path: '/analytics/notification',
+  factory: $NotificationIntelligenceRoute._fromState,
+);
+
+mixin $NotificationIntelligenceRoute on GoRouteData {
+  static NotificationIntelligenceRoute _fromState(GoRouterState state) =>
+      const NotificationIntelligenceRoute();
+
+  @override
+  String get location => GoRouteData.$location('/analytics/notification');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $widgetQuickActionsRoute => GoRouteData.$route(
+  path: '/analytics/widgets',
+  factory: $WidgetQuickActionsRoute._fromState,
+);
+
+mixin $WidgetQuickActionsRoute on GoRouteData {
+  static WidgetQuickActionsRoute _fromState(GoRouterState state) =>
+      const WidgetQuickActionsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/analytics/widgets');
 
   @override
   void go(BuildContext context) => context.go(location);
