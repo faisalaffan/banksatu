@@ -1,0 +1,56 @@
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Files that might be created on a Mac volume
+.DocumentRevisions-V100
+.SyncID
+.SyncOld
+.SyncArchive
+.Trash-*
+.Spotlight-V100
+.Trashes
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# Dart and Flutter related
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+**/doc/api/
+**/ios/Flutter/.flutter-plugins
+**/ios/Flutter/.flutter-plugins-dependencies
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/GeneratedPluginRegistrant.h
+**/ios/Flutter/GeneratedPluginRegistrant.m
+**/ios/Flutter/flutter_export_environment.sh
+**/android/key.properties
+**/android/app/src/main/res/values/strings.xml
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Flutter/flutter_export_environment.sh
+
+# Crashlytics/Firebase generated files
+**/ios/firebase_app_id_file.json
+**/android/app/google-services.json
+
+# Local environment / secrets
+.env
+.env.*
+secret.json

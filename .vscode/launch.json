@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "BankSatu Mobile (Debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "cwd": "mobile",
+      "args": [
+        "--dart-define",
+        "APP_ENV=development"
+      ]
+    },
+    {
+      "name": "BankSatu Mobile (Profile)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "program": "lib/main.dart",
+      "cwd": "mobile"
+    },
+    {
+      "name": "BankSatu Mobile (Release)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main.dart",
+      "cwd": "mobile"
+    }
+  ]
+}
