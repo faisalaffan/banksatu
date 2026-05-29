@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 import 'package:simulator/core/theme/app_theme.dart';
 
 class OAuthLoginScreen extends StatefulWidget {
@@ -39,7 +40,9 @@ class _OAuthLoginScreenState extends State<OAuthLoginScreen> {
                       child: const Text('OK'),
                       onPressed: () {
                         Navigator.of(context).pop(); // Close dialog
-                        Navigator.of(context).pop(); // Go back to onboarding
+                        if (this.mounted) {
+                          this.context.pop(); // Go back to onboarding
+                        }
                       },
                     ),
                   ],
@@ -53,7 +56,9 @@ class _OAuthLoginScreenState extends State<OAuthLoginScreen> {
                       child: const Text('OK'),
                       onPressed: () {
                         Navigator.of(context).pop(); // Close dialog
-                        Navigator.of(context).pop(); // Go back to onboarding
+                        if (this.mounted) {
+                          this.context.pop(); // Go back to onboarding
+                        }
                       },
                     ),
                   ],
@@ -322,7 +327,7 @@ class _OAuthLoginScreenState extends State<OAuthLoginScreen> {
                       width: double.infinity,
                       height: 50,
                       child: TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () => context.pop(),
                         style: TextButton.styleFrom(
                           foregroundColor: AppTheme.textDark,
                           shape: RoundedRectangleBorder(
