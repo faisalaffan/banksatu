@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:simulator/core/theme/app_theme.dart';
 
 class InvoiceItem {
@@ -26,16 +27,30 @@ class SMENewInvoiceScreen extends StatefulWidget {
 
 class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _clientNameController = TextEditingController(text: 'PT Sinergi Semesta');
-  final _clientEmailController = TextEditingController(text: 'finance@sinergi.co.id');
-  final _clientAddressController = TextEditingController(text: 'Menara Mandiri Lt. 18, Jakarta');
-  
+  final _clientNameController = TextEditingController(
+    text: 'PT Sinergi Semesta',
+  );
+  final _clientEmailController = TextEditingController(
+    text: 'finance@sinergi.co.id',
+  );
+  final _clientAddressController = TextEditingController(
+    text: 'Menara Mandiri Lt. 18, Jakarta',
+  );
+
   DateTime _dueDate = DateTime.now().add(const Duration(days: 14));
   bool _isSending = false;
 
   final List<InvoiceItem> _items = [
-    InvoiceItem(name: 'Premium Design System Consulting', quantity: 1, price: 15000000),
-    InvoiceItem(name: 'Flutter Integration Phase 1', quantity: 1, price: 20000000),
+    InvoiceItem(
+      name: 'Premium Design System Consulting',
+      quantity: 1,
+      price: 15000000,
+    ),
+    InvoiceItem(
+      name: 'Flutter Integration Phase 1',
+      quantity: 1,
+      price: 20000000,
+    ),
   ];
 
   final _currencyFormatter = NumberFormat.currency(
@@ -43,6 +58,26 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
     symbol: 'Rp ',
     decimalDigits: 0,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    // Safely trigger date formatting initialization for hot reloads or first-time render
+    initializeDateFormatting('id_ID', null).then((_) {
+      if (mounted) {
+        setState(() {}); // Re-render once initialized
+      }
+    });
+  }
+
+  String _formatDueDate(DateTime date) {
+    try {
+      return DateFormat('dd MMMM yyyy', 'id_ID').format(date);
+    } catch (_) {
+      // Safe fallback to English date formatting if locale is not initialized yet
+      return DateFormat('dd MMMM yyyy').format(date);
+    }
+  }
 
   @override
   void dispose() {
@@ -216,8 +251,13 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Platform.isIOS
-                        ? const CupertinoActivityIndicator(radius: 18, color: AppTheme.primaryBlue)
-                        : const CircularProgressIndicator(color: AppTheme.primaryBlue),
+                        ? const CupertinoActivityIndicator(
+                            radius: 18,
+                            color: AppTheme.primaryBlue,
+                          )
+                        : const CircularProgressIndicator(
+                            color: AppTheme.primaryBlue,
+                          ),
                     const SizedBox(height: 16),
                     Text(
                       'Menerbitkan Invoice Digital...',
@@ -262,7 +302,10 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                         decoration: BoxDecoration(
                           color: AppTheme.surfaceCard,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
+                          border: Border.all(
+                            color: const Color(0xFFE8EEFF),
+                            width: 1,
+                          ),
                           boxShadow: AppTheme.premiumShadow,
                         ),
                         child: Column(
@@ -271,7 +314,9 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                               label: 'Nama Klien / Perusahaan',
                               controller: _clientNameController,
                               placeholder: 'Contoh: PT Angin Ribut',
-                              validator: (val) => val == null || val.isEmpty ? 'Nama klien harus diisi' : null,
+                              validator: (val) => val == null || val.isEmpty
+                                  ? 'Nama klien harus diisi'
+                                  : null,
                             ),
                             const SizedBox(height: 16),
                             _buildTextField(
@@ -279,7 +324,10 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                               controller: _clientEmailController,
                               placeholder: 'finance@perusahaan.com',
                               keyboardType: TextInputType.emailAddress,
-                              validator: (val) => val == null || !val.contains('@') ? 'Email tidak valid' : null,
+                              validator: (val) =>
+                                  val == null || !val.contains('@')
+                                  ? 'Email tidak valid'
+                                  : null,
                             ),
                             const SizedBox(height: 16),
                             _buildTextField(
@@ -287,7 +335,9 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                               controller: _clientAddressController,
                               placeholder: 'Gedung, Jalan, Kota',
                               maxLines: 2,
-                              validator: (val) => val == null || val.isEmpty ? 'Alamat harus diisi' : null,
+                              validator: (val) => val == null || val.isEmpty
+                                  ? 'Alamat harus diisi'
+                                  : null,
                             ),
                           ],
                         ),
@@ -309,11 +359,17 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                       GestureDetector(
                         onTap: _selectDueDate,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
                           decoration: BoxDecoration(
                             color: AppTheme.surfaceCard,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
+                            border: Border.all(
+                              color: const Color(0xFFE8EEFF),
+                              width: 1,
+                            ),
                             boxShadow: AppTheme.premiumShadow,
                           ),
                           child: Row(
@@ -328,7 +384,8 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                                   ),
                                   const SizedBox(width: 12),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Batas Pembayaran',
@@ -339,7 +396,7 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                                       ),
                                       const SizedBox(height: 2),
                                       Text(
-                                        DateFormat('dd MMMM yyyy', 'id_ID').format(_dueDate),
+                                        _formatDueDate(_dueDate),
                                         style: GoogleFonts.inter(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w700,
@@ -351,7 +408,9 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                                 ],
                               ),
                               Icon(
-                                Platform.isIOS ? CupertinoIcons.chevron_down : Icons.arrow_drop_down,
+                                Platform.isIOS
+                                    ? CupertinoIcons.chevron_down
+                                    : Icons.arrow_drop_down,
                                 color: AppTheme.textLightGray,
                               ),
                             ],
@@ -412,14 +471,18 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                             decoration: BoxDecoration(
                               color: AppTheme.surfaceCard,
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
+                              border: Border.all(
+                                color: const Color(0xFFE8EEFF),
+                                width: 1,
+                              ),
                               boxShadow: AppTheme.premiumShadow,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: _buildItemInlineField(
@@ -450,7 +513,8 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                                         keyboardType: TextInputType.number,
                                         onChanged: (val) {
                                           setState(() {
-                                            item.quantity = int.tryParse(val) ?? 1;
+                                            item.quantity =
+                                                int.tryParse(val) ?? 1;
                                           });
                                         },
                                       ),
@@ -459,18 +523,21 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                                     Expanded(
                                       child: _buildItemInlineField(
                                         hint: 'Harga Satuan (Rp)',
-                                        initialValue: item.price.toStringAsFixed(0),
+                                        initialValue: item.price
+                                            .toStringAsFixed(0),
                                         keyboardType: TextInputType.number,
                                         onChanged: (val) {
                                           setState(() {
-                                            item.price = double.tryParse(val) ?? 0.0;
+                                            item.price =
+                                                double.tryParse(val) ?? 0.0;
                                           });
                                         },
                                       ),
                                     ),
                                     const SizedBox(width: 12),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
                                         Text(
                                           'Subtotal',
@@ -481,7 +548,9 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
-                                          _currencyFormatter.format(item.quantity * item.price),
+                                          _currencyFormatter.format(
+                                            item.quantity * item.price,
+                                          ),
                                           style: GoogleFonts.inter(
                                             fontSize: 13,
                                             fontWeight: FontWeight.bold,
@@ -506,13 +575,24 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
                         decoration: BoxDecoration(
                           color: AppTheme.primaryBlue.withOpacity(0.04),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppTheme.primaryBlue.withOpacity(0.12), width: 1.5),
+                          border: Border.all(
+                            color: AppTheme.primaryBlue.withOpacity(0.12),
+                            width: 1.5,
+                          ),
                         ),
                         child: Column(
                           children: [
-                            _buildSummaryRow('Subtotal', _currencyFormatter.format(_subtotal), isBold: false),
+                            _buildSummaryRow(
+                              'Subtotal',
+                              _currencyFormatter.format(_subtotal),
+                              isBold: false,
+                            ),
                             const SizedBox(height: 10),
-                            _buildSummaryRow('PPN (11%)', _currencyFormatter.format(_tax), isBold: false),
+                            _buildSummaryRow(
+                              'PPN (11%)',
+                              _currencyFormatter.format(_tax),
+                              isBold: false,
+                            ),
                             const SizedBox(height: 12),
                             const Divider(color: Color(0xFFC4D2FF), height: 1),
                             const SizedBox(height: 12),
@@ -592,9 +672,15 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
           ),
           decoration: InputDecoration(
             hintText: placeholder,
-            hintStyle: GoogleFonts.inter(color: AppTheme.textDisabled, fontSize: 13),
+            hintStyle: GoogleFonts.inter(
+              color: AppTheme.textDisabled,
+              fontSize: 13,
+            ),
             fillColor: AppTheme.background.withOpacity(0.4),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
           ),
         ),
       ],
@@ -618,7 +704,10 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.inter(color: AppTheme.textDisabled, fontSize: 12),
+        hintStyle: GoogleFonts.inter(
+          color: AppTheme.textDisabled,
+          fontSize: 12,
+        ),
         fillColor: AppTheme.background.withOpacity(0.5),
         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         enabledBorder: OutlineInputBorder(
@@ -633,7 +722,12 @@ class _SMENewInvoiceScreenState extends State<SMENewInvoiceScreen> {
     );
   }
 
-  Widget _buildSummaryRow(String label, String value, {required bool isBold, Color? color}) {
+  Widget _buildSummaryRow(
+    String label,
+    String value, {
+    required bool isBold,
+    Color? color,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

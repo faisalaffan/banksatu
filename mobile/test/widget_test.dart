@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:simulator/main.dart';
 import 'package:simulator/core/di/service_locator.dart';
+import 'package:simulator/features/sme/presentation/sme_new_invoice_screen.dart';
 
 void main() {
   setUp(() {
@@ -61,6 +62,29 @@ void main() {
     expect(find.text('Selamat Pagi,'), findsOneWidget);
     
     // Reset view size
+    tester.view.resetPhysicalSize();
+    tester.view.resetDevicePixelRatio();
+  });
+
+  testWidgets('Test SMENewInvoiceScreen initialization and rendering', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1200, 1920);
+    tester.view.devicePixelRatio = 1.0;
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: SMENewInvoiceScreen(),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    // Verify Batas Pembayaran is visible and formatted without throwing exceptions
+    expect(find.text('Batas Pembayaran'), findsOneWidget);
+    
+    // Verify client name is visible
+    expect(find.text('Nama Klien / Perusahaan'), findsOneWidget);
+
     tester.view.resetPhysicalSize();
     tester.view.resetDevicePixelRatio();
   });
