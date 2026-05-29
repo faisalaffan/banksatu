@@ -51,9 +51,7 @@ part 'app_router.g.dart';
         TypedGoRoute<DashboardRoute>(
           path: '/',
           routes: [
-            TypedGoRoute<TransactionDetailRoute>(
-              path: 'transaction/:id',
-            ),
+            TypedGoRoute<TransactionDetailRoute>(path: 'transaction/:id'),
           ],
         ),
       ],
@@ -83,7 +81,8 @@ part 'app_router.g.dart';
 class AppShellRouteData extends StatefulShellRouteData {
   const AppShellRouteData();
 
-  Widget build(
+  @override
+  Widget builder(
     BuildContext context,
     GoRouterState state,
     StatefulNavigationShell navigationShell,
@@ -320,7 +319,8 @@ class RoundUpRoute extends GoRouteData with $RoundUpRoute {
 }
 
 @TypedGoRoute<RoundUpInstrumentsRoute>(path: '/wealth/roundup/instruments')
-class RoundUpInstrumentsRoute extends GoRouteData with $RoundUpInstrumentsRoute {
+class RoundUpInstrumentsRoute extends GoRouteData
+    with $RoundUpInstrumentsRoute {
   const RoundUpInstrumentsRoute();
 
   @override
@@ -348,7 +348,8 @@ class AIAssistantSearchRoute extends GoRouteData with $AIAssistantSearchRoute {
 }
 
 @TypedGoRoute<AIFinancialInsightsRoute>(path: '/analytics/insights')
-class AIFinancialInsightsRoute extends GoRouteData with $AIFinancialInsightsRoute {
+class AIFinancialInsightsRoute extends GoRouteData
+    with $AIFinancialInsightsRoute {
   const AIFinancialInsightsRoute();
 
   @override
@@ -357,7 +358,8 @@ class AIFinancialInsightsRoute extends GoRouteData with $AIFinancialInsightsRout
 }
 
 @TypedGoRoute<TransactionIntelligenceRoute>(path: '/analytics/intelligence')
-class TransactionIntelligenceRoute extends GoRouteData with $TransactionIntelligenceRoute {
+class TransactionIntelligenceRoute extends GoRouteData
+    with $TransactionIntelligenceRoute {
   const TransactionIntelligenceRoute();
 
   @override
@@ -366,7 +368,8 @@ class TransactionIntelligenceRoute extends GoRouteData with $TransactionIntellig
 }
 
 @TypedGoRoute<NotificationIntelligenceRoute>(path: '/analytics/notification')
-class NotificationIntelligenceRoute extends GoRouteData with $NotificationIntelligenceRoute {
+class NotificationIntelligenceRoute extends GoRouteData
+    with $NotificationIntelligenceRoute {
   const NotificationIntelligenceRoute();
 
   @override
@@ -375,7 +378,8 @@ class NotificationIntelligenceRoute extends GoRouteData with $NotificationIntell
 }
 
 @TypedGoRoute<WidgetQuickActionsRoute>(path: '/analytics/widgets')
-class WidgetQuickActionsRoute extends GoRouteData with $WidgetQuickActionsRoute {
+class WidgetQuickActionsRoute extends GoRouteData
+    with $WidgetQuickActionsRoute {
   const WidgetQuickActionsRoute();
 
   @override
@@ -402,8 +406,11 @@ class SMENewInvoiceRoute extends GoRouteData with $SMENewInvoiceRoute {
       const SMENewInvoiceScreen();
 }
 
-@TypedGoRoute<ProgrammableMoneyDetailRoute>(path: '/sme/programmable-money/detail')
-class ProgrammableMoneyDetailRoute extends GoRouteData with $ProgrammableMoneyDetailRoute {
+@TypedGoRoute<ProgrammableMoneyDetailRoute>(
+  path: '/sme/programmable-money/detail',
+)
+class ProgrammableMoneyDetailRoute extends GoRouteData
+    with $ProgrammableMoneyDetailRoute {
   const ProgrammableMoneyDetailRoute();
 
   @override
@@ -411,8 +418,11 @@ class ProgrammableMoneyDetailRoute extends GoRouteData with $ProgrammableMoneyDe
       const ProgrammableMoneyDetailScreen();
 }
 
-@TypedGoRoute<ProgrammableMoneyVerifyRoute>(path: '/sme/programmable-money/verify')
-class ProgrammableMoneyVerifyRoute extends GoRouteData with $ProgrammableMoneyVerifyRoute {
+@TypedGoRoute<ProgrammableMoneyVerifyRoute>(
+  path: '/sme/programmable-money/verify',
+)
+class ProgrammableMoneyVerifyRoute extends GoRouteData
+    with $ProgrammableMoneyVerifyRoute {
   const ProgrammableMoneyVerifyRoute();
 
   @override
@@ -420,8 +430,11 @@ class ProgrammableMoneyVerifyRoute extends GoRouteData with $ProgrammableMoneyVe
       const ProgrammableMoneyVerifyScreen();
 }
 
-@TypedGoRoute<ProgrammableMoneyRejectedRoute>(path: '/sme/programmable-money/rejected')
-class ProgrammableMoneyRejectedRoute extends GoRouteData with $ProgrammableMoneyRejectedRoute {
+@TypedGoRoute<ProgrammableMoneyRejectedRoute>(
+  path: '/sme/programmable-money/rejected',
+)
+class ProgrammableMoneyRejectedRoute extends GoRouteData
+    with $ProgrammableMoneyRejectedRoute {
   const ProgrammableMoneyRejectedRoute();
 
   @override
@@ -431,7 +444,8 @@ class ProgrammableMoneyRejectedRoute extends GoRouteData with $ProgrammableMoney
 
 // Phase 6 Accessibility & Customization Page Routes
 @TypedGoRoute<AccessibilitySettingsRoute>(path: '/settings/accessibility')
-class AccessibilitySettingsRoute extends GoRouteData with $AccessibilitySettingsRoute {
+class AccessibilitySettingsRoute extends GoRouteData
+    with $AccessibilitySettingsRoute {
   const AccessibilitySettingsRoute();
 
   @override
