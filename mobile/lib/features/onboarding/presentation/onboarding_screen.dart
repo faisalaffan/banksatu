@@ -289,7 +289,7 @@ class OnboardingScreen extends StatelessWidget {
                               width: double.infinity,
                               height: 50,
                               child: TextButton(
-                                onPressed: () => const OAuthLoginRoute().push(context),
+                                onPressed: () => const LoginRoute().push(context),
                                 style: TextButton.styleFrom(
                                   backgroundColor: AppTheme.background,
                                   foregroundColor: AppTheme.primaryBlue,

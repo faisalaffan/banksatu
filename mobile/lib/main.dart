@@ -9,6 +9,7 @@ import 'package:simulator/features/security/bloc/security_bloc.dart';
 import 'package:simulator/features/subscriptions/bloc/subscription_bloc.dart';
 import 'package:simulator/features/syariah/bloc/syariah_bloc.dart';
 import 'package:simulator/features/future_rails/bloc/future_rails_bloc.dart';
+import 'package:simulator/features/auth/presentation/session_timeout_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         routerConfig: appRouter,
         debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          return SessionTimeoutManager(child: child!);
+        },
       ),
     );
   }

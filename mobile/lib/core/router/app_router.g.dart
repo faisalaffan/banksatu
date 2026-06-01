@@ -9,6 +9,7 @@ part of 'app_router.dart';
 List<RouteBase> get $appRoutes => [
   $appShellRouteData,
   $onboardingRoute,
+  $loginRoute,
   $oAuthLoginRoute,
   $kYCIdentityRoute,
   $kYCFaceRoute,
@@ -251,15 +252,40 @@ mixin $OnboardingRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $oAuthLoginRoute =>
-    GoRouteData.$route(path: '/login', factory: $OAuthLoginRoute._fromState);
+RouteBase get $loginRoute =>
+    GoRouteData.$route(path: '/login', factory: $LoginRoute._fromState);
+
+mixin $LoginRoute on GoRouteData {
+  static LoginRoute _fromState(GoRouterState state) => const LoginRoute();
+
+  @override
+  String get location => GoRouteData.$location('/login');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $oAuthLoginRoute => GoRouteData.$route(
+  path: '/oauth/authorize',
+  factory: $OAuthLoginRoute._fromState,
+);
 
 mixin $OAuthLoginRoute on GoRouteData {
   static OAuthLoginRoute _fromState(GoRouterState state) =>
       const OAuthLoginRoute();
 
   @override
-  String get location => GoRouteData.$location('/login');
+  String get location => GoRouteData.$location('/oauth/authorize');
 
   @override
   void go(BuildContext context) => context.go(location);

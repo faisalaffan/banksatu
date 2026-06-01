@@ -12,6 +12,7 @@ import 'package:simulator/features/onboarding/presentation/kyc_identity_screen.d
 import 'package:simulator/features/onboarding/presentation/kyc_face_screen.dart';
 import 'package:simulator/features/onboarding/presentation/kyc_success_screen.dart';
 import 'package:simulator/features/auth/presentation/oauth_login_screen.dart';
+import 'package:simulator/features/auth/presentation/login_screen.dart';
 import 'package:simulator/features/profile/presentation/profile_screen.dart';
 import 'package:simulator/features/transactions/presentation/transfer_screen.dart';
 import 'package:simulator/features/transactions/presentation/pay_bills_screen.dart';
@@ -172,7 +173,16 @@ class OnboardingRoute extends GoRouteData with $OnboardingRoute {
       const OnboardingScreen();
 }
 
-@TypedGoRoute<OAuthLoginRoute>(path: '/login')
+@TypedGoRoute<LoginRoute>(path: '/login')
+class LoginRoute extends GoRouteData with $LoginRoute {
+  const LoginRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const LoginScreen();
+}
+
+@TypedGoRoute<OAuthLoginRoute>(path: '/oauth/authorize')
 class OAuthLoginRoute extends GoRouteData with $OAuthLoginRoute {
   const OAuthLoginRoute();
 
