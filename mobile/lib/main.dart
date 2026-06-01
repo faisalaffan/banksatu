@@ -9,6 +9,7 @@ import 'package:simulator/features/security/bloc/security_bloc.dart';
 import 'package:simulator/features/subscriptions/bloc/subscription_bloc.dart';
 import 'package:simulator/features/syariah/bloc/syariah_bloc.dart';
 import 'package:simulator/features/future_rails/bloc/future_rails_bloc.dart';
+import 'package:simulator/core/widgets/sandbox_banner.dart';
 import 'package:simulator/features/auth/presentation/session_timeout_manager.dart';
 
 void main() async {
@@ -47,7 +48,26 @@ class MyApp extends StatelessWidget {
         routerConfig: appRouter,
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
-          return SessionTimeoutManager(child: child!);
+          final originalPadding = MediaQuery.of(context).padding;
+          return SessionTimeoutManager(
+            child: Container(
+              color:
+                  Colors.white, // Prevents blackouts behind system status bar
+              child: Column(
+                children: [
+                  const SafeArea(bottom: false, child: SandboxBanner()),
+                  Expanded(
+                    child: MediaQuery(
+                      data: MediaQuery.of(
+                        context,
+                      ).copyWith(padding: originalPadding.copyWith(top: 0)),
+                      child: child!,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         },
       ),
     );
