@@ -42,6 +42,21 @@ import 'package:simulator/features/accessibility/presentation/theme_customizer_s
 import 'package:simulator/features/accessibility/presentation/biometrics_setup_screen.dart';
 import 'package:simulator/features/accessibility/presentation/language_selector_screen.dart';
 import 'package:simulator/features/accessibility/presentation/security_logs_screen.dart';
+import 'package:simulator/features/dashboard/presentation/loyalty_screen.dart';
+import 'package:simulator/features/dashboard/presentation/system_status_screen.dart';
+import 'package:simulator/features/wealth/presentation/multicurrency_wallet_screen.dart';
+import 'package:simulator/features/wealth/presentation/live_fx_rate_screen.dart';
+import 'package:simulator/features/wealth/presentation/financial_products_screen.dart';
+import 'package:simulator/features/security/presentation/card_limit_settings_screen.dart';
+import 'package:simulator/features/wealth/presentation/shared_wallet_screen.dart';
+import 'package:simulator/features/profile/presentation/customer_service_screen.dart';
+import 'package:simulator/features/dashboard/presentation/lifestyle_marketplace_screen.dart';
+import 'package:simulator/features/dashboard/presentation/notification_center_screen.dart';
+import 'package:simulator/features/security/presentation/digital_heir_screen.dart';
+import 'package:simulator/features/security/presentation/dispute_manager_screen.dart';
+import 'package:simulator/features/security/presentation/virtual_card_screen.dart';
+import 'package:simulator/features/security/presentation/credit_card_screen.dart';
+import 'package:simulator/features/security/presentation/personal_api_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -497,6 +512,145 @@ class SecurityLogsRoute extends GoRouteData with $SecurityLogsRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const SecurityLogsScreen();
+}
+
+// 15 New Routes
+@TypedGoRoute<LoyaltyRoute>(path: '/dashboard/loyalty')
+class LoyaltyRoute extends GoRouteData with $LoyaltyRoute {
+  const LoyaltyRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const LoyaltyScreen();
+}
+
+@TypedGoRoute<SystemStatusRoute>(path: '/dashboard/system-status')
+class SystemStatusRoute extends GoRouteData with $SystemStatusRoute {
+  const SystemStatusRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SystemStatusScreen();
+}
+
+@TypedGoRoute<MulticurrencyWalletRoute>(path: '/wealth/multicurrency')
+class MulticurrencyWalletRoute extends GoRouteData
+    with $MulticurrencyWalletRoute {
+  const MulticurrencyWalletRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const MulticurrencyWalletScreen();
+}
+
+@TypedGoRoute<LiveFxRateRoute>(path: '/wealth/live-fx')
+class LiveFxRateRoute extends GoRouteData with $LiveFxRateRoute {
+  const LiveFxRateRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const LiveFxRateScreen();
+}
+
+@TypedGoRoute<FinancialProductsRoute>(path: '/wealth/products')
+class FinancialProductsRoute extends GoRouteData with $FinancialProductsRoute {
+  const FinancialProductsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const FinancialProductsScreen();
+}
+
+@TypedGoRoute<CardLimitSettingsRoute>(path: '/security/card-limit')
+class CardLimitSettingsRoute extends GoRouteData with $CardLimitSettingsRoute {
+  const CardLimitSettingsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const CardLimitSettingsScreen();
+}
+
+@TypedGoRoute<SharedWalletRoute>(path: '/wealth/shared-wallet')
+class SharedWalletRoute extends GoRouteData with $SharedWalletRoute {
+  const SharedWalletRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SharedWalletScreen();
+}
+
+@TypedGoRoute<CustomerServiceRoute>(path: '/profile/customer-service')
+class CustomerServiceRoute extends GoRouteData with $CustomerServiceRoute {
+  const CustomerServiceRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const CustomerServiceScreen();
+}
+
+@TypedGoRoute<LifestyleMarketplaceRoute>(path: '/dashboard/lifestyle')
+class LifestyleMarketplaceRoute extends GoRouteData
+    with $LifestyleMarketplaceRoute {
+  const LifestyleMarketplaceRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const LifestyleMarketplaceScreen();
+}
+
+@TypedGoRoute<NotificationCenterRoute>(path: '/dashboard/notifications')
+class NotificationCenterRoute extends GoRouteData
+    with $NotificationCenterRoute {
+  const NotificationCenterRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const NotificationCenterScreen();
+}
+
+@TypedGoRoute<DigitalHeirRoute>(path: '/security/digital-heir')
+class DigitalHeirRoute extends GoRouteData with $DigitalHeirRoute {
+  const DigitalHeirRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const DigitalHeirScreen();
+}
+
+@TypedGoRoute<DisputeManagerRoute>(path: '/security/dispute-manager')
+class DisputeManagerRoute extends GoRouteData with $DisputeManagerRoute {
+  const DisputeManagerRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const DisputeManagerScreen();
+}
+
+@TypedGoRoute<VirtualCardRoute>(path: '/security/virtual-card')
+class VirtualCardRoute extends GoRouteData with $VirtualCardRoute {
+  const VirtualCardRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const VirtualCardScreen();
+}
+
+@TypedGoRoute<CreditCardRoute>(path: '/security/credit-card')
+class CreditCardRoute extends GoRouteData with $CreditCardRoute {
+  const CreditCardRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const CreditCardScreen();
+}
+
+@TypedGoRoute<PersonalApiRoute>(path: '/security/personal-api')
+class PersonalApiRoute extends GoRouteData with $PersonalApiRoute {
+  const PersonalApiRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const PersonalApiScreen();
 }
 
 // Global router config instance

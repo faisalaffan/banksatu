@@ -252,6 +252,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 48),
 
+            // Section: Bantuan
+            _buildSectionHeader('Bantuan & Dukungan'),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: AppTheme.premiumShadow,
+                border: Border.all(color: const Color(0xFFE8EEFF)),
+              ),
+              child: Column(
+                children: [
+                  _buildNavigationRow(
+                    Platform.isIOS ? CupertinoIcons.headphones : Icons.headset_mic,
+                    'Layanan Nasabah',
+                    'Hubungi CS, FAQ, dan live chat.',
+                    () => const CustomerServiceRoute().push(context),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 28),
+
             // Logout Button
             SizedBox(
               width: double.infinity,

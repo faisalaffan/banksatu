@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:simulator/core/theme/app_theme.dart';
+import 'package:simulator/core/router/app_router.dart';
 import 'package:simulator/features/security/bloc/security_bloc.dart';
 
 class SecurityScreen extends StatefulWidget {
@@ -433,6 +434,85 @@ class _SecurityScreenState extends State<SecurityScreen> {
                     ),
                   ),
 
+                  const SizedBox(height: 16),
+
+                  // Advanced Security Features Section
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceCard,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
+                      boxShadow: AppTheme.premiumShadow,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSectionHeader(
+                          title: 'KEAMANAN LANJUTAN',
+                          subtitle: 'Kelola kartu, ahli waris digital, sengketa, dan API.',
+                        ),
+                        const SizedBox(height: 16),
+                        _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.creditcard_fill : Icons.credit_card,
+                          title: 'Atur Limit Kartu',
+                          subtitle: 'Batas pengeluaran & kontrol MCC.',
+                          onTap: () => const CardLimitSettingsRoute().push(context),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(color: Color(0xFFE8EEFF)),
+                        ),
+                        _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.person_2_fill : Icons.family_restroom,
+                          title: 'Ahli Waris Digital',
+                          subtitle: 'Atur penerus akses akun digital Anda.',
+                          onTap: () => const DigitalHeirRoute().push(context),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(color: Color(0xFFE8EEFF)),
+                        ),
+                        _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.exclamationmark_bubble_fill : Icons.gavel,
+                          title: 'Manajer Sengketa',
+                          subtitle: 'Ajukan & lacak penyelesaian transaksi.',
+                          onTap: () => const DisputeManagerRoute().push(context),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(color: Color(0xFFE8EEFF)),
+                        ),
+                        _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.creditcard_fill : Icons.credit_card_off,
+                          title: 'Kartu Virtual',
+                          subtitle: 'Buat kartu digital sekali pakai untuk online.',
+                          onTap: () => const VirtualCardRoute().push(context),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(color: Color(0xFFE8EEFF)),
+                        ),
+                        _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.creditcard : Icons.credit_score,
+                          title: 'Manajemen Kartu Kredit',
+                          subtitle: 'Pantau tagihan & limit kredit harian.',
+                          onTap: () => const CreditCardRoute().push(context),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(color: Color(0xFFE8EEFF)),
+                        ),
+                        _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.gear_alt_fill : Icons.api,
+                          title: 'API & Webhooks Pribadi',
+                          subtitle: 'Generate token akses & integrasi.',
+                          onTap: () => const PersonalApiRoute().push(context),
+                        ),
+                      ],
+                    ),
+                  ),
+
                   // Bottom padding spacer to avoid persistent floating navigation bar clipping
                   const SizedBox(height: 120),
                 ],
@@ -522,6 +602,59 @@ class _SecurityScreenState extends State<SecurityScreen> {
           activeColor: activeColor ?? AppTheme.primaryBlue,
         ),
       ],
+    );
+  }
+
+  Widget _buildNavRow({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppTheme.background,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: AppTheme.primaryBlue, size: 20),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textDark,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    color: AppTheme.textLightGray,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(
+            Platform.isIOS ? CupertinoIcons.chevron_right : Icons.chevron_right,
+            color: AppTheme.textLightGray,
+            size: 16,
+          ),
+        ],
+      ),
     );
   }
 

@@ -43,6 +43,21 @@ List<RouteBase> get $appRoutes => [
   $biometricsSetupRoute,
   $languageSelectorRoute,
   $securityLogsRoute,
+  $loyaltyRoute,
+  $systemStatusRoute,
+  $multicurrencyWalletRoute,
+  $liveFxRateRoute,
+  $financialProductsRoute,
+  $cardLimitSettingsRoute,
+  $sharedWalletRoute,
+  $customerServiceRoute,
+  $lifestyleMarketplaceRoute,
+  $notificationCenterRoute,
+  $digitalHeirRoute,
+  $disputeManagerRoute,
+  $virtualCardRoute,
+  $creditCardRoute,
+  $personalApiRoute,
 ];
 
 RouteBase get $appShellRouteData => StatefulShellRouteData.$route(
@@ -1110,6 +1125,395 @@ mixin $SecurityLogsRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/settings/security-logs');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $loyaltyRoute => GoRouteData.$route(
+  path: '/dashboard/loyalty',
+  factory: $LoyaltyRoute._fromState,
+);
+
+mixin $LoyaltyRoute on GoRouteData {
+  static LoyaltyRoute _fromState(GoRouterState state) => const LoyaltyRoute();
+
+  @override
+  String get location => GoRouteData.$location('/dashboard/loyalty');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $systemStatusRoute => GoRouteData.$route(
+  path: '/dashboard/system-status',
+  factory: $SystemStatusRoute._fromState,
+);
+
+mixin $SystemStatusRoute on GoRouteData {
+  static SystemStatusRoute _fromState(GoRouterState state) =>
+      const SystemStatusRoute();
+
+  @override
+  String get location => GoRouteData.$location('/dashboard/system-status');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $multicurrencyWalletRoute => GoRouteData.$route(
+  path: '/wealth/multicurrency',
+  factory: $MulticurrencyWalletRoute._fromState,
+);
+
+mixin $MulticurrencyWalletRoute on GoRouteData {
+  static MulticurrencyWalletRoute _fromState(GoRouterState state) =>
+      const MulticurrencyWalletRoute();
+
+  @override
+  String get location => GoRouteData.$location('/wealth/multicurrency');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $liveFxRateRoute => GoRouteData.$route(
+  path: '/wealth/live-fx',
+  factory: $LiveFxRateRoute._fromState,
+);
+
+mixin $LiveFxRateRoute on GoRouteData {
+  static LiveFxRateRoute _fromState(GoRouterState state) =>
+      const LiveFxRateRoute();
+
+  @override
+  String get location => GoRouteData.$location('/wealth/live-fx');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $financialProductsRoute => GoRouteData.$route(
+  path: '/wealth/products',
+  factory: $FinancialProductsRoute._fromState,
+);
+
+mixin $FinancialProductsRoute on GoRouteData {
+  static FinancialProductsRoute _fromState(GoRouterState state) =>
+      const FinancialProductsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/wealth/products');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $cardLimitSettingsRoute => GoRouteData.$route(
+  path: '/security/card-limit',
+  factory: $CardLimitSettingsRoute._fromState,
+);
+
+mixin $CardLimitSettingsRoute on GoRouteData {
+  static CardLimitSettingsRoute _fromState(GoRouterState state) =>
+      const CardLimitSettingsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/security/card-limit');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $sharedWalletRoute => GoRouteData.$route(
+  path: '/wealth/shared-wallet',
+  factory: $SharedWalletRoute._fromState,
+);
+
+mixin $SharedWalletRoute on GoRouteData {
+  static SharedWalletRoute _fromState(GoRouterState state) =>
+      const SharedWalletRoute();
+
+  @override
+  String get location => GoRouteData.$location('/wealth/shared-wallet');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $customerServiceRoute => GoRouteData.$route(
+  path: '/profile/customer-service',
+  factory: $CustomerServiceRoute._fromState,
+);
+
+mixin $CustomerServiceRoute on GoRouteData {
+  static CustomerServiceRoute _fromState(GoRouterState state) =>
+      const CustomerServiceRoute();
+
+  @override
+  String get location => GoRouteData.$location('/profile/customer-service');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $lifestyleMarketplaceRoute => GoRouteData.$route(
+  path: '/dashboard/lifestyle',
+  factory: $LifestyleMarketplaceRoute._fromState,
+);
+
+mixin $LifestyleMarketplaceRoute on GoRouteData {
+  static LifestyleMarketplaceRoute _fromState(GoRouterState state) =>
+      const LifestyleMarketplaceRoute();
+
+  @override
+  String get location => GoRouteData.$location('/dashboard/lifestyle');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $notificationCenterRoute => GoRouteData.$route(
+  path: '/dashboard/notifications',
+  factory: $NotificationCenterRoute._fromState,
+);
+
+mixin $NotificationCenterRoute on GoRouteData {
+  static NotificationCenterRoute _fromState(GoRouterState state) =>
+      const NotificationCenterRoute();
+
+  @override
+  String get location => GoRouteData.$location('/dashboard/notifications');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $digitalHeirRoute => GoRouteData.$route(
+  path: '/security/digital-heir',
+  factory: $DigitalHeirRoute._fromState,
+);
+
+mixin $DigitalHeirRoute on GoRouteData {
+  static DigitalHeirRoute _fromState(GoRouterState state) =>
+      const DigitalHeirRoute();
+
+  @override
+  String get location => GoRouteData.$location('/security/digital-heir');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $disputeManagerRoute => GoRouteData.$route(
+  path: '/security/dispute-manager',
+  factory: $DisputeManagerRoute._fromState,
+);
+
+mixin $DisputeManagerRoute on GoRouteData {
+  static DisputeManagerRoute _fromState(GoRouterState state) =>
+      const DisputeManagerRoute();
+
+  @override
+  String get location => GoRouteData.$location('/security/dispute-manager');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $virtualCardRoute => GoRouteData.$route(
+  path: '/security/virtual-card',
+  factory: $VirtualCardRoute._fromState,
+);
+
+mixin $VirtualCardRoute on GoRouteData {
+  static VirtualCardRoute _fromState(GoRouterState state) =>
+      const VirtualCardRoute();
+
+  @override
+  String get location => GoRouteData.$location('/security/virtual-card');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $creditCardRoute => GoRouteData.$route(
+  path: '/security/credit-card',
+  factory: $CreditCardRoute._fromState,
+);
+
+mixin $CreditCardRoute on GoRouteData {
+  static CreditCardRoute _fromState(GoRouterState state) =>
+      const CreditCardRoute();
+
+  @override
+  String get location => GoRouteData.$location('/security/credit-card');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $personalApiRoute => GoRouteData.$route(
+  path: '/security/personal-api',
+  factory: $PersonalApiRoute._fromState,
+);
+
+mixin $PersonalApiRoute on GoRouteData {
+  static PersonalApiRoute _fromState(GoRouterState state) =>
+      const PersonalApiRoute();
+
+  @override
+  String get location => GoRouteData.$location('/security/personal-api');
 
   @override
   void go(BuildContext context) => context.go(location);

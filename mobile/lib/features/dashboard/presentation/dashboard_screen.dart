@@ -385,6 +385,203 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
 
+                  // Horizontal Feature Shortcuts
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Fitur Pintar',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            height: 72,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              physics: const BouncingScrollPhysics(),
+                              children: [
+                                _buildFeatureChip(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.chart_bar_alt_fill
+                                      : Icons.insights,
+                                  label: 'AI Insights',
+                                  color: AppTheme.shariaGreen,
+                                  onTap: () =>
+                                      const AIFinancialInsightsRoute().push(context),
+                                ),
+                                _buildFeatureChip(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.chart_pie_fill
+                                      : Icons.query_stats,
+                                  label: 'Intel',
+                                  color: AppTheme.primaryBlue,
+                                  onTap: () =>
+                                      const TransactionIntelligenceRoute().push(context),
+                                ),
+                                _buildFeatureChip(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.search_circle_fill
+                                      : Icons.manage_search,
+                                  label: 'Cari AI',
+                                  color: Colors.deepPurple,
+                                  onTap: () =>
+                                      const AIAssistantSearchRoute().push(context),
+                                ),
+                                _buildFeatureChip(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.square_grid_2x2_fill
+                                      : Icons.widgets,
+                                  label: 'Widget',
+                                  color: Colors.orange,
+                                  onTap: () =>
+                                      const WidgetQuickActionsRoute().push(context),
+                                ),
+                                _buildFeatureChip(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.gift_fill
+                                      : Icons.card_giftcard,
+                                  label: 'Loyalty',
+                                  color: Colors.pink,
+                                  onTap: () => const LoyaltyRoute().push(context),
+                                ),
+                                _buildFeatureChip(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.antenna_radiowaves_left_right
+                                      : Icons.monitor_heart,
+                                  label: 'Status',
+                                  color: Colors.teal,
+                                  onTap: () =>
+                                      const SystemStatusRoute().push(context),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Wealth & Services Quick Grid
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Keuangan & Investasi',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.share
+                                      : Icons.folder_shared,
+                                  label: 'Shared Wallet',
+                                  onTap: () =>
+                                      const SharedWalletRoute().push(context),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.money_dollar_circle
+                                      : Icons.currency_exchange,
+                                  label: 'Multi Mata Uang',
+                                  onTap: () =>
+                                      const MulticurrencyWalletRoute().push(context),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.chart_bar_alt_fill
+                                      : Icons.show_chart,
+                                  label: 'Live FX',
+                                  onTap: () => const LiveFxRateRoute().push(context),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.bag_fill
+                                      : Icons.shopping_bag,
+                                  label: 'Produk Finansial',
+                                  onTap: () =>
+                                      const FinancialProductsRoute().push(context),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Lifestyle & Services
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Layanan Lainnya',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.cart_fill
+                                      : Icons.storefront,
+                                  label: 'Lifestyle',
+                                  onTap: () =>
+                                      const LifestyleMarketplaceRoute().push(context),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.bell_fill
+                                      : Icons.notifications_active,
+                                  label: 'Notifikasi',
+                                  onTap: () =>
+                                      const NotificationCenterRoute().push(context),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
                   // Transactions List Header
                   SliverPadding(
                     padding: const EdgeInsets.only(
@@ -500,6 +697,94 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFeatureChip({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(right: 12),
+        width: 72,
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(icon, color: color, size: 22),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textDark,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildServiceCard({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceCard,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
+          boxShadow: AppTheme.premiumShadow,
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryBlue.withOpacity(0.06),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: AppTheme.primaryBlue, size: 18),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                label,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.textDark,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Icon(
+              Platform.isIOS ? CupertinoIcons.chevron_right : Icons.chevron_right,
+              color: AppTheme.textLightGray,
+              size: 16,
+            ),
+          ],
+        ),
       ),
     );
   }
