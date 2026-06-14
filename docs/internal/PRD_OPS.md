@@ -1,6 +1,6 @@
 # Product Requirements Document — BankSatu OPS
 
-**Version:** 0.3.0-draft
+**Version:** 0.3.1-draft
 **Author:** Muhammad Faisal Affan
 **Status:** Draft
 **Last Updated:** 2026-06-14
@@ -305,10 +305,27 @@ BankSatu OPS adalah single source of truth untuk semua aktivitas operational, di
 - Cicilan bulanan total
 - Debt-to-Income Ratio (auto-calculated: total cicilan / total pendapatan)
 
-#### F. Tujuan Pengajuan
+#### F. Tujuan Pengajuan & Simulasi Bunga
+
+**Regulasi:** POJK 22/2023 tentang Perlindungan Konsumen — wajib transparansi suku bunga efektif (bukan cuma flat).
+
 - Jenis fasilitas: kartu kredit, kredit usaha, KPR, personal loan
 - Tujuan penggunaan dana
 - Jumlah pengajuan limit
+- **Simulasi bunga kredit (real-time calculator):**
+  - Tenor (bulan): 6, 12, 24, 36, 48, 60
+  - Suku bunga flat (%) — nominal yang dikutip ke nasabah
+  - Suku bunga efektif (%) — auto-calculated: memperhitungkan compounding
+  - Total pembayaran (pokok + bunga)
+  - Cicilan bulanan
+  - Biaya administrasi, provisi, asuransi (jika ada)
+  - **Total biaya kredit (APR)** — angka wajib yang harus di-disclose ke nasabah per POJK 22/2023
+- **Perbandingan visual:** grafik batang bunga flat vs bunga efektif, tabel amortisasi
+- Disclaimer: "Simulasi ini bersifat ilustratif. Suku bunga final ditentukan saat approval."
+
+**NFR:**
+- Kalkulator simulasi real-time, update setiap perubahan input
+- Grafik render client-side, < 100ms
 
 #### G. Rekomendasi & Scoring
 
@@ -517,11 +534,30 @@ Petugas bisa override rekomendasi dengan justifikasi tertulis.
 | SLIK report history | 3 tahun | +2 tahun | SEOJK 49/2020 |
 | LTKM/LTKT | 10 tahun | +5 tahun | UU TPPU |
 
-**NFR:**
-- Audit log immutable, write-once
-- Export 10.000+ baris < 5 detik
-- Report generation < 3 detik
-- Maker-Checker visual timeline render < 500ms
+### Notification Channel Preferences & Opt-Out
+
+**Regulasi:** UU PDP (UU 27/2022) — nasabah berhak memilih channel komunikasi dan opt-out.
+
+**Capabilities:**
+- **Channel preferences per nasabah:** SMS, Email, WhatsApp, In-App Push, Telepon
+- **Opt-out granular:** nasabah bisa opt-out dari channel tertentu tanpa opt-out semua (misal: nonaktifkan SMS, tetap terima email)
+- **Sinkronisasi ke modul CS (7.9):** petugas CS tidak bisa menghubungi via channel yang sudah di-opt-out — UI tampilkan warning "Nasabah telah opt-out dari channel ini"
+- **Opt-out history:** track setiap perubahan preferensi dengan timestamp
+- **Re-opt-in workflow:** nasabah bisa aktifkan kembali channel via BankSatu Mobile
+- **Mandatory channel exception:** notifikasi transaksi, keamanan, dan regulasi TETAP dikirim walaupun nasabah opt-out (dasar hukum: kewajiban regulator)
+
+### Compliance Officer Oversight
+
+**Konteks:** Compliance Officer punya akses powerful (screening APU-PPT, approval LTKM, DTTOT override). Siapa yang mengaudit Compliance Officer?
+
+**Capabilities:**
+- **Compliance Review Role:** role terpisah "Compliance Reviewer" (bisa diisi oleh Internal Audit atau Direksi) yang punya akses read-only ke semua tindakan Compliance Officer
+- **Auto-flag anomali Compliance Officer:**
+  - Compliance Officer meng-override screening result tanpa justifikasi → flag
+  - Compliance Officer approve LTKM untuk transaksi yang melibatkan dirinya sendiri → auto-reject
+  - Compliance Officer melakukan bulk action tidak wajar → flag
+- **Quarterly compliance audit report:** ringkasan semua tindakan Compliance Officer per kuartal untuk review Direksi
+- **Segregation:** Compliance Officer TIDAK bisa meng-audit dirinya sendiri — hanya Compliance Reviewer yang bisa
 
 ---
 
@@ -731,6 +767,31 @@ Petugas bisa override rekomendasi dengan justifikasi tertulis.
 - Collection queue sortable by tunggakan, nilai kredit, risk level
 - Semua restrukturisasi tercatat di audit trail
 
+### Dormant / Inactive Account Handling
+
+**Regulasi:** POJK 12/2017 (APU-PPT) — rekening dormant yang tiba-tiba aktif = red flag. POJK 18/2021 tentang Rekening Dormant.
+
+**Dormant Definition:**
+
+| Status | Kriteria | Tindakan |
+| ------ | -------- | -------- |
+| **Active** | Transaksi dalam 6 bulan terakhir | Normal |
+| **Inactive** | Tidak ada transaksi 6-12 bulan | Notifikasi ke nasabah (email/SMS) |
+| **Dormant** | Tidak ada transaksi > 12 bulan | Restriksi: tidak bisa transfer/withdraw tanpa reaktivasi. Saldo tetap bisa dilihat. |
+| **Dormant + Large Tx** | Dormant > 12 bulan + tiba-tiba transaksi > Rp 10jt | **Red flag** — auto-escalate ke compliance officer (potensi pencucian uang) |
+
+**Capabilities:**
+- **Auto-classification:** nightly cron meng-update status rekening berdasarkan transaksi terakhir
+- **Dormant dashboard:** list semua rekening inactive dan dormant dengan filter
+- **Reaktivasi workflow:** nasabah minta reaktivasi → wajib re-verifikasi KYC (termasuk CDD ulang) → petugas approve
+- **Dormant alert:** notifikasi ke compliance officer jika rekening dormant melakukan transaksi besar
+- **Pre-dormant notification:** 30 hari sebelum status jadi dormant, sistem kirim notifikasi ke nasabah
+- **Escheatment placeholder:** field untuk tracking dana dormant yang akan diserahkan ke negara (UU jika applicable)
+
+**NFR:**
+- Dormant classification via nightly cron
+- Reaktivasi butuh re-KYC mandatory (auto-trigger dari 7.5)
+
 ---
 
 ### 7.15 LTKM/LTKT Reporting (PPATK)
@@ -775,7 +836,74 @@ Petugas bisa override rekomendasi dengan justifikasi tertulis.
 
 ---
 
-## 8. API Surface
+### 7.16 Beneficial Ownership (BO)
+
+**Purpose:** Identifikasi Pemilik Manfaat (Beneficial Owner) dari nasabah badan usaha/korporasi. **Wajib per Permenkumham 21/2019 dan POJK 12/2017.**
+
+**Definisi BO:** Orang perseorangan yang:
+- Memiliki saham ≥ 25% (kepemilikan langsung)
+- Memiliki hak suara ≥ 25%
+- Menerima manfaat ≥ 25% dari laba perusahaan
+- Memiliki kewenangan mengangkat/memberhentikan direksi
+- Pengendali utama/ultimate beneficial owner
+
+**Capabilities:**
+- **BO Declaration Form:** struktur kepemilikan bertingkat (langsung → tidak langsung)
+- **Ownership graph visual:** diagram pohon siapa memiliki apa, berapa persen
+- **Multi-level BO:** capture pemilik tidak langsung melalui perusahaan perantara
+- **Identitas BO:** NIK, nama, alamat, persentase kepemilikan, hubungan dengan pemilik terdaftar
+- **BO Verification:** screening BO terhadap DTTOT, sanctions list, adverse media
+- **BO History:** track perubahan struktur kepemilikan dari waktu ke waktu
+- **BO Certificate:** generate surat pernyataan BO sesuai format Permenkumham
+- **PEP Flag:** auto-flag jika BO adalah Penyelenggara Negara atau keluarganya
+
+**Contoh Struktur BO:**
+
+```
+PT Maju Bersama (Nasabah)
+├── Ahmad Sudrajat (45% saham — BO Langsung)
+│   └── PT Holding Jaya (pemilik Ahmad 100%)
+│       └── Maria Sudrajat (istri Ahmad — BO Tidak Langsung)
+├── Budi Hartono (30% saham — BO Langsung)
+├── PT Investasi Nusantara (25% saham)
+│   └── Charlie Wijaya (60% saham PT Investasi — BO Tidak Langsung)
+```
+
+**NFR:**
+- BO graph render < 500ms
+- Setiap BO wajib di-screen terhadap APU-PPT (auto-trigger dari modul 7.12)
+- BO declaration wajib di-update jika ada perubahan struktur ≥ 10%
+
+---
+
+### 7.17 Data Master & Reference Tables
+
+**Purpose:** Reference data untuk validasi alamat, kode wilayah, dan data master lainnya.
+
+**Reference Tables:**
+
+| Tabel | Sumber | Penggunaan |
+| ----- | ------ | ---------- |
+| **Wilayah Administratif** (provinsi, kabupaten, kecamatan, kelurahan) | Kemendagri (Permendagri 58/2021) | Validasi alamat KTP di KYC (7.5), alamat usaha di wawancara (7.3-C) |
+| **Kode Pos** | BPS / Pos Indonesia | Auto-complete alamat |
+| **Kode KBLI** (Klasifikasi Baku Lapangan Usaha Indonesia) | BPS | Klasifikasi bidang usaha di wawancara (7.3-C) |
+| **Daftar Bank** (kode bank + SWIFT) | BI | SLIK (7.11), transfer monitoring |
+| **Kode MCC** (Merchant Category Code) | ISO | Transaction monitoring (7.7), flag rules per kategori |
+| **Daftar Negara High-Risk** | FATF Greylist/Blacklist | APU-PPT screening (7.12), cross-border flag |
+| **Daftar Penyelenggara Negara (PEP)** | Data publik | CDD/EDD (7.13), PEP auto-flag |
+| **Suku Bunga Acuan** (BI Rate, LPS Rate) | BI, LPS | Simulasi bunga kredit (7.3-F) |
+
+**Capabilities:**
+- Reference data import (CSV/JSON/API sync)
+- Version tracking: siapa update, kapan, perubahan apa
+- Auto-complete di semua form menggunakan reference data (alamat, kode bank, KBLI)
+- Deprecated data flag (wilayah pemekaran, kode bank kadaluarsa)
+- Manual update oleh Admin dengan audit trail
+
+**NFR:**
+- Reference data cached di Redis, TTL 24 jam
+- Auto-complete response < 200ms
+- Import 50.000+ baris data wilayah < 30 detik
 
 ### Base URL
 
@@ -923,9 +1051,13 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 | **POJK 64/2020** | SLIK: BI Checking wajib untuk semua kredit | Modul 7.11 |
 | **SEOJK 42/2019** | Kolektibilitas NPL: klasifikasi Lancar-Macet | Modul 7.14 |
 | **UU 8/2010 (TPPU)** | LTKM/LTKT: pelaporan transaksi mencurigakan | Modul 7.15 |
-| **UU 27/2022 (UU PDP)** | Pelindungan data pribadi: consent, retensi, right-to-erasure | Modul 7.8 |
-| **PP 43/2015** | APU-PPT: screening DTTOT, beneficial owner | Modul 7.12, 7.13 |
+| **UU 27/2022 (UU PDP)** | Pelindungan data pribadi: consent, retensi, right-to-erasure, channel opt-out | Modul 7.8 |
+| **PP 43/2015** | APU-PPT: screening DTTOT, LTKM/LTKT | Modul 7.12, 7.15 |
+| **POJK 22/2023** | Perlindungan Konsumen: transparansi suku bunga efektif, APR disclosure | Modul 7.3-F |
+| **Permenkumham 21/2019** | Beneficial Ownership: identifikasi pemilik manfaat korporasi | Modul 7.16 |
 | **Permendagri 104/2019** | e-KYC Dukcapil: NIK validation | Modul 7.5 |
+| **Permendagri 58/2021** | Kode wilayah administratif Indonesia | Modul 7.17 |
+| **POJK 18/2021** | Rekening Dormant: klasifikasi, reaktivasi, escheatment | Modul 7.14 |
 | **BI SNAP** | Standar Open API nasional | API design |
 | **ISO 27001** | Information security management | Security controls |
 | **PCI DSS** | Keamanan data kartu (jika applicable) | Card data handling |
@@ -1008,14 +1140,31 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 - [ ] SLA tracking untuk KYC dan sengketa
 
 **Deliverable:** Petugas bisa proses KYC dengan risk-rating, screening APU-PPT, dan sengketa dengan SLA severity-based.
-- [ ] Komunikasi internal + eksternal di sengketa
-- [ ] SLA tracking untuk KYC dan sengketa
-
-**Deliverable:** Petugas bisa proses KYC dan sengketa dalam satu platform.
 
 ---
 
-### Phase 3 — Monitoring, Collection & CS (Weeks 8–10)
+### Phase 2b — Compliance Regulatory Core (Weeks 8–10)
+
+**Goal:** Modul regulasi wajib: SLIK, APU-PPT, CDD/EDD, Beneficial Ownership, Data Master.
+
+- [ ] SLIK database schema + UI mock (field & API contract siap untuk integrasi OJK)
+- [ ] APU-PPT screening engine: DTTOT, sanctions list, adverse media, PEP detection
+- [ ] CDD/EDD auto risk-rating + periodic review scheduler + EDD requirements
+- [ ] **Beneficial Ownership (BO) module — modul 7.16:** form struktur kepemilikan, ownership graph visual, BO history tracking, BO certificate generation
+- [ ] **Data Master & Reference Tables — modul 7.17:** import wilayah administratif Kemendagri, KBLI, kode bank, FATF country list, PEP list
+- [ ] **Dormant account flagging — modul 7.14:** auto-classification Active/Inactive/Dormant, reaktivasi + re-KYC workflow, dormant alert
+- [ ] **Interest rate disclosure — modul 7.3-F:** kalkulator simulasi bunga flat vs efektif, APR calculator, tabel amortisasi, compliance POJK 22/2023
+- [ ] **Notification channel opt-out — modul 7.8:** channel preferences per nasabah, opt-out granular, re-opt-in workflow, mandatory channel exception
+- [ ] **Compliance Officer oversight — modul 7.8:** Compliance Reviewer role, auto-flag anomali, quarterly compliance audit report
+- [ ] APU-PPT screening log + investigasi workflow
+- [ ] BO ownership graph visual (siapa memiliki apa, berapa persen)
+- [ ] Regional code auto-complete di form alamat
+
+**Deliverable:** Compliance officer bisa screening nasabah, assign risk rating, capture BO, deteksi rekening dormant, dan petugas bisa simulasi bunga sesuai POJK 22/2023.
+
+---
+
+### Phase 3 — Monitoring, Collection & CS (Weeks 11–13)
 
 **Goal:** Real-time monitoring + kolektibilitas + LTKM/LTKT + CS tools di mobile.
 
@@ -1034,7 +1183,7 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 
 ---
 
-### Phase 4 — Reporting, Admin & PDP (Weeks 11–12)
+### Phase 4 — Reporting, Admin & PDP (Weeks 14–15)
 
 **Goal:** Web reporting + regulatory reports + user management + UU PDP compliance.
 
@@ -1051,7 +1200,7 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 
 ---
 
-### Phase 5 — Polish & Security Hardening (Week 13–14)
+### Phase 5 — Polish & Security Hardening (Weeks 16–18)
 
 **Goal:** Polish, performance, security hardening — mobile + web.
 
