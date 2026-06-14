@@ -1,6 +1,6 @@
 # Product Requirements Document — BankSatu OPS
 
-**Version:** 0.5.1-draft
+**Version:** 1.0.0-draft
 **Author:** Muhammad Faisal Affan
 **Status:** Draft
 **Last Updated:** 2026-06-14
@@ -38,6 +38,7 @@
    - 7.20 Payment Exception Handling
    - 7.21 Internal Fraud Detection (Employee)
    - 7.22 Dual Authorization — Customer Transactions
+   - 7.23 Withholding Tax (PPh Final/23)
 8. [API Surface](#8-api-surface)
 9. [Mobile App & Web Dashboard](#9-mobile-app--web-dashboard)
 10. [Security & Compliance](#10-security--compliance)
@@ -112,6 +113,7 @@ Jika BankSatu OPS menyediakan platform operational terintegrasi dengan wawancara
 | G18 | Payment exception handling: SKNBI/RTGS/BI-FAST retur              | P2       |
 | G19 | Internal fraud detection: employee behavioral monitoring          | P2       |
 | G20 | Dual authorization: customer multi-signatory + system config      | P2       |
+| G21 | Withholding tax: PPh Final/23 auto-calc, Bupot generation          | P1       |
 
 ### Non-Goals (v1)
 
@@ -322,7 +324,7 @@ BankSatu OPS adalah single source of truth untuk semua aktivitas operational, di
 
 **Capabilities:**
 - Global search by nama, NIK, nomor rekening, nomor kartu, email, telepon
-- Profile summary: foto KTP, data diri, alamat, pekerjaan
+- Profile summary: foto KTP, data diri, **NPWP (15 digit, format validasi, status aktif/dead)**, alamat, pekerjaan
 - Account overview: semua rekening, saldo, kartu aktif
 - Transaction history dengan filter granular (tanggal, nominal, jenis)
 - Credit history: limit saat ini, pengajuan sebelumnya, status approval
@@ -701,6 +703,7 @@ Petugas bisa override rekomendasi dengan justifikasi tertulis.
 | LTKM/LTKT submission | Compliance Officer | Manager Compliance |
 | Data retention erasure | CS Agent | Compliance Officer |
 | BO structure change ≥ 10% | Compliance Officer | Manager Compliance |
+| Koreksi perhitungan PPh (7.23) | Petugas | Supervisor → Manager Compliance |
 | User role change | Admin | Admin ke-2 (dual admin) |
 
 **Dual Control untuk System Configuration:**
@@ -1205,6 +1208,92 @@ PT Maju Bersama (Nasabah)
 
 ---
 
+### 7.23 Withholding Tax (PPh Final / PPh 23)
+
+**Purpose:** Perhitungan, pemotongan, dan pelaporan Pajak Penghasilan (PPh) atas transaksi perbankan. **Wajib per PP 131/2000, KMK 51/2001, dan UU HPP (Harmonisasi Peraturan Perpajakan) 2021.**
+
+Bank adalah **pemotong pajak (withholding agent)** — wajib memotong, menyetor, dan melaporkan PPh nasabah ke DJP.
+
+**Regulasi:**
+- PP 131/2000 — PPh Final atas bunga deposito/tabungan
+- KMK 51/2001 — Tata cara pemotongan PPh Final bunga
+- UU HPP 2021 — Update tarif & threshold terbaru
+- PMK terkait e-Bupot Unifikasi
+
+**Tax Types Covered:**
+
+| Jenis Pajak | Objek | Tarif (dengan NPWP) | Tarif (tanpa NPWP) | Threshold Bebas Pajak |
+| ----------- | ----- | ------------------- | ------------------ | --------------------- |
+| **PPh Final 4(2)** | Bunga deposito (IDR) | 20% | 40% | — |
+| **PPh Final 4(2)** | Bunga tabungan | 20% | 40% | Saldo ≤ Rp 7.500.000 (0%) |
+| **PPh Final 4(2)** | Bunga deposito valas | 20% | 40% | — |
+| **PPh 23** | Jasa appraisal agunan | 2% | 4% | — |
+| **PPh 23** | Jasa notaris/PPAT | 2% | 4% | — |
+| **PPh 23** | Jasa konsultan/advisor | 2% | 4% | — |
+| **PPh 23** | Sewa (equipment/bangunan) | 2% | 4% | — |
+
+**Capabilities:**
+- **NPWP linkage:** field NPWP di profil nasabah (7.2) — wajib divalidasi format (15 digit) dan status (aktif/dead). NPWP kosong → auto-kena tarif 2x.
+- **Auto-calculation engine:** trigger saat event pencairan:
+  - Bunga deposito dikreditkan → PPh Final 20% auto-calculated
+  - Bunga tabungan dikreditkan → cek threshold saldo, jika > Rp 7.5jt → 20%
+  - Pembayaran jasa ke vendor (appraisal, notaris) → PPh 23 auto-calculated
+- **Bukti Potong (Bupot) generation:**
+  - Format e-Bupot Unifikasi (DJP)
+  - Generate per transaksi atau akumulasi per bulan per nasabah
+  - Download PDF + XML (untuk e-filing)
+  - Distribusi: nasabah bisa download Bupot dari BankSatu Mobile, petugas dari OPS
+- **PPh Summary dashboard:** total PPh dipotong per jenis, per bulan, per tahun
+- **Koreksi pajak workflow:**
+  - Petugas mendeteksi kesalahan perhitungan → ajukan koreksi
+  - Approval: Supervisor → Manager Compliance (dual control, maker-checker)
+  - Koreksi tercatat di audit trail dengan alasan
+  - Bupot pembetulan auto-generated
+- **Penyetoran pajak tracking:**
+  - ID Billing (SSE DJP) per setoran
+  - Tanggal setor, NTPN (Nomor Tanda Terima Elektronik)
+  - Status: belum setor / sudah setor / terverifikasi
+- **Pelaporan pajak:**
+  - SPT Masa PPh Final/23 — rekap bulanan
+  - SPT Tahunan — rekap tahunan per Wajib Pajak
+  - Terintegrasi ke reporting regulator (7.8) — bank wajib melaporkan ke BI/OJK
+
+**Tax Calculation Example:**
+
+```
+Nasabah dengan NPWP, deposito Rp 100.000.000, bunga 5%/tahun.
+Bunga per bulan = 100jt × 5% / 12 = Rp 416.667
+PPh Final 20% = Rp 416.667 × 20% = Rp 83.333
+Bunga bersih diterima nasabah = Rp 416.667 - Rp 83.333 = Rp 333.333
+```
+
+```
+Nasabah TANPA NPWP, deposito Rp 100.000.000, bunga 5%/tahun.
+Bunga per bulan = Rp 416.667
+PPh Final 40% = Rp 416.667 × 40% = Rp 166.667
+Bunga bersih diterima nasabah = Rp 250.000
+```
+
+**v1 (Mock):**
+- Database schema + UI + kalkulasi engine
+- Bupot generation (PDF + XML format)
+- Approval workflow koreksi
+- Mock ID Billing dan NTPN (placeholder)
+- TANPA integrasi ke e-Bupot Unifikasi DJP
+
+**v2 (Real Integration):**
+- API integration ke e-Bupot Unifikasi DJP (jika tersedia)
+- Auto-submit SPT Masa via API DJP
+- Auto-validasi NPWP via API DJP
+
+**NFR:**
+- Auto-calculation real-time saat trigger event (pencairan bunga/jasa)
+- Akurasi perhitungan sampai Rupiah penuh (pembulatan sesuai aturan pajak)
+- Bupot generation < 2 detik per dokumen
+- Koreksi pajak wajib maker-checker (tidak bisa self-approve)
+
+---
+
 ### Cross-Module Data Flow
 
 Untuk memastikan konsistensi antar modul, berikut aliran data kunci yang harus terhubung:
@@ -1224,6 +1313,9 @@ Untuk memastikan konsistensi antar modul, berikut aliran data kunci yang harus t
 | Card Fraud → Monitoring | 7.18 → 7.7 | Kartu blokir/reissue karena fraud → auto-flag di monitoring untuk tracking transaksi terkait. |
 | Employee Flag → Compliance | 7.21 → 7.12 | Flag internal fraud (VIP lookup, self-approval) → auto-create case untuk Compliance Reviewer. |
 | Dual Auth → Transaction | 7.22 → 7.7 | Transaksi korporat pending multi-signatory → masuk monitoring sebagai "Pending Approval" dengan timeout tracker. |
+| Disbursement → Tax | 7.19 → 7.23 | Pencairan bunga deposito/tabungan → auto-trigger PPh Final calculation. Pembayaran jasa vendor (appraisal, notaris) → auto-trigger PPh 23. |
+| NPWP → Tax | 7.2 → 7.23 | Status NPWP nasabah (ada/tidak) → menentukan tarif PPh (normal vs 2x). NPWP tervalidasi format 15 digit. |
+| Tax → Reporting | 7.23 → 7.8 | Total PPh dipotong + Bupot → masuk pelaporan regulator (SPT Masa, SPT Tahunan, laporan BI/OJK). |
 
 **Aturan umum integrasi:**
 - Setiap perubahan status di modul upstream HARUS trigger event yang bisa dikonsumsi modul downstream (Event-Driven pattern)
@@ -1388,6 +1480,8 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 | **Permendagri 104/2019** | e-KYC Dukcapil: NIK validation | Modul 7.5 |
 | **Permendagri 58/2021** | Kode wilayah administratif Indonesia | Modul 7.17 |
 | **POJK 18/2021** | Rekening Dormant: klasifikasi, reaktivasi, escheatment | Modul 7.14 |
+| **PP 131/2000** | PPh Final atas bunga deposito/tabungan | Modul 7.23 |
+| **UU HPP 2021** | Harmonisasi Peraturan Perpajakan: update tarif & threshold | Modul 7.23 |
 | **BI SNAP** | Standar Open API nasional | API design |
 | **ISO 27001** | Information security management | Security controls |
 | **PCI DSS** | Keamanan data kartu (jika applicable) | Card data handling |
@@ -1525,7 +1619,8 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 - [ ] Audit trail viewer dengan filter granular + maker-checker visual timeline (web)
 - [ ] Operational reports: pengajuan, approval, dispute, KYC, kolektibilitas (web)
 - [ ] Credit portfolio dashboard dengan segmentasi NPL (web)
-- [ ] Pelaporan regulator: OJK summary, PPATK log, BI statistik (web)
+- [ ] Pelaporan regulator: OJK summary, PPATK log, BI statistik, **PPh/Withholding Tax** (web)
+- [ ] **Withholding Tax — modul 7.23:** PPh Final/23 auto-calc engine, Bupot generation (PDF+XML), koreksi pajak workflow, penyetoran tracking (ID Billing/NTPN)
 - [ ] UU PDP: consent log, data retention policy, right-to-erasure workflow (web)
 - [ ] Export PDF/CSV dengan filter granular (web)
 - [ ] User management + role assignment dengan maker-checker separation (web)
