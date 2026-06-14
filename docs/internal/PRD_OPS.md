@@ -1,6 +1,6 @@
 # Product Requirements Document — BankSatu OPS
 
-**Version:** 0.3.1-draft
+**Version:** 0.4.0-draft
 **Author:** Muhammad Faisal Affan
 **Status:** Draft
 **Last Updated:** 2026-06-14
@@ -26,8 +26,15 @@
    - 7.8 Reporting & Audit Trail
    - 7.9 Customer Service Tools
    - 7.10 Role-Based Access Control
+   - 7.11 SLIK / BI Checking Integration
+   - 7.12 APU-PPT & Sanctions Screening
+   - 7.13 CDD/EDD Tiering & Risk Rating
+   - 7.14 Restrukturisasi & Kolektibilitas (NPL)
+   - 7.15 LTKM/LTKT Reporting (PPATK)
+   - 7.16 Beneficial Ownership (BO)
+   - 7.17 Data Master & Reference Tables
 8. [API Surface](#8-api-surface)
-9. [Web App](#9-web-app)
+9. [Mobile App & Web Dashboard](#9-mobile-app--web-dashboard)
 10. [Security & Compliance](#10-security--compliance)
 11. [Tech Stack](#11-tech-stack)
 12. [Build Phases & Milestones](#12-build-phases--milestones)
@@ -106,6 +113,49 @@ Jika BankSatu OPS menyediakan platform operational terintegrasi dengan wawancara
 ### ⚠️ Compliance Notice
 
 PRD ini dirancang dengan **compliance-ready architecture**. Fitur regulasi (SLIK, APU-PPT, LTKM/LTKT, Dukcapil) disiapkan skema database dan UI-nya di v1, dengan integrasi institusional (OJK, PPATK, Dukcapil) dijadwalkan di v2 setelah kerja sama API tersedia. **Tanpa integrasi ini, aplikasi TIDAK dapat digunakan untuk operasional bank berlisensi.** Risiko utama: audit OJK akan menemukan temuan jika SLIK check, APU-PPT screening, dan pelaporan LTKM tidak aktif.
+
+### MVP Scope Definition (v1 — Demo/Pitch)
+
+**Target v1:** Aplikasi operasional yang bisa di-demokan ke stakeholder dengan data mock. BUKAN produksi.
+
+**Wajib ada (P0 — tanpa ini demo tidak jalan):**
+
+| Modul | Scope v1 |
+|-------|----------|
+| 7.1 Dashboard | Task queue personal, SLA timer, quick stats dengan mock data |
+| 7.2 Nasabah Search | Search + profil 360° dengan mock data nasabah |
+| 7.3 Wawancara | Form multi-section + auto-calculation + simulasi bunga (mock data) |
+| 7.4 Approval | Workflow 2-level (Supervisor → Manager) dengan mock |
+| 7.5 KYC | Review queue + side-by-side view + document expiry tracking |
+| 7.10 RBAC | Role-based access + maker-checker separation |
+
+**Nice-to-have (P1 — bikin demo lebih convincing):**
+
+| Modul | Scope v1 |
+|-------|----------|
+| 7.6 Sengketa | Case management + severity SLA |
+| 7.7 Monitoring | Live feed + flag rules dasar (threshold, cross-city, midnight) |
+| 7.8 Audit | Audit trail viewer + maker-checker visual |
+
+**Compliance UI/DB ready (P2 — skema siap, mock data, integrasi real di v2):**
+
+| Modul | Scope v1 |
+|-------|----------|
+| 7.11 SLIK | Database schema + UI + mock data |
+| 7.12 APU-PPT | Database schema + UI screening + mock engine |
+| 7.13 CDD/EDD | Risk-rating engine + periodic review scheduler |
+| 7.14 NPL | Kolektibilitas dashboard + restrukturisasi workflow |
+| 7.15 LTKM/LTKT | Form pelaporan + workflow submit (mock) |
+| 7.16 BO | Form struktur kepemilikan + ownership graph |
+| 7.17 Data Master | Reference tables + import workflow |
+
+**Out of scope v1 (v2+):**
+- Integrasi API SLIK OJK real-time
+- Integrasi API Dukcapil real-time
+- Integrasi API goAML PPATK
+- Real-time sanctions list sync
+- AI/ML credit scoring otomatis
+- Multi-cabang/multi-branch
 
 ---
 
@@ -322,6 +372,26 @@ BankSatu OPS adalah single source of truth untuk semua aktivitas operational, di
   - **Total biaya kredit (APR)** — angka wajib yang harus di-disclose ke nasabah per POJK 22/2023
 - **Perbandingan visual:** grafik batang bunga flat vs bunga efektif, tabel amortisasi
 - Disclaimer: "Simulasi ini bersifat ilustratif. Suku bunga final ditentukan saat approval."
+
+**Formula Bunga Efektif (Metode Anuitas):**
+
+```
+Cicilan Bulanan = P × [i × (1 + i)^n] / [(1 + i)^n - 1]
+
+Dimana:
+  P = Pokok pinjaman
+  i = Suku bunga per bulan (suku bunga tahunan / 12)
+  n = Jumlah bulan (tenor)
+
+APR (Annual Percentage Rate) = [(Total Pembayaran - Pokok) / Pokok] / Tenor Tahun × 100%
+```
+
+**Contoh:** Pinjaman Rp 10.000.000, tenor 12 bulan, bunga flat 10%/tahun.
+- Bunga flat: cicilan = (10jt + 1jt) / 12 = Rp 916.667/bulan  
+- Bunga efektif (anuitas): cicilan = Rp 879.159/bulan
+- **APR = 10.47%** → angka ini yang wajib di-disclose ke nasabah per POJK 22/2023
+
+**Disclaimer wajib ditampilkan:** "Simulasi ini bersifat ilustratif dan dapat berubah sewaktu-waktu. Suku bunga final ditentukan pada saat persetujuan kredit. Nasabah berhak mendapatkan informasi lengkap mengenai suku bunga, biaya, dan ketentuan sebelum menandatangani perjanjian kredit."
 
 **NFR:**
 - Kalkulator simulasi real-time, update setiap perubahan input
@@ -608,6 +678,7 @@ Petugas bisa override rekomendasi dengan justifikasi tertulis.
 | KYC approval | KYC Officer | Supervisor (random sampling 10%) |
 | LTKM/LTKT submission | Compliance Officer | Manager Compliance |
 | Data retention erasure | CS Agent | Compliance Officer |
+| BO structure change ≥ 10% | Compliance Officer | Manager Compliance |
 | User role change | Admin | Admin ke-2 (dual admin) |
 
 **Pengecualian Maker-Checker:**
@@ -900,10 +971,31 @@ PT Maju Bersama (Nasabah)
 - Deprecated data flag (wilayah pemekaran, kode bank kadaluarsa)
 - Manual update oleh Admin dengan audit trail
 
+**Periodic Review untuk Data Dinamis:**
+
+| Data | Sumber | Frekuensi Update | Proses |
+| ---- | ------ | ---------------- | ------ |
+| FATF Greylist/Blacklist | FATF (www.fatf-gafi.org) | 3x/tahun (Feb, Jun, Okt) | Compliance Officer download → import CSV → Admin approve → audit trail |
+| PEP List | Data publik (LHKPN, KPU, Kemendagri) | Quarterly | Compliance Officer update manual → Admin approve |
+| DTTOT | PPATK / BNPT | Jika ada update | Compliance Officer import file → Admin approve |
+| Sanctions List (OFAC, UN, EU) | Website resmi masing-masing | Monthly | Auto-scheduled check + manual import jika ada perubahan |
+| BI Rate / LPS Rate | BI, LPS | Setiap perubahan (ad-hoc) | Admin update via form → audit trail |
+
+**Update Workflow:**
+1. Compliance Officer menerima/cek update dari sumber
+2. Import data baru ke staging table (tidak langsung production)
+3. Diff review: tampilkan perubahan (tambah, hapus, update) dari data sebelumnya
+4. Admin atau Manager Compliance approve → data pindah ke production table
+5. Audit trail: siapa import, siapa approve, timestamp, jumlah perubahan
+
 **NFR:**
 - Reference data cached di Redis, TTL 24 jam
 - Auto-complete response < 200ms
 - Import 50.000+ baris data wilayah < 30 detik
+
+---
+
+## 8. API Surface
 
 ### Base URL
 
@@ -1125,21 +1217,21 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 
 ---
 
-### Phase 2 — KYC, Compliance & Dispute (Weeks 5–7)
+### Phase 2 — KYC & Dispute Operations (Weeks 5–7)
 
-**Goal:** KYC + compliance regulatory + dispute management.
+**Goal:** KYC operational + dispute management. Fokus pada fitur yang langsung digunakan petugas.
 
-- [ ] KYC review queue dengan side-by-side view + e-KYC Dukcapil placeholder
-- [ ] CDD/EDD tiering: auto risk-rating + periodic review scheduler
+- [ ] KYC review queue dengan side-by-side view (KTP vs selfie)
+- [ ] e-KYC Dukcapil placeholder (format validation + mock response)
 - [ ] Document expiry tracking & re-KYC reminder otomatis
-- [ ] SLIK database schema + UI mock (field & API contract siap)
-- [ ] APU-PPT screening: DTTOT/sanctions/adverse media placeholder database + UI
 - [ ] Bulk KYC approve/reject
 - [ ] Dispute case management dengan severity-based SLA escalation matrix
 - [ ] Komunikasi internal + eksternal di sengketa
 - [ ] SLA tracking untuk KYC dan sengketa
 
-**Deliverable:** Petugas bisa proses KYC dengan risk-rating, screening APU-PPT, dan sengketa dengan SLA severity-based.
+**Deliverable:** Petugas bisa proses KYC dengan document tracking dan sengketa dengan SLA severity-based.
+
+> **Catatan:** SLIK, APU-PPT, CDD/EDD (database schema + engine) dipindahkan ke Phase 2b — modul regulasi yang lebih berat secara teknis.
 
 ---
 
