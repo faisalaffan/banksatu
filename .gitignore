@@ -54,3 +54,6 @@ build/
 .env
 .env.*
 secret.json
+
+# git-crypt keys (never commit)
+.git-crypt-keys/
