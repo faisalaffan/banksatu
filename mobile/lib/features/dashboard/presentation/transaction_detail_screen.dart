@@ -9,6 +9,8 @@ import 'package:simulator/core/theme/app_theme.dart';
 import 'package:simulator/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:simulator/features/dashboard/models/transaction.dart';
 
+import 'package:simulator/core/router/app_router.dart';
+
 class TransactionDetailScreen extends StatelessWidget {
   final String transactionId;
 
@@ -141,18 +143,20 @@ class TransactionDetailScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Geolocation Map Card (Stylized Vector Custom Paint)
-                Container(
-                  height: 180,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
-                    boxShadow: AppTheme.premiumShadow,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: Stack(
-                      children: [
+                GestureDetector(
+                  onTap: () => const GeolocationMapRoute().push(context),
+                  child: Container(
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
+                      boxShadow: AppTheme.premiumShadow,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Stack(
+                        children: [
                         // Custom Vector Map Background Drawing
                         CustomPaint(
                           size: Size.infinite,
@@ -220,6 +224,7 @@ class TransactionDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
                 const SizedBox(height: 16),
 
                 // Fee Breakdown Card

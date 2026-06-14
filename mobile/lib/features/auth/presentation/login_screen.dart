@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:simulator/core/theme/app_theme.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:simulator/core/router/app_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -346,9 +347,9 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                   ),
                   TextButton(
-                    onPressed: () => context.pop(),
+                    onPressed: () => const OAuthLoginRoute().push(context),
                     child: Text(
-                      'Masuk Akun Lain',
+                      'Otorisasi OAuth',
                       style: GoogleFonts.inter(
                         color: AppTheme.textLightGray,
                         fontWeight: FontWeight.w600,

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simulator/core/theme/app_theme.dart';
+import 'package:simulator/core/router/app_router.dart';
 
 class AIFinancialInsightsScreen extends StatefulWidget {
    const AIFinancialInsightsScreen({Key? key}) : super(key: key);
@@ -170,6 +171,42 @@ class _AIFinancialInsightsScreenState extends State<AIFinancialInsightsScreen> {
              ),
              const SizedBox(height: 28),
 
+             // AI & Analytics Menu Grid
+             Row(
+               children: [
+                 Expanded(
+                   child: _buildInsightActionCard(
+                     context,
+                     icon: Platform.isIOS ? CupertinoIcons.heart_fill : Icons.favorite_rounded,
+                     label: 'Skor Kesehatan',
+                     color: AppTheme.errorRed,
+                     onTap: () => const FinancialHealthRoute().push(context),
+                   ),
+                 ),
+                 const SizedBox(width: 10),
+                 Expanded(
+                   child: _buildInsightActionCard(
+                     context,
+                     icon: Platform.isIOS ? CupertinoIcons.chart_bar_fill : Icons.trending_up_rounded,
+                     label: 'Proyeksi Saldo',
+                     color: AppTheme.primaryBlue,
+                     onTap: () => const PredictiveCashflowRoute().push(context),
+                   ),
+                 ),
+                 const SizedBox(width: 10),
+                 Expanded(
+                   child: _buildInsightActionCard(
+                     context,
+                     icon: Platform.isIOS ? CupertinoIcons.doc_plaintext : Icons.receipt_long_rounded,
+                     label: 'Laporan SPT',
+                     color: AppTheme.shariaGreen,
+                     onTap: () => const TaxReportRoute().push(context),
+                   ),
+                 ),
+               ],
+             ),
+             const SizedBox(height: 24),
+
              // AI smart advisory feed cards
              Text(
                'Rekomendasi Pintar AI',
@@ -271,8 +308,51 @@ class _AIFinancialInsightsScreenState extends State<AIFinancialInsightsScreen> {
            ],
          ),
        ),
-     );
-   }
+    }
+
+    Widget _buildInsightActionCard(
+      BuildContext context, {
+      required IconData icon,
+      required String label,
+      required Color color,
+      required VoidCallback onTap,
+    }) {
+      return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFE8EEFF)),
+            boxShadow: AppTheme.premiumShadow,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.08),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color, size: 20),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.textDark,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 }
 
 // Custom painter to draw beautiful categories doughnut pie chart

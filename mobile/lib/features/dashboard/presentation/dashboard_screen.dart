@@ -532,6 +532,78 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.trending_up
+                                      : Icons.trending_up,
+                                  label: 'Investasi',
+                                  onTap: () => const InvestRoute().push(context),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.pie_chart
+                                      : Icons.pie_chart_outline,
+                                  label: 'Portofolio',
+                                  onTap: () => const PortfolioRoute().push(context),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.lock_shield
+                                      : Icons.lock_outline,
+                                  label: 'Deposito',
+                                  onTap: () => const TimeDepositRoute().push(context),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.arrow_2_circlepath
+                                      : Icons.autorenew,
+                                  label: 'Autosave Round-up',
+                                  onTap: () => const RoundUpRoute().push(context),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.person_2_fill
+                                      : Icons.people_outline,
+                                  label: 'Kantong / Sub-Akun',
+                                  onTap: () => const SubAccountManagementRoute().push(context),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _buildServiceCard(
+                                  icon: Platform.isIOS
+                                      ? CupertinoIcons.mail_solid
+                                      : Icons.mail_outline,
+                                  label: 'Pos Anggaran',
+                                  onTap: () => const EnvelopeBudgetingRoute().push(context),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -604,15 +676,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
-                          if (state.searchQuery.isNotEmpty)
-                            Text(
-                              '${state.filteredTransactions.length} Ditemukan',
-                              style: GoogleFonts.inter(
-                                color: AppTheme.primaryBlue,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
+                          Row(
+                            children: [
+                              if (state.searchQuery.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Text(
+                                    '${state.filteredTransactions.length} Ditemukan',
+                                    style: GoogleFonts.inter(
+                                      color: AppTheme.primaryBlue,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              GestureDetector(
+                                onTap: () => const ExportReportRoute().push(context),
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.primaryBlue.withOpacity(0.06),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    Platform.isIOS
+                                        ? CupertinoIcons.square_arrow_down
+                                        : Icons.download_rounded,
+                                    color: AppTheme.primaryBlue,
+                                    size: 18,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

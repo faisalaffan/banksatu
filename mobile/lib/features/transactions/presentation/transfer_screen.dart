@@ -173,8 +173,33 @@ class _TransferScreenState extends State<TransferScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _buildQuickAction(
+                  icon: Platform.isIOS ? CupertinoIcons.group_solid : Icons.group,
+                  title: 'Bulk Transfer',
+                  subtitle: 'Multi Target',
+                  onTap: () => const BulkTransferRoute().push(context),
+                ),
+                const SizedBox(width: 12),
+                _buildQuickAction(
+                  icon: Platform.isIOS ? CupertinoIcons.link : Icons.link,
+                  title: 'Payment Link',
+                  subtitle: 'Tagihan Link',
+                  onTap: () => const PaymentLinkRoute().push(context),
+                ),
+                const SizedBox(width: 12),
+                _buildQuickAction(
+                  icon: Platform.isIOS ? CupertinoIcons.money_dollar_circle_fill : Icons.monetization_on,
+                  title: 'Minta Uang',
+                  subtitle: 'Request Bill',
+                  onTap: () => const RequestMoneyRoute().push(context),
+                ),
+              ],
+            ),
             const SizedBox(height: 24),
-
+ 
             // Transfer Detail Card
             Container(
               padding: const EdgeInsets.all(20),
@@ -351,11 +376,11 @@ class _TransferScreenState extends State<TransferScreen> {
                 children: [
                   _buildAddFavoriteButton(),
                   const SizedBox(width: 16),
-                  _buildFavoriteContact('Budi S.', 'BS', const Color(0xFFF1F3FF)),
+                  _buildFavoriteContact(context, 'Budi S.', 'BS', const Color(0xFFF1F3FF)),
                   const SizedBox(width: 16),
-                  _buildFavoriteContact('Ani M.', 'AM', const Color(0xFFE8EEFF)),
+                  _buildFavoriteContact(context, 'Ani M.', 'AM', const Color(0xFFE8EEFF)),
                   const SizedBox(width: 16),
-                  _buildFavoriteContact('Dedi T.', 'DT', const Color(0xFFFFDAD6)),
+                  _buildFavoriteContact(context, 'Dedi T.', 'DT', const Color(0xFFFFDAD6)),
                 ],
               ),
             ),
@@ -502,39 +527,42 @@ class _TransferScreenState extends State<TransferScreen> {
     );
   }
 
-  Widget _buildFavoriteContact(String name, String initials, Color bgColor) {
-    return Column(
-      children: [
-        Container(
-          width: 54,
-          height: 54,
-          decoration: BoxDecoration(
-            color: bgColor,
-            shape: BoxShape.circle,
-            boxShadow: AppTheme.premiumShadow,
-            border: Border.all(color: Colors.white, width: 2),
-          ),
-          child: Center(
-            child: Text(
-              initials,
-              style: GoogleFonts.inter(
-                color: AppTheme.primaryBlue,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+  Widget _buildFavoriteContact(BuildContext context, String name, String initials, Color bgColor) {
+    return GestureDetector(
+      onTap: () => const ContactHistoryRoute().push(context),
+      child: Column(
+        children: [
+          Container(
+            width: 54,
+            height: 54,
+            decoration: BoxDecoration(
+              color: bgColor,
+              shape: BoxShape.circle,
+              boxShadow: AppTheme.premiumShadow,
+              border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: Center(
+              child: Text(
+                initials,
+                style: GoogleFonts.inter(
+                  color: AppTheme.primaryBlue,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          name,
-          style: GoogleFonts.inter(
-            color: AppTheme.textDark,
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: GoogleFonts.inter(
+              color: AppTheme.textDark,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

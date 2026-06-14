@@ -3,15 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simulator/core/theme/app_theme.dart';
+import 'package:simulator/core/router/app_router.dart';
 
 class AccessibilitySettingsScreen extends StatefulWidget {
   const AccessibilitySettingsScreen({Key? key}) : super(key: key);
 
   @override
-  State<AccessibilitySettingsScreen> createState() => _AccessibilitySettingsScreenState();
+  State<AccessibilitySettingsScreen> createState() =>
+      _AccessibilitySettingsScreenState();
 }
 
-class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScreen> {
+class _AccessibilitySettingsScreenState
+    extends State<AccessibilitySettingsScreen> {
   double _fontScale = 1.0;
   bool _highContrast = false;
   bool _screenReader = false;
@@ -45,7 +48,9 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                 style: GoogleFonts.inter(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: _highContrast ? Colors.white70 : AppTheme.textLightGray,
+                  color: _highContrast
+                      ? Colors.white70
+                      : AppTheme.textLightGray,
                   letterSpacing: 1.2,
                 ),
               ),
@@ -54,10 +59,14 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: _highContrast ? Colors.grey[900] : AppTheme.surfaceCard,
+                  color: _highContrast
+                      ? Colors.grey[900]
+                      : AppTheme.surfaceCard,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: _highContrast ? Colors.white : const Color(0xFFE8EEFF),
+                    color: _highContrast
+                        ? Colors.white
+                        : const Color(0xFFE8EEFF),
                     width: _highContrast ? 2.0 : 1.0,
                   ),
                   boxShadow: _highContrast ? [] : AppTheme.premiumShadow,
@@ -79,7 +88,9 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                       style: GoogleFonts.inter(
                         fontSize: 22 * _fontScale,
                         fontWeight: FontWeight.w800,
-                        color: _highContrast ? Colors.yellowAccent : AppTheme.primaryBlue,
+                        color: _highContrast
+                            ? Colors.yellowAccent
+                            : AppTheme.primaryBlue,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -87,7 +98,9 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                       'Gunakan slider di bawah untuk menyesuaikan kenyamanan membaca Anda.',
                       style: GoogleFonts.inter(
                         fontSize: 12 * _fontScale,
-                        color: _highContrast ? Colors.white : AppTheme.textLightGray,
+                        color: _highContrast
+                            ? Colors.white
+                            : AppTheme.textLightGray,
                         height: 1.4,
                       ),
                     ),
@@ -103,7 +116,9 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                 style: GoogleFonts.inter(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: _highContrast ? Colors.white70 : AppTheme.textLightGray,
+                  color: _highContrast
+                      ? Colors.white70
+                      : AppTheme.textLightGray,
                   letterSpacing: 1.2,
                 ),
               ),
@@ -111,10 +126,14 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: _highContrast ? Colors.grey[900] : AppTheme.surfaceCard,
+                  color: _highContrast
+                      ? Colors.grey[900]
+                      : AppTheme.surfaceCard,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: _highContrast ? Colors.white54 : const Color(0xFFE8EEFF),
+                    color: _highContrast
+                        ? Colors.white54
+                        : const Color(0xFFE8EEFF),
                     width: 1,
                   ),
                 ),
@@ -123,8 +142,25 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('A', style: TextStyle(fontSize: 12, color: _highContrast ? Colors.white : AppTheme.textDark)),
-                        Text('Aa', style: TextStyle(fontSize: 22, color: _highContrast ? Colors.white : AppTheme.textDark, fontWeight: FontWeight.bold)),
+                        Text(
+                          'A',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: _highContrast
+                                ? Colors.white
+                                : AppTheme.textDark,
+                          ),
+                        ),
+                        Text(
+                          'Aa',
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: _highContrast
+                                ? Colors.white
+                                : AppTheme.textDark,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -156,7 +192,9 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                       'Skala Font saat ini: ${(_fontScale * 100).toStringAsFixed(0)}%',
                       style: GoogleFonts.inter(
                         fontSize: 11,
-                        color: _highContrast ? Colors.white70 : AppTheme.textLightGray,
+                        color: _highContrast
+                            ? Colors.white70
+                            : AppTheme.textLightGray,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -172,17 +210,23 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                 style: GoogleFonts.inter(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
-                  color: _highContrast ? Colors.white70 : AppTheme.textLightGray,
+                  color: _highContrast
+                      ? Colors.white70
+                      : AppTheme.textLightGray,
                   letterSpacing: 1.2,
                 ),
               ),
               const SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
-                  color: _highContrast ? Colors.grey[900] : AppTheme.surfaceCard,
+                  color: _highContrast
+                      ? Colors.grey[900]
+                      : AppTheme.surfaceCard,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: _highContrast ? Colors.white54 : const Color(0xFFE8EEFF),
+                    color: _highContrast
+                        ? Colors.white54
+                        : const Color(0xFFE8EEFF),
                     width: 1,
                   ),
                 ),
@@ -227,6 +271,56 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                 ),
               ),
 
+              const SizedBox(height: 28),
+
+              Text(
+                'MODE KEMUDAHAN AKSES',
+                style: GoogleFonts.inter(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: _highContrast
+                      ? Colors.white70
+                      : AppTheme.textLightGray,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: _highContrast
+                      ? Colors.grey[900]
+                      : AppTheme.surfaceCard,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: _highContrast
+                        ? Colors.white54
+                        : const Color(0xFFE8EEFF),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    _buildNavigationMenuItem(
+                      icon: Platform.isIOS
+                          ? CupertinoIcons.person_crop_circle_badge_exclam
+                          : Icons.elderly_rounded,
+                      title: 'Elder Mode (Ramah Lansia)',
+                      subtitle: 'Antarmuka tombol besar dan kontras tinggi.',
+                      onTap: () => const ElderModeRoute().push(context),
+                    ),
+                    const Divider(height: 1, color: Color(0xFFE8EEFF)),
+                    _buildNavigationMenuItem(
+                      icon: Platform.isIOS
+                          ? CupertinoIcons.mic_circle_fill
+                          : Icons.mic_rounded,
+                      title: 'Voice Banking',
+                      subtitle: 'Kirim uang & cek saldo via perintah suara.',
+                      onTap: () => const VoiceBankingRoute().push(context),
+                    ),
+                  ],
+                ),
+              ),
+
               const SizedBox(height: 32),
 
               // Save / Done Button
@@ -235,11 +329,17 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                 height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _highContrast ? Colors.white : AppTheme.primaryBlue,
-                    foregroundColor: _highContrast ? Colors.black : Colors.white,
+                    backgroundColor: _highContrast
+                        ? Colors.white
+                        : AppTheme.primaryBlue,
+                    foregroundColor: _highContrast
+                        ? Colors.black
+                        : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      side: _highContrast ? const BorderSide(color: Colors.white, width: 2) : BorderSide.none,
+                      side: _highContrast
+                          ? const BorderSide(color: Colors.white, width: 2)
+                          : BorderSide.none,
                     ),
                     elevation: 0,
                   ),
@@ -277,7 +377,8 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: (_highContrast ? Colors.white : AppTheme.primaryBlue).withOpacity(0.08),
+              color: (_highContrast ? Colors.white : AppTheme.primaryBlue)
+                  .withOpacity(0.08),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -304,7 +405,9 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
                   subtitle,
                   style: GoogleFonts.inter(
                     fontSize: 11,
-                    color: _highContrast ? Colors.white70 : AppTheme.textLightGray,
+                    color: _highContrast
+                        ? Colors.white70
+                        : AppTheme.textLightGray,
                   ),
                 ),
               ],
@@ -316,6 +419,71 @@ class _AccessibilitySettingsScreenState extends State<AccessibilitySettingsScree
             onChanged: onChanged,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNavigationMenuItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: (_highContrast ? Colors.white : AppTheme.primaryBlue)
+                    .withOpacity(0.08),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: _highContrast ? Colors.white : AppTheme.primaryBlue,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: _highContrast ? Colors.white : AppTheme.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: _highContrast
+                          ? Colors.white70
+                          : AppTheme.textLightGray,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Platform.isIOS
+                  ? CupertinoIcons.chevron_right
+                  : Icons.chevron_right,
+              color: _highContrast ? Colors.white70 : AppTheme.textLightGray,
+              size: 16,
+            ),
+          ],
+        ),
       ),
     );
   }

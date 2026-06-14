@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:simulator/core/theme/app_theme.dart';
+import 'package:simulator/core/router/app_router.dart';
 
 class AIAssistantSearchScreen extends StatefulWidget {
    const AIAssistantSearchScreen({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class _AIAssistantSearchScreenState extends State<AIAssistantSearchScreen> {
      {'title': 'Buat Tabungan Berjangka', 'category': 'Tabungan', 'route': '/wealth/savings/time-deposit', 'type': 'wealth'},
      {'title': 'Akses Shared Vault Pocket', 'category': 'Tabungan', 'route': '/wealth/savings/shared-vault', 'type': 'wealth'},
      {'title': 'Konfigurasi Keamanan PIN', 'category': 'Keamanan', 'route': '/profile', 'type': 'profile'},
+     {'title': 'Tanya AI Assistant (Chat)', 'category': 'Fitur Pintar', 'route': '/analytics/chat', 'type': 'action'},
    ];
 
    List<Map<String, String>> _getFilteredResults() {
@@ -116,6 +118,71 @@ class _AIAssistantSearchScreenState extends State<AIAssistantSearchScreen> {
                ),
              ),
              const SizedBox(height: 28),
+
+             if (_query.isEmpty) ...[
+               GestureDetector(
+                 onTap: () => const AIAssistantRoute().push(context),
+                 child: Container(
+                   padding: const EdgeInsets.all(16),
+                   decoration: BoxDecoration(
+                     gradient: const LinearGradient(
+                       colors: [AppTheme.primaryBlue, Colors.deepPurple],
+                       begin: Alignment.topLeft,
+                       end: Alignment.bottomRight,
+                     ),
+                     borderRadius: BorderRadius.circular(16),
+                     boxShadow: AppTheme.premiumShadow,
+                   ),
+                   child: Row(
+                     children: [
+                       Container(
+                         padding: const EdgeInsets.all(10),
+                         decoration: BoxDecoration(
+                           color: Colors.white.withOpacity(0.15),
+                           shape: BoxShape.circle,
+                         ),
+                         child: const Icon(
+                           CupertinoIcons.chat_bubble_2_fill,
+                           color: Colors.white,
+                           size: 20,
+                         ),
+                       ),
+                       const SizedBox(width: 16),
+                       Expanded(
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             Text(
+                               'Mulai Chat dengan AI Assistant',
+                               style: GoogleFonts.inter(
+                                 color: Colors.white,
+                                 fontSize: 13,
+                                 fontWeight: FontWeight.w800,
+                               ),
+                             ),
+                             const SizedBox(height: 2),
+                             Text(
+                               'Tanyakan apa saja tentang transaksi, keuangan, atau bantuan produk.',
+                               style: GoogleFonts.inter(
+                                 color: Colors.white.withOpacity(0.8),
+                                 fontSize: 10,
+                                 fontWeight: FontWeight.w500,
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                       const Icon(
+                         Icons.chevron_right,
+                         color: Colors.white,
+                         size: 20,
+                       ),
+                     ],
+                   ),
+                 ),
+               ),
+               const SizedBox(height: 20),
+             ],
 
              // Suggestion lists header titles
              Text(

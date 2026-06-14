@@ -504,6 +504,36 @@ class _SecurityScreenState extends State<SecurityScreen> {
                           child: Divider(color: Color(0xFFE8EEFF)),
                         ),
                         _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.device_phone_portrait : Icons.smartphone,
+                          title: 'Manajemen Perangkat',
+                          subtitle: 'Kelola perangkat & remote logout.',
+                          onTap: () => const DeviceManagementRoute().push(context),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(color: Color(0xFFE8EEFF)),
+                        ),
+                        _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.airplane : Icons.flight_takeoff,
+                          title: 'Travel Mode',
+                          subtitle: 'Whitelist transaksi luar negeri.',
+                          onTap: () => const TravelModeRoute().push(context),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(color: Color(0xFFE8EEFF)),
+                        ),
+                        _buildNavRow(
+                          icon: Platform.isIOS ? CupertinoIcons.shield_slash : Icons.gpp_maybe,
+                          title: 'Decoy/Duress PIN',
+                          subtitle: 'PIN darurat untuk keamanan terancam.',
+                          onTap: () => const DuressPinRoute().push(context),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(color: Color(0xFFE8EEFF)),
+                        ),
+                        _buildNavRow(
                           icon: Platform.isIOS ? CupertinoIcons.gear_alt_fill : Icons.api,
                           title: 'API & Webhooks Pribadi',
                           subtitle: 'Generate token akses & integrasi.',

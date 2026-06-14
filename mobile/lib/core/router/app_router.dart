@@ -57,6 +57,25 @@ import 'package:simulator/features/security/presentation/dispute_manager_screen.
 import 'package:simulator/features/security/presentation/virtual_card_screen.dart';
 import 'package:simulator/features/security/presentation/credit_card_screen.dart';
 import 'package:simulator/features/security/presentation/personal_api_screen.dart';
+import 'package:simulator/features/transactions/presentation/bulk_transfer_screen.dart';
+import 'package:simulator/features/security/presentation/device_management_screen.dart';
+import 'package:simulator/features/dashboard/presentation/sub_account_management_screen.dart';
+import 'package:simulator/features/transactions/presentation/payment_link_screen.dart';
+import 'package:simulator/features/transactions/presentation/request_money_screen.dart';
+import 'package:simulator/features/security/presentation/travel_mode_screen.dart';
+import 'package:simulator/features/dashboard/presentation/envelope_budgeting_screen.dart';
+import 'package:simulator/features/subscriptions/presentation/recurring_payments_screen.dart';
+import 'package:simulator/features/dashboard/presentation/export_report_screen.dart';
+import 'package:simulator/features/analytics/presentation/financial_health_screen.dart';
+import 'package:simulator/features/analytics/presentation/tax_report_screen.dart';
+import 'package:simulator/features/analytics/presentation/predictive_cashflow_screen.dart';
+import 'package:simulator/features/analytics/presentation/geolocation_map_screen.dart';
+import 'package:simulator/features/wealth/presentation/group_savings_screen.dart';
+import 'package:simulator/features/sme/presentation/approval_workflow_screen.dart';
+import 'package:simulator/features/transactions/presentation/contact_history_screen.dart';
+import 'package:simulator/features/accessibility/presentation/voice_banking_screen.dart';
+import 'package:simulator/features/accessibility/presentation/elder_mode_screen.dart';
+import 'package:simulator/features/security/presentation/duress_pin_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -651,6 +670,140 @@ class PersonalApiRoute extends GoRouteData with $PersonalApiRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const PersonalApiScreen();
+}
+
+// 19 PRD Routes
+@TypedGoRoute<BulkTransferRoute>(path: '/transactions/bulk-transfer')
+class BulkTransferRoute extends GoRouteData with $BulkTransferRoute {
+  const BulkTransferRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const BulkTransferScreen();
+}
+
+@TypedGoRoute<DeviceManagementRoute>(path: '/security/device-management')
+class DeviceManagementRoute extends GoRouteData with $DeviceManagementRoute {
+  const DeviceManagementRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const DeviceManagementScreen();
+}
+
+@TypedGoRoute<SubAccountManagementRoute>(path: '/dashboard/sub-accounts')
+class SubAccountManagementRoute extends GoRouteData with $SubAccountManagementRoute {
+  const SubAccountManagementRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const SubAccountManagementScreen();
+}
+
+@TypedGoRoute<PaymentLinkRoute>(path: '/transactions/payment-link')
+class PaymentLinkRoute extends GoRouteData with $PaymentLinkRoute {
+  const PaymentLinkRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const PaymentLinkScreen();
+}
+
+@TypedGoRoute<RequestMoneyRoute>(path: '/transactions/request-money')
+class RequestMoneyRoute extends GoRouteData with $RequestMoneyRoute {
+  const RequestMoneyRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const RequestMoneyScreen();
+}
+
+@TypedGoRoute<TravelModeRoute>(path: '/security/travel-mode')
+class TravelModeRoute extends GoRouteData with $TravelModeRoute {
+  const TravelModeRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const TravelModeScreen();
+}
+
+@TypedGoRoute<EnvelopeBudgetingRoute>(path: '/dashboard/envelope-budgeting')
+class EnvelopeBudgetingRoute extends GoRouteData with $EnvelopeBudgetingRoute {
+  const EnvelopeBudgetingRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const EnvelopeBudgetingScreen();
+}
+
+@TypedGoRoute<RecurringPaymentsRoute>(path: '/subscriptions/recurring-payments')
+class RecurringPaymentsRoute extends GoRouteData with $RecurringPaymentsRoute {
+  const RecurringPaymentsRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const RecurringPaymentsScreen();
+}
+
+@TypedGoRoute<ExportReportRoute>(path: '/dashboard/export-report')
+class ExportReportRoute extends GoRouteData with $ExportReportRoute {
+  const ExportReportRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const ExportReportScreen();
+}
+
+@TypedGoRoute<FinancialHealthRoute>(path: '/analytics/financial-health')
+class FinancialHealthRoute extends GoRouteData with $FinancialHealthRoute {
+  const FinancialHealthRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const FinancialHealthScreen();
+}
+
+@TypedGoRoute<TaxReportRoute>(path: '/analytics/tax-report')
+class TaxReportRoute extends GoRouteData with $TaxReportRoute {
+  const TaxReportRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const TaxReportScreen();
+}
+
+@TypedGoRoute<PredictiveCashflowRoute>(path: '/analytics/predictive-cashflow')
+class PredictiveCashflowRoute extends GoRouteData with $PredictiveCashflowRoute {
+  const PredictiveCashflowRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const PredictiveCashflowScreen();
+}
+
+@TypedGoRoute<GeolocationMapRoute>(path: '/analytics/geolocation-map')
+class GeolocationMapRoute extends GoRouteData with $GeolocationMapRoute {
+  const GeolocationMapRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const GeolocationMapScreen();
+}
+
+@TypedGoRoute<GroupSavingsRoute>(path: '/wealth/group-savings')
+class GroupSavingsRoute extends GoRouteData with $GroupSavingsRoute {
+  const GroupSavingsRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const GroupSavingsScreen();
+}
+
+@TypedGoRoute<ApprovalWorkflowRoute>(path: '/sme/approval-workflow')
+class ApprovalWorkflowRoute extends GoRouteData with $ApprovalWorkflowRoute {
+  const ApprovalWorkflowRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const ApprovalWorkflowScreen();
+}
+
+@TypedGoRoute<ContactHistoryRoute>(path: '/transactions/contact-history')
+class ContactHistoryRoute extends GoRouteData with $ContactHistoryRoute {
+  const ContactHistoryRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const ContactHistoryScreen();
+}
+
+@TypedGoRoute<VoiceBankingRoute>(path: '/settings/voice-banking')
+class VoiceBankingRoute extends GoRouteData with $VoiceBankingRoute {
+  const VoiceBankingRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const VoiceBankingScreen();
+}
+
+@TypedGoRoute<ElderModeRoute>(path: '/settings/elder-mode')
+class ElderModeRoute extends GoRouteData with $ElderModeRoute {
+  const ElderModeRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const ElderModeScreen();
+}
+
+@TypedGoRoute<DuressPinRoute>(path: '/security/duress-pin')
+class DuressPinRoute extends GoRouteData with $DuressPinRoute {
+  const DuressPinRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const DuressPinScreen();
 }
 
 // Global router config instance

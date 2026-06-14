@@ -240,14 +240,18 @@ class _SMEDashboardScreenState extends State<SMEDashboardScreen> {
               ),
             ),
 
-            // Quick SME Action Grid
+            // Quick SME Action Carousel
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               sliver: SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _buildActionCard(
+                child: SizedBox(
+                  height: 124,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    children: [
+                      _buildActionCard(
                         context: context,
                         icon: CupertinoIcons.doc_text_viewfinder,
                         title: 'Buat Invoice',
@@ -255,10 +259,15 @@ class _SMEDashboardScreenState extends State<SMEDashboardScreen> {
                         color: AppTheme.primaryBlue,
                         onTap: () => const SMENewInvoiceRoute().push(context),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildActionCard(
+                      _buildActionCard(
+                        context: context,
+                        icon: Platform.isIOS ? CupertinoIcons.checkmark_seal_fill : Icons.verified_user_rounded,
+                        title: 'Approval Workflow',
+                        subtitle: 'Persetujuan transaksi',
+                        color: Colors.deepPurple,
+                        onTap: () => const ApprovalWorkflowRoute().push(context),
+                      ),
+                      _buildActionCard(
                         context: context,
                         icon: CupertinoIcons.gift_fill,
                         title: 'Dana Bansos',
@@ -266,8 +275,8 @@ class _SMEDashboardScreenState extends State<SMEDashboardScreen> {
                         color: AppTheme.shariaGreen,
                         onTap: () => const ProgrammableMoneyDetailRoute().push(context),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -430,6 +439,8 @@ class _SMEDashboardScreenState extends State<SMEDashboardScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: 160,
+        margin: const EdgeInsets.only(right: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppTheme.surfaceCard,
@@ -452,18 +463,22 @@ class _SMEDashboardScreenState extends State<SMEDashboardScreen> {
             Text(
               title,
               style: GoogleFonts.inter(
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: AppTheme.textDark,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 2),
             Text(
               subtitle,
               style: GoogleFonts.inter(
-                fontSize: 11,
+                fontSize: 10,
                 color: AppTheme.textLightGray,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

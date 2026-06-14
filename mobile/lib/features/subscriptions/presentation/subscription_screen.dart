@@ -42,6 +42,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Auto-Debit Manager'),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Platform.isIOS ? CupertinoIcons.calendar_badge_plus : Icons.history_toggle_off_rounded,
+              color: AppTheme.primaryBlue,
+            ),
+            tooltip: 'Tagihan Berulang',
+            onPressed: () => const RecurringPaymentsRoute().push(context),
+          ),
+        ],
       ),
       body: BlocBuilder<SubscriptionBloc, SubscriptionState>(
         builder: (context, state) {
