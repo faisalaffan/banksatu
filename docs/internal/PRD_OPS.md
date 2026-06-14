@@ -1,6 +1,6 @@
 # Product Requirements Document — BankSatu OPS
 
-**Version:** 0.4.0-draft
+**Version:** 0.5.0-draft
 **Author:** Muhammad Faisal Affan
 **Status:** Draft
 **Last Updated:** 2026-06-14
@@ -33,6 +33,11 @@
    - 7.15 LTKM/LTKT Reporting (PPATK)
    - 7.16 Beneficial Ownership (BO)
    - 7.17 Data Master & Reference Tables
+   - 7.18 Card Servicing Operations
+   - 7.19 Loan Disbursement & Drawdown
+   - 7.20 Payment Exception Handling
+   - 7.21 Internal Fraud Detection (Employee)
+   - 7.22 Dual Authorization — Customer Transactions
 8. [API Surface](#8-api-surface)
 9. [Mobile App & Web Dashboard](#9-mobile-app--web-dashboard)
 10. [Security & Compliance](#10-security--compliance)
@@ -48,6 +53,8 @@
 **BankSatu OPS** adalah aplikasi internal untuk petugas dan operational staff BankSatu — tersedia sebagai **mobile app (Flutter)** dan **web dashboard (React/Next.js)**. Mobile app digunakan untuk workflow sehari-hari di lapangan (wawancara nasabah, approval on-the-go, KYC review). Web dashboard digunakan untuk analisis mendalam dan reporting di kantor.
 
 BankSatu OPS adalah **companion app** untuk BankSatu Mobile (nasabah-facing). Jika BankSatu Mobile adalah tempat nasabah melakukan transaksi, BankSatu OPS adalah tempat petugas memastikan semua berjalan aman, compliant, dan efisien.
+
+**Scope fokus:** Credit/lending operations + compliance regulatory + card servicing + payment exception handling. Ini **bukan** full branch operations app — tidak mencakup teller/cash management, cek fisik, atau bank guarantee.
 
 ---
 
@@ -100,6 +107,11 @@ Jika BankSatu OPS menyediakan platform operational terintegrasi dengan wawancara
 | G13 | Role-based access control granular (maker-checker separation)     | P2       |
 | G14 | Customer service tools (live chat, call log)                      | P2       |
 | G15 | Reporting & analytics operational + pelaporan regulator           | P2       |
+| G16 | Card servicing: blokir, reissue, PIN reset, card dispute          | P1       |
+| G17 | Loan disbursement & drawdown tracking                             | P1       |
+| G18 | Payment exception handling: SKNBI/RTGS/BI-FAST retur              | P2       |
+| G19 | Internal fraud detection: employee behavioral monitoring          | P2       |
+| G20 | Dual authorization: customer multi-signatory + system config      | P2       |
 
 ### Non-Goals (v1)
 
@@ -107,8 +119,18 @@ Jika BankSatu OPS menyediakan platform operational terintegrasi dengan wawancara
 - Integrasi core banking system real — gunakan mock
 - Multi-cabang/multi-branch operational — single branch dulu
 - Integrasi Dukcapil real-time — desain API contract + field di database untuk integrasi di v2
-- Integrasi SLIK/BI Checking real-time — desain API contract + field di database, mock data di v1, integrasi real wajib di Phase 2
+- Integrasi SLIK/BI Checking real-time — desain API contract + field di database, mock data di v1, integrasi real wajib di Phase 2b
 - Integrasi PPATK API real-time — desain field + workflow pelaporan, mock submission di v1
+
+### Explicitly Out of Scope (Semua Versi)
+
+Fitur yang secara sadar **tidak** masuk scope BankSatu OPS karena tidak relevan dengan fokus lending + compliance:
+
+- **Cek/Bilyet Giro fisik** — BankSatu adalah digital-first bank, tidak memproses cek fisik atau BG. Kalau ada di masa depan, akan jadi modul terpisah.
+- **Garansi Bank (Bank Guarantee)** — penerbitan dan monitoring garansi bank untuk korporat. Out of scope karena target utama consumer/SME lending.
+- **Teller & cash/vault management** — manajemen kas harian cabang, setoran/tarik tunai fisik. Out of scope karena single branch + digital-first.
+- **Cross-selling / product recommendation** — rekomendasi produk otomatis ke petugas. Future enhancement, bukan v1.
+- **Cross-border trade finance** — L/C, SKBDN, wesel ekspor. Out of scope.
 
 ### ⚠️ Compliance Notice
 
@@ -681,6 +703,19 @@ Petugas bisa override rekomendasi dengan justifikasi tertulis.
 | BO structure change ≥ 10% | Compliance Officer | Manager Compliance |
 | User role change | Admin | Admin ke-2 (dual admin) |
 
+**Dual Control untuk System Configuration:**
+
+| Perubahan Konfigurasi | Maker | Checker |
+| --------------------- | ----- | ------- |
+| Flag rules threshold (7.7) | Admin | Admin ke-2 |
+| Approval matrix limit (7.4) | Admin | Manager |
+| Interest rate reference (7.17) | Admin | Manager |
+| DTTOT/Sanctions list update (7.12) | Compliance Officer | Manager Compliance |
+| Risk rating criteria bobot (7.13) | Manager | Direksi |
+| SLA severity matrix (7.6) | Manager | Direksi |
+| Role permission change (7.10) | Admin | Admin ke-2 + Manager |
+| Data retention policy (7.8) | Compliance Officer | Direksi |
+
 **Pengecualian Maker-Checker:**
 - View/search tidak butuh checker
 - Draft wawancara (belum submit) tidak butuh checker
@@ -995,7 +1030,178 @@ PT Maju Bersama (Nasabah)
 
 ---
 
-## 8. API Surface
+### 7.18 Card Servicing Operations
+
+**Purpose:** Modul operasional kartu untuk task harian CS: blokir, reissue, PIN reset, kartu hilang/rusak.
+
+**Capabilities:**
+- **Kartu hilang/rusak workflow:** nasabah lapor via BankSatu Mobile → ticket otomatis dibuat di OPS → petugas verifikasi → blokir kartu lama → reissue kartu baru
+- **PIN reset:** nasabah lupa PIN → petugas verifikasi identitas (KYC re-check) → reset PIN → kirim PIN baru via channel aman
+- **Blokir/unblokir kartu ad-hoc:** nasabah minta blokir sementara (mis. travelling, kartu tertinggal) → petugas blokir/unblokir dari OPS
+- **Kartu rusak/ganti jenis:** upgrade kartu (silver → gold → platinum) → reissue dengan nomor baru
+- **Kartu tambahan (supplementary card):** pengajuan kartu tambahan untuk keluarga → approval → reissue
+- **Kartu expired auto-reissue:** sistem deteksi kartu akan expired (H-60, H-30) → auto-buat ticket reissue → kirim kartu baru
+- **Kartu gagal kirim/return:** tracking kartu yang dikembalikan kurir → update alamat → kirim ulang
+- **Card stock management:** tracking stok kartu fisik (nomor kartu, status: tersedia/dipakai/rusak)
+- **Card delivery tracking:** integrasi dengan kurir (resi, status pengiriman, estimasi tiba)
+- Integrasi dengan modul 7.7 (Monitoring): freeze kartu saat fraud flag merah
+
+**Kartu Types:**
+
+| Jenis Kartu | Limit Range | Approval |
+| ----------- | ----------- | -------- |
+| Silver (Debit) | Saldo rekening | Otomatis |
+| Gold (Kredit) | Rp 5jt - 25jt | Supervisor |
+| Platinum (Kredit) | Rp 25jt - 100jt | Manager |
+| Infinite/Black | > Rp 100jt | Direksi |
+
+**NFR:**
+- Blokir kartu dari OPS ke core banking < 2 detik
+- Reissue card processing < 1 hari kerja (workflow, bukan cetak fisik)
+- PIN reset butuh verifikasi identitas wajib (KYC re-check)
+
+---
+
+### 7.19 Loan Disbursement & Drawdown Tracking
+
+**Purpose:** Workflow pencairan dana kredit setelah approval. Tracking disbursement sekaligus atau bertahap.
+
+**Capabilities:**
+- **Disbursement request:** setelah approval kredit (7.4), petugas atau nasabah mengajukan pencairan
+- **Disbursement types:**
+  - **Sekaligus (lumpsum):** seluruh plafon dicairkan satu kali (kredit konsumer, KPR)
+  - **Bertahap (term drawdown):** dicairkan sesuai progress (kredit konstruksi, modal kerja) — setiap pencairan butuh approval
+- **Drawdown schedule:** jadwal pencairan bertahap dengan milestone (contoh: 30% saat akad, 40% setelah progress 50%, 30% setelah selesai)
+- **Pre-disbursement checklist:** verifikasi dokumen lengkap sebelum dana dicairkan:
+  - Akad kredit ditandatangani
+  - Agunan diikat (SKMHT/APHT untuk KPR)
+  - Asuransi jiwa/kredit aktif
+  - Biaya administrasi & provisi dibayar
+- **Disbursement approval:** maker-checker per pencairan
+- **Fund transfer execution:** dana dikirim ke rekening nasabah atau langsung ke pihak ketiga (developer, supplier)
+- **Disbursement history:** timeline semua pencairan per fasilitas kredit
+- **Remaining limit tracking:** plafon - total disbursed = sisa yang bisa dicairkan
+
+**Disbursement Approval Matrix:**
+
+| Jumlah Pencairan | Level 1 | Level 2 |
+| ---------------- | ------- | ------- |
+| ≤ Plafon, sesuai jadwal | Supervisor | — |
+| Di luar jadwal / perubahan | Supervisor | Manager |
+| > 80% plafon (final drawdown) | Manager | Direksi |
+
+**NFR:**
+- Disbursement execution ke core banking < 5 detik
+- Pre-disbursement checklist semua harus checked sebelum bisa submit
+- Drawdown schedule auto-reminder ke petugas H-7, H-3, H-1
+
+---
+
+### 7.20 Payment Exception Handling (SKNBI/RTGS/BI-FAST)
+
+**Purpose:** Modul investigasi dan retur untuk transaksi pembayaran yang gagal di sistem kliring.
+
+**Context:** Saat nasabah melakukan transfer via SKNBI/RTGS/BI-FAST, transaksi bisa gagal karena: salah nomor rekening, rekening tujuan tutup, nama tidak match, limit exceeded, sistem kliring timeout. Petugas OPS butuh tool untuk investigasi dan retur.
+
+**Capabilities:**
+- **Failed transaction queue:** semua transaksi kliring gagal dalam satu dashboard
+- **Failure reason classification:**
+  - Rekening tujuan tidak ditemukan
+  - Nama penerima tidak sesuai
+  - Rekening tujuan diblokir/tutup
+  - Limit transaksi exceeded
+  - Sistem kliring timeout / RTO (Return Timeout)
+  - Duplikat transaksi
+- **Investigation detail:** full context — data pengirim, penerima, nominal, reference number, timestamp, kliring batch ID
+- **Retur otomatis:** dana auto-dikembalikan ke pengirim jika transaksi gagal (sesuai aturan BI)
+- **Retur manual:** jika auto-retur gagal → petugas investigasi → retur manual
+- **Retur notification:** notifikasi ke nasabah bahwa dana sudah dikembalikan + alasan kegagalan
+- **Exception reporting:** laporan transaksi gagal per periode (untuk rekonsiliasi BI)
+- **Escalation:** transaksi gagal > 1x24 jam tanpa resolusi → auto-escalate ke supervisor
+
+**BI-FAST Specific:**
+- BI-FAST bersifat real-time irrevocable — jika transaksi gagal, retur harus dalam batch yang sama
+- Timeout BI-FAST = 60 detik → status "Pending" atau "Timed Out"
+
+**SKNBI Specific:**
+- SKNBI batch-based (4 batch/hari) — retur di batch berikutnya
+- Daftar hitam penarik (blacklist) untuk cek yang ditolak berulang
+
+**NFR:**
+- Failed transaction feed real-time dari core banking
+- Auto-retur < 5 menit setelah kegagalan
+- Investigation queue sortable by nominal, urgency
+
+---
+
+### 7.21 Internal Fraud Detection (Employee Monitoring)
+
+**Purpose:** Behavioral analytics untuk deteksi anomali pada tindakan petugas. **Concern serius di semua bank — insider threat.**
+
+**Regulasi:** POJK 12/2017 (APU-PPT — termasuk pegawai bank), SEOJK tentang Manajemen Risiko Operasional.
+
+**Detection Rules:**
+
+| Rule | Threshold | Severity |
+| ---- | --------- | -------- |
+| **VIP profile lookup tanpa alasan bisnis** | Petugas search nasabah VIP/High-Net-Worth > 5x dalam sehari tanpa ticket/wawancara terkait | High |
+| **Approval velocity anomali** | Petugas approve > 20 pengajuan dalam < 1 jam | Medium |
+| **Approval outside working hours** | Approve/reject di luar jam kerja (00:00-06:00) tanpa on-call schedule | Medium |
+| **Same-device login berbeda** | 1 device dipakai login oleh 2+ petugas berbeda | High |
+| **Data export tidak wajar** | Petugas export > 1000 baris data nasabah dalam 1 hari | High |
+| **Self-approval attempt** | Petugas mencoba approve pengajuan yang melibatkan dirinya atau keluarganya | Critical |
+| **Repeated failed access** | Petugas gagal akses modul di luar role-nya > 5x | Medium |
+| **Data change outside workflow** | Petugas mengubah data nasabah langsung via API/database (bukan via UI) | Critical |
+| **Geolocation anomaly** | Petugas login dari 2 kota berbeda dalam < 1 jam | High |
+
+**Capabilities:**
+- Real-time flag untuk petugas (mirip transaction monitoring tapi untuk karyawan)
+- Case creation otomatis: flag → investigasi internal → Compliance Reviewer
+- Dashboard "Employee Risk Score" per petugas (agregat dari flag)
+- Anomali pattern detection: cross-reference tindakan petugas dengan data nasabah
+- **Segregation:** hanya Compliance Reviewer dan Direksi yang bisa lihat employee monitoring dashboard
+- Whistleblower channel: petugas bisa lapor anomali rekan kerja secara anonim
+
+**NFR:**
+- Flag detection real-time
+- Employee risk score update tiap 24 jam (batch)
+- Data employee monitoring dienkripsi dan dipisahkan dari operational DB
+
+---
+
+### 7.22 Dual Authorization — Customer Transactions
+
+**Purpose:** Dual authorization untuk transaksi nasabah yang membutuhkan multiple signatory (umum di rekening korporat/giro).
+
+**Berbeda dari maker-checker internal (7.10):** Ini adalah authorization oleh **nasabah** (signatory rekening), bukan oleh petugas.
+
+**Use Case:** PT Maju Bersaya punya rekening giro dengan 3 signatory: Direktur (Ahmad), Finance Manager (Budi), Komisaris (Citra). Transfer > Rp 500jt butuh approval minimum 2 dari 3 signatory.
+
+**Capabilities:**
+- **Signatory management per rekening:** daftar signatory, tipe (mandatory/optional), threshold approval
+- **Transaction approval rules per rekening:**
+
+  | Jumlah Transaksi | Signatory Requirement |
+  | ---------------- | --------------------- |
+  | < Rp 100jt | 1 signatory (any) |
+  | Rp 100jt - 500jt | 2 signatory (any 2) |
+  | > Rp 500jt | 2 signatory (1 harus Direktur/Komisaris) |
+  | Semua transaksi luar negeri | 2 signatory wajib |
+
+- **Signatory approval flow:** transaksi dibuat oleh 1 signatory → pending approval signatory lain → semua approve → transaksi dieksekusi
+- **Timeout:** transaksi pending > 24 jam → auto-cancel + notifikasi
+- **Signatory delegation:** signatory bisa mendelegasikan wewenang ke orang lain dengan batas waktu dan nominal tertentu
+- **Audit trail:** siapa yang request, siapa yang approve, timestamp per signatory
+- **Override oleh petugas:** dalam kondisi darurat (mis. signatory sakit semua), petugas bisa override dengan approval level lebih tinggi (Manager + Compliance Officer)
+
+**Integration:**
+- Signatory list disinkronkan dengan data BO (modul 7.16) — signatory yang juga BO harus di-flag
+- Transaction monitoring (7.7) punya rule tambahan: transaksi yang menunggu dual approval > threshold
+
+**NFR:**
+- Approval notification ke semua signatory via push + email + SMS
+- Timeout auto-cancel < 1 menit setelah deadline
+- Override oleh petugas wajib audit trail + justifikasi tertulis
 
 ### Base URL
 
@@ -1228,8 +1434,9 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 - [ ] Dispute case management dengan severity-based SLA escalation matrix
 - [ ] Komunikasi internal + eksternal di sengketa
 - [ ] SLA tracking untuk KYC dan sengketa
+- [ ] **Card servicing — modul 7.18:** blokir/unblokir/reissue/PIN reset workflow, kartu hilang/rusak, supplementary card
 
-**Deliverable:** Petugas bisa proses KYC dengan document tracking dan sengketa dengan SLA severity-based.
+**Deliverable:** Petugas bisa proses KYC dengan document tracking, sengketa dengan SLA, dan kartu servicing harian.
 
 > **Catatan:** SLIK, APU-PPT, CDD/EDD (database schema + engine) dipindahkan ke Phase 2b — modul regulasi yang lebih berat secara teknis.
 
@@ -1256,9 +1463,9 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 
 ---
 
-### Phase 3 — Monitoring, Collection & CS (Weeks 11–13)
+### Phase 3 — Monitoring, Collection, Disbursement & CS (Weeks 11–13)
 
-**Goal:** Real-time monitoring + kolektibilitas + LTKM/LTKT + CS tools di mobile.
+**Goal:** Real-time monitoring + kolektibilitas + disbursement + payment exception + LTKM/LTKT + CS tools di mobile.
 
 - [ ] Live transaction feed dengan flag otomatis + LTKM/LTKT trigger rules (mobile + web)
 - [ ] Flag rules configuration termasuk threshold PPATK (web)
@@ -1266,12 +1473,16 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 - [ ] Kolektibilitas dashboard + auto-downgrade cron (mobile + web)
 - [ ] Restrukturisasi workflow + approval matrix (mobile)
 - [ ] Collection queue + follow-up tracking (mobile)
+- [ ] **Loan disbursement — modul 7.19:** lumpsum + term drawdown, pre-disbursement checklist, remaining limit tracking
+- [ ] **Payment exception — modul 7.20:** failed transaction queue, SKNBI/RTGS/BI-FAST retur workflow, auto-retur
 - [ ] LTKM/LTKT report draft generator + workflow submit (mobile + web)
 - [ ] In-app live chat — petugas di mobile, nasabah di BankSatu Mobile
 - [ ] Ticket system (mobile + web)
 - [ ] Call log (mobile)
+- [ ] **Internal fraud detection — modul 7.21:** employee monitoring rules, employee risk score dashboard, anomaly case creation
+- [ ] **Dual authorization — modul 7.22:** multi-signatory per rekening, signatory approval flow, timeout auto-cancel
 
-**Deliverable:** Petugas bisa monitor transaksi real-time, kelola kolektibilitas, generate laporan PPATK, dan layani nasabah via chat — semua dari mobile.
+**Deliverable:** Petugas bisa monitor transaksi, kelola kolektibilitas, proses pencairan kredit, handle retur kliring, generate laporan PPATK, dan layani nasabah via chat — semua dari mobile.
 
 ---
 
