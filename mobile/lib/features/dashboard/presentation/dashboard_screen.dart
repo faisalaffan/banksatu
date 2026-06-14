@@ -43,21 +43,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: BlocBuilder<DashboardBloc, DashboardState>(
+    return CupertinoPageScaffold(
+      child: BlocBuilder<DashboardBloc, DashboardState>(
           builder: (context, state) {
             if (state is DashboardLoading) {
-              return Center(
-                child: Platform.isIOS
-                    ? const CupertinoActivityIndicator(
-                        color: AppTheme.primaryBlue,
-                        radius: 14,
-                      )
-                    : const CircularProgressIndicator(
-                        color: AppTheme.primaryBlue,
-                      ),
+              return const Center(
+                child: CupertinoActivityIndicator(
+                  color: AppTheme.primaryBlue,
+                  radius: 14,
+                ),
               );
             }
 
@@ -66,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.error_outline, size: 48, color: AppTheme.errorRed),
+                    const Icon(CupertinoIcons.exclamationmark_circle, size: 48, color: AppTheme.errorRed),
                     const SizedBox(height: 16),
                     Text(
                       state.message,
@@ -74,9 +68,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
+                    CupertinoButton(
                       onPressed: () => context.read<DashboardBloc>().add(LoadDashboard()),
-                      child: const Text('Coba Lagi'),
+                      color: AppTheme.primaryBlue,
+                      borderRadius: BorderRadius.circular(12),
+                      child: const Text('Coba Lagi', style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -1003,7 +999,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 

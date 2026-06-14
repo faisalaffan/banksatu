@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:banksatu_mobile/core/config/app_config.dart';
@@ -16,7 +16,6 @@ import 'package:banksatu_mobile/features/auth/presentation/session_timeout_manag
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Init config — override via --dart-define di build command
   AppConfig.init(AppConfig.development());
 
   await initializeDateFormatting('id_ID', null);
@@ -47,30 +46,18 @@ class MyApp extends StatelessWidget {
           create: (_) => sl<FutureRailsBloc>()..add(LoadFutureRails()),
         ),
       ],
-      child: MaterialApp.router(
+      child: CupertinoApp.router(
         title: 'BankSatu',
-        theme: AppTheme.lightTheme,
+        theme: AppTheme.cupertinoTheme,
         routerConfig: appRouter,
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
-          final originalPadding = MediaQuery.of(context).padding;
           return SessionTimeoutManager(
-            child: Container(
-              color:
-                  Colors.white, // Prevents blackouts behind system status bar
-              child: Column(
-                children: [
-                  const SafeArea(bottom: false, child: SandboxBanner()),
-                  Expanded(
-                    child: MediaQuery(
-                      data: MediaQuery.of(
-                        context,
-                      ).copyWith(padding: originalPadding.copyWith(top: 0)),
-                      child: child!,
-                    ),
-                  ),
-                ],
-              ),
+            child: Column(
+              children: [
+                const SandboxBanner(),
+                Expanded(child: child!),
+              ],
             ),
           );
         },
