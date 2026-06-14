@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:simulator/features/future_rails/models/future_rails_data.dart';
+import 'package:banksatu_mobile/features/future_rails/models/future_rails_data.dart';
 
 part 'future_rails_state.freezed.dart';
 

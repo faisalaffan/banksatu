@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simulator/features/syariah/models/syariah_state_data.dart';
-import 'package:simulator/features/syariah/bloc/syariah_event.dart';
-import 'package:simulator/features/syariah/bloc/syariah_state.dart';
+import 'package:banksatu_mobile/features/syariah/models/syariah_state_data.dart';
+import 'package:banksatu_mobile/features/syariah/bloc/syariah_event.dart';
+import 'package:banksatu_mobile/features/syariah/bloc/syariah_state.dart';
 
 export 'syariah_event.dart';
 export 'syariah_state.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
-import 'package:simulator/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
 
 class WidgetQuickActionsScreen extends StatefulWidget {
    const WidgetQuickActionsScreen({Key? key}) : super(key: key);

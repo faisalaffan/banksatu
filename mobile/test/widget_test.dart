@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:simulator/main.dart';
-import 'package:simulator/core/di/service_locator.dart';
-import 'package:simulator/features/sme/presentation/sme_new_invoice_screen.dart';
-import 'package:simulator/features/auth/presentation/login_screen.dart';
+import 'package:banksatu_mobile/main.dart';
+import 'package:banksatu_mobile/core/di/service_locator.dart';
+import 'package:banksatu_mobile/features/sme/presentation/sme_new_invoice_screen.dart';
+import 'package:banksatu_mobile/features/auth/presentation/login_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:simulator/features/auth/presentation/session_timeout_manager.dart';
+import 'package:banksatu_mobile/features/auth/presentation/session_timeout_manager.dart';
 
 void main() {
   setUp(() {

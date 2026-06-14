@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:simulator/features/subscriptions/models/subscription.dart';
+import 'package:banksatu_mobile/features/subscriptions/models/subscription.dart';
 
 part 'subscription_state.freezed.dart';
 

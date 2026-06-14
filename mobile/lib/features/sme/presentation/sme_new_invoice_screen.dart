@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:simulator/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
 
 class InvoiceItem {
   String name;

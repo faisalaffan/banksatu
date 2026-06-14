@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:simulator/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
 
 class ThemeConfig {
   final String name;

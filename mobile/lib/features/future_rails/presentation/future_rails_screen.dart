@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:simulator/core/theme/app_theme.dart';
-import 'package:simulator/core/widgets/adaptive_dialog.dart';
-import 'package:simulator/features/future_rails/bloc/future_rails_bloc.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/core/widgets/adaptive_dialog.dart';
+import 'package:banksatu_mobile/features/future_rails/bloc/future_rails_bloc.dart';
 
 class FutureRailsScreen extends StatefulWidget {
   const FutureRailsScreen({Key? key}) : super(key: key);

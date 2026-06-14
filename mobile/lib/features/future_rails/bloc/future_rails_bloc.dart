@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simulator/features/future_rails/models/future_rails_data.dart';
-import 'package:simulator/features/future_rails/bloc/future_rails_event.dart';
-import 'package:simulator/features/future_rails/bloc/future_rails_state.dart';
+import 'package:banksatu_mobile/features/future_rails/models/future_rails_data.dart';
+import 'package:banksatu_mobile/features/future_rails/bloc/future_rails_event.dart';
+import 'package:banksatu_mobile/features/future_rails/bloc/future_rails_state.dart';
 
 export 'future_rails_event.dart';
 export 'future_rails_state.dart';

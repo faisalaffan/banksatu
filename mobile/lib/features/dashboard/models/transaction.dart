@@ -20,4 +20,22 @@ abstract class Transaction with _$Transaction {
 
   factory Transaction.fromJson(Map<String, dynamic> json) =>
       _$TransactionFromJson(json);
+
+  factory Transaction.fromDto(dynamic dto) {
+    return Transaction(
+      id: dto.id as String,
+      merchantName: dto.merchantName as String,
+      originalAcquirerString: dto.originalAcquirerString as String,
+      amount: (dto.amount as num).toDouble(),
+      category: dto.category as String,
+      timestamp: dto.timestamp as DateTime,
+      latitude: (dto.latitude as num).toDouble(),
+      longitude: (dto.longitude as num).toDouble(),
+      feeBreakdown: Map<String, double>.from(
+        (dto.feeBreakdown as Map).map(
+          (k, v) => MapEntry(k.toString(), (v as num).toDouble()),
+        ),
+      ),
+    );
+  }
 }

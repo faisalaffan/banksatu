@@ -1,5 +1,5 @@
-name: simulator
-description: "BankSatu mobile application."
+name: banksatu_mobile
+description: "BankSatu mobile application — consumer-facing digital banking."
 publish_to: 'none'
 
 version: 1.0.0+1

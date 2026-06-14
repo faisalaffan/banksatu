@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simulator/features/subscriptions/models/subscription.dart';
-import 'package:simulator/features/subscriptions/bloc/subscription_event.dart';
-import 'package:simulator/features/subscriptions/bloc/subscription_state.dart';
+import 'package:banksatu_mobile/features/subscriptions/models/subscription.dart';
+import 'package:banksatu_mobile/features/subscriptions/bloc/subscription_event.dart';
+import 'package:banksatu_mobile/features/subscriptions/bloc/subscription_state.dart';
 
 export 'subscription_event.dart';
 export 'subscription_state.dart';

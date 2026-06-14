@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:simulator/features/dashboard/models/transaction.dart';
+import 'package:banksatu_mobile/features/dashboard/models/transaction.dart';
 
 part 'dashboard_state.freezed.dart';
 
@@ -12,4 +12,7 @@ sealed class DashboardState with _$DashboardState {
     required List<Transaction> filteredTransactions,
     required String searchQuery,
   }) = DashboardLoaded;
+  const factory DashboardState.error({
+    required String message,
+  }) = DashboardError;
 }

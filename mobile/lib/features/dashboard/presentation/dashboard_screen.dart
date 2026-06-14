@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:simulator/core/theme/app_theme.dart';
-import 'package:simulator/core/router/app_router.dart';
-import 'package:simulator/features/dashboard/bloc/dashboard_bloc.dart';
-import 'package:simulator/features/dashboard/models/transaction.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/core/router/app_router.dart';
+import 'package:banksatu_mobile/features/dashboard/bloc/dashboard_bloc.dart';
+import 'package:banksatu_mobile/features/dashboard/models/transaction.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -58,6 +58,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     : const CircularProgressIndicator(
                         color: AppTheme.primaryBlue,
                       ),
+              );
+            }
+
+            if (state is DashboardError) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.error_outline, size: 48, color: AppTheme.errorRed),
+                    const SizedBox(height: 16),
+                    Text(
+                      state.message,
+                      style: const TextStyle(color: AppTheme.textLightGray),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => context.read<DashboardBloc>().add(LoadDashboard()),
+                      child: const Text('Coba Lagi'),
+                    ),
+                  ],
+                ),
               );
             }
 

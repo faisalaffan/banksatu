@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:simulator/core/theme/app_theme.dart';
-import 'package:simulator/core/router/app_router.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/core/router/app_router.dart';
 
 class ProgrammableMoneyVerifyScreen extends StatefulWidget {
   const ProgrammableMoneyVerifyScreen({Key? key}) : super(key: key);

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:simulator/core/theme/app_theme.dart';
-import 'package:simulator/features/syariah/bloc/syariah_bloc.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/features/syariah/bloc/syariah_bloc.dart';
 
 class SyariahScreen extends StatefulWidget {
   const SyariahScreen({Key? key}) : super(key: key);

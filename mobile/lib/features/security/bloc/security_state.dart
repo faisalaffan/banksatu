@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:simulator/features/security/models/security_settings.dart';
+import 'package:banksatu_mobile/features/security/models/security_settings.dart';
 
 part 'security_state.freezed.dart';
 

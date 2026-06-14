@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:simulator/core/di/service_locator.dart';
-import 'package:simulator/core/router/app_router.dart';
-import 'package:simulator/core/theme/app_theme.dart';
-import 'package:simulator/features/dashboard/bloc/dashboard_bloc.dart';
-import 'package:simulator/features/security/bloc/security_bloc.dart';
-import 'package:simulator/features/subscriptions/bloc/subscription_bloc.dart';
-import 'package:simulator/features/syariah/bloc/syariah_bloc.dart';
-import 'package:simulator/features/future_rails/bloc/future_rails_bloc.dart';
-import 'package:simulator/core/widgets/sandbox_banner.dart';
-import 'package:simulator/features/auth/presentation/session_timeout_manager.dart';
+import 'package:banksatu_mobile/core/config/app_config.dart';
+import 'package:banksatu_mobile/core/di/service_locator.dart';
+import 'package:banksatu_mobile/core/router/app_router.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/features/dashboard/bloc/dashboard_bloc.dart';
+import 'package:banksatu_mobile/features/security/bloc/security_bloc.dart';
+import 'package:banksatu_mobile/features/subscriptions/bloc/subscription_bloc.dart';
+import 'package:banksatu_mobile/features/syariah/bloc/syariah_bloc.dart';
+import 'package:banksatu_mobile/features/future_rails/bloc/future_rails_bloc.dart';
+import 'package:banksatu_mobile/core/widgets/sandbox_banner.dart';
+import 'package:banksatu_mobile/features/auth/presentation/session_timeout_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Init config — override via --dart-define di build command
+  AppConfig.init(AppConfig.development());
+
   await initializeDateFormatting('id_ID', null);
   setupLocator();
   runApp(const MyApp());

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:simulator/core/theme/app_theme.dart';
-import 'package:simulator/core/widgets/adaptive_dialog.dart';
-import 'package:simulator/features/subscriptions/bloc/subscription_bloc.dart';
-import 'package:simulator/features/subscriptions/models/subscription.dart';
+import 'package:banksatu_mobile/core/theme/app_theme.dart';
+import 'package:banksatu_mobile/core/widgets/adaptive_dialog.dart';
+import 'package:banksatu_mobile/features/subscriptions/bloc/subscription_bloc.dart';
+import 'package:banksatu_mobile/features/subscriptions/models/subscription.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({Key? key}) : super(key: key);

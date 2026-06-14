@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:simulator/features/syariah/models/syariah_state_data.dart';
+import 'package:banksatu_mobile/features/syariah/models/syariah_state_data.dart';
 
 part 'syariah_state.freezed.dart';
 
