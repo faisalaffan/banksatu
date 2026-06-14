@@ -1,6 +1,6 @@
 # Product Requirements Document — BankSatu OPS
 
-**Version:** 0.1.0-draft
+**Version:** 0.2.0-draft
 **Author:** Muhammad Faisal Affan
 **Status:** Draft
 **Last Updated:** 2026-06-14
@@ -38,7 +38,7 @@
 
 ## 1. Executive Summary
 
-**BankSatu OPS** adalah aplikasi internal untuk petugas dan operational staff BankSatu. Aplikasi ini menjadi backend operational hub — tempat petugas memproses pengajuan nasabah, melakukan wawancara credit assessment, meninjau KYC, menyelesaikan sengketa, dan memonitor transaksi.
+**BankSatu OPS** adalah aplikasi internal untuk petugas dan operational staff BankSatu — tersedia sebagai **mobile app (Flutter)** dan **web dashboard (React/Next.js)**. Mobile app digunakan untuk workflow sehari-hari di lapangan (wawancara nasabah, approval on-the-go, KYC review). Web dashboard digunakan untuk analisis mendalam dan reporting di kantor.
 
 BankSatu OPS adalah **companion app** untuk BankSatu Mobile (nasabah-facing). Jika BankSatu Mobile adalah tempat nasabah melakukan transaksi, BankSatu OPS adalah tempat petugas memastikan semua berjalan aman, compliant, dan efisien.
 
@@ -93,7 +93,6 @@ Jika BankSatu OPS menyediakan platform operational terintegrasi dengan wawancara
 
 - Integrasi dengan BI Checking/SLIK real-time — gunakan mock data
 - AI/ML credit scoring otomatis — assessment tetap oleh petugas, AI sebagai rekomendasi saja
-- Mobile native app untuk OPS — web-first untuk v1
 - Integrasi core banking system real — gunakan mock
 - Multi-cabang/multi-branch operational — single branch dulu
 
@@ -136,31 +135,35 @@ Jika BankSatu OPS menyediakan platform operational terintegrasi dengan wawancara
 
 ### Core Concept: Operational Command Center
 
-BankSatu OPS adalah single source of truth untuk semua aktivitas operational:
+BankSatu OPS adalah single source of truth untuk semua aktivitas operational, diakses via mobile dan web:
 
 ```
-                    ┌─────────────────────┐
-                    │   BankSatu OPS       │
-                    │   (Web App)          │
-                    └──────────┬──────────┘
-                               │
-            ┌──────────────────┼──────────────────┐
-            │                  │                  │
-     ┌──────▼──────┐   ┌──────▼──────┐   ┌──────▼──────┐
-     │  Assessment │   │  Approval   │   │   Service   │
-     │  Layer      │   │  Layer      │   │  Layer      │
-     │             │   │             │   │             │
-     │ • Interview │   │ • Workflow  │   │ • Dispute   │
-     │ • Scoring   │   │ • Review    │   │ • CS Tools   │
-     │ • Document  │   │ • Escalate  │   │ • Live Chat │
-     └──────┬──────┘   └──────┬──────┘   └──────┬──────┘
-            │                  │                  │
-            └──────────────────┼──────────────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │   BankSatu Core API  │
-                    │   (Shared Backend)   │
-                    └─────────────────────┘
+         ┌──────────────┐     ┌──────────────┐
+         │ Flutter Mobile│     │  Web Dashboard│
+         │ (Daily Ops)   │     │ (Admin/Rprt)  │
+         └──────┬───────┘     └──────┬────────┘
+                │                    │
+                └────────┬───────────┘
+                         │
+            ┌────────────▼────────────┐
+            │     BankSatu OPS API     │
+            └────────────┬────────────┘
+                         │
+            ┌────────────┼────────────┐
+            │            │            │
+     ┌──────▼──────┐ ┌──▼────┐ ┌─────▼──────┐
+     │  Assessment │ │Apprvl │ │  Service   │
+     │  • Interview│ │• Wkflw│ │ • Dispute  │
+     │  • Scoring  │ │• Rvw  │ │ • CS Tools │
+     │  • Document │ │• Esc  │ │ • LiveChat │
+     └──────┬──────┘ └──┬────┘ └─────┬──────┘
+            │            │            │
+            └────────┬───┴────────────┘
+                     │
+          ┌──────────▼──────────┐
+          │   BankSatu Core API  │
+          │   (Shared Backend)   │
+          └─────────────────────┘
 ```
 
 ### Key Design Principles
@@ -180,8 +183,8 @@ BankSatu OPS adalah single source of truth untuk semua aktivitas operational:
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                   Client Layer                           │
-│   Web App (React/Next.js) - Desktop First               │
-│   Mobile-friendly untuk supervisor on-call              │
+│   Flutter Mobile (iOS + Android) — Daily Ops            │
+│   React/Next.js Web — Admin & Reporting                 │
 └──────────────────────────────┬──────────────────────────┘
                                │ HTTPS + mTLS + RBAC
 ┌──────────────────────────────▼──────────────────────────┐
@@ -558,57 +561,78 @@ Idempotency-Key: <unique_key>
 
 ---
 
-## 9. Web App
+## 9. Mobile App & Web Dashboard
 
-### Platform
+### Mobile App (Flutter)
 
-- **Framework:** React 19 + Next.js 16 (App Router)
-- **Target:** Desktop (utama), Tablet (supervisor on-call)
-- **Browser:** Chrome 120+, Edge 120+, Safari 18+
+**Framework:** Flutter 3.x (Dart) — share codebase dengan BankSatu Mobile.
 
-### Navigation Structure
+**Target:** iOS 15+, Android 8+
 
-| Section | Content |
-| ------- | ------- |
-| Dashboard | Ringkasan, task queue, SLA timer |
-| Nasabah | Search, profil 360°, history |
-| Pengajuan | Wawancara baru, draft, queue |
-| Approval | Queue approval, history |
-| KYC | Review queue, verifikasi |
-| Sengketa | Case management, timeline |
-| Monitoring | Live feed, flag, alert |
-| Laporan | Report, audit trail |
-| Admin | User, role, konfigurasi |
+**Digunakan untuk:** workflow harian di lapangan — petugas wawancara, supervisor approval on-the-go, KYC officer review dari tablet.
 
-### Key UX Principles
+#### Navigation Structure (Mobile)
 
-1. **Power user efficiency** — keyboard shortcuts, bulk actions, advanced filter
-2. **Data density** — tampilkan maksimal informasi tanpa scroll berlebihan
-3. **Contextual actions** — tindakan selalu tersedia tanpa pindah layar
-4. **Real-time updates** — data selalu fresh tanpa manual refresh
-5. **Dark mode default** — OPS sering dipakai dalam ruangan dengan pencahayaan rendah
+Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 
-### Key Screens
+| Tab | Route | Content |
+| --- | ----- | ------- |
+| Dashboard | `/ops` | Task queue, SLA timer, quick stats |
+| Nasabah | `/ops/nasabah` | Search, profil 360° |
+| Pengajuan | `/ops/pengajuan` | Wawancara, approval queue |
+| Monitoring | `/ops/monitoring` | Live feed, flag, sengketa |
+| Lainnya | `/ops/lainnya` | Report, audit, admin |
+
+#### Key Screens (Mobile)
 
 | Screen | Route | Deskripsi |
 | ------ | ----- | --------- |
-| OpsDashboard | `/ops` | Dashboard utama |
-| NasabahSearch | `/ops/nasabah` | Search & list nasabah |
-| NasabahProfile | `/ops/nasabah/:id` | Profil 360° nasabah |
-| WawancaraBaru | `/ops/nasabah/:id/wawancara/baru` | Form wawancara baru |
-| WawancaraDetail | `/ops/nasabah/:id/wawancara/:wid` | Detail hasil wawancara |
-| WawancaraDraft | `/ops/wawancara/draft` | Draft wawancara |
-| ApprovalQueue | `/ops/approval` | Queue approval |
-| ApprovalDetail | `/ops/approval/:id` | Detail pengajuan + approve/reject |
-| KYCQueue | `/ops/kyc` | Queue review KYC |
-| KYCDetail | `/ops/kyc/:id` | Detail KYC side-by-side |
-| SengketaList | `/ops/sengketa` | List sengketa |
-| SengketaDetail | `/ops/sengketa/:id` | Detail sengketa + timeline |
-| TxMonitoring | `/ops/monitoring` | Live transaction feed |
-| AuditLog | `/ops/audit` | Audit trail |
-| Reports | `/ops/reports` | Laporan operasional |
-| AdminUsers | `/ops/admin/users` | Manajemen user |
-| AdminRoles | `/ops/admin/roles` | Manajemen role |
+| OpsDashboardScreen | `/ops` | Ringkasan + task queue personal |
+| NasabahSearchScreen | `/ops/nasabah` | Search & list nasabah |
+| NasabahProfileScreen | `/ops/nasabah/:id` | Profil 360° dengan tab navigasi |
+| WawancaraBaruScreen | `/ops/nasabah/:id/wawancara/baru` | Form wawancara multi-section |
+| WawancaraDetailScreen | `/ops/nasabah/:id/wawancara/:wid` | Detail hasil + rekomendasi |
+| WawancaraDraftScreen | `/ops/wawancara/draft` | Draft wawancara tersimpan |
+| ApprovalQueueScreen | `/ops/approval` | Queue approval personal |
+| ApprovalDetailScreen | `/ops/approval/:id` | Detail + approve/reject/revisi |
+| KYCQueueScreen | `/ops/kyc` | Queue review KYC |
+| KYCDetailScreen | `/ops/kyc/:id` | Side-by-side KTP vs selfie |
+| SengketaListScreen | `/ops/sengketa` | List sengketa aktif |
+| SengketaDetailScreen | `/ops/sengketa/:id` | Timeline + case management |
+| TxMonitoringScreen | `/ops/monitoring` | Live transaction feed |
+| AuditLogScreen | `/ops/audit` | Audit trail viewer |
+| ProfileScreen | `/ops/profil` | Profil petugas + settings |
+| AdminUsersScreen | `/ops/admin/users` | Manajemen user (admin only) |
+
+### Web Dashboard (React/Next.js)
+
+**Framework:** React 19 + Next.js 16 (App Router)
+
+**Target:** Desktop — Chrome 120+, Edge 120+
+
+**Digunakan untuk:** analisis mendalam, reporting, bulk operations, admin konfigurasi.
+
+#### Key Screens (Web)
+
+| Screen | Route | Deskripsi |
+| ------ | ----- | --------- |
+| ReportsDashboard | `/ops/reports` | Laporan operasional + chart |
+| CreditPortfolio | `/ops/reports/credit` | Portfolio kredit + segmentasi |
+| AdminRoles | `/ops/admin/roles` | Role & permission config |
+| SystemConfig | `/ops/admin/config` | Konfigurasi sistem (admin) |
+
+### Key UX Principles
+
+**Mobile:**
+1. **Offline-capable** — form wawancara bisa diisi offline, sync saat online
+2. **Thumb-friendly** — semua tindakan utama dalam jangkauan ibu jari
+3. **Biometric confirm** — tindakan kritis (approve, reject) dikonfirmasi sidik jari
+4. **Quick scan** — data nasabah bisa di-scan dari KTP fisik via kamera
+
+**Web:**
+1. **Power user efficiency** — keyboard shortcuts, bulk actions, advanced filter
+2. **Data density** — maksimal informasi tanpa scroll berlebihan
+3. **Dark mode default** — ruangan operasional biasanya low-light
 
 ---
 
@@ -647,12 +671,13 @@ Idempotency-Key: <unique_key>
 
 | Layer | Technology | Rationale |
 | ----- | ---------- | --------- |
-| Frontend | React 19 + Next.js 16 (App Router) | SSR opsional, RSC untuk data berat |
-| UI Components | shadcn/ui + Tailwind CSS 4 | Consistent, accessible |
-| State | TanStack Query + Zustand | Server state + client state |
-| Tables | TanStack Table | Virtual scroll untuk 10K+ baris |
-| Forms | React Hook Form + Zod | Validasi terstruktur |
-| Charts | Recharts | Operational reports |
+| Mobile | Flutter 3.x + Dart | Share codebase dengan BankSatu Mobile |
+| Frontend Web | React 19 + Next.js 16 (App Router) | SSR opsional, RSC untuk data berat |
+| UI Components (Web) | shadcn/ui + Tailwind CSS 4 | Consistent, accessible |
+| State (Web) | TanStack Query + Zustand | Server state + client state |
+| Tables (Web) | TanStack Table | Virtual scroll untuk 10K+ baris |
+| Forms (Web) | React Hook Form + Zod | Validasi terstruktur |
+| Charts (Web) | Recharts | Operational reports |
 | API | Go (net/http + chi) | Shared dengan BankSatu |
 | Database | PostgreSQL (shared) + Redis | ACID + cache/session |
 | Real-time | WebSocket (shared) | Live feed, notif |
@@ -662,20 +687,21 @@ Idempotency-Key: <unique_key>
 
 ## 12. Build Phases & Milestones
 
-### Phase 1 — Core Operations (Weeks 1–3)
+### Phase 1 — Core Operations (Weeks 1–4)
 
-**Goal:** Search nasabah + wawancara + approval working end-to-end di Web.
+**Goal:** Search nasabah + wawancara + approval working end-to-end di Flutter mobile + Web.
 
-- [ ] Next.js project setup dengan shadcn/ui
-- [ ] RBAC middleware (role verification)
-- [ ] Nasabah search & 360° profile view
-- [ ] Form wawancara multi-section dengan auto-calculation
-- [ ] Approval workflow 2-level (Supervisor → Manager)
+- [ ] Flutter OPS project setup (share codebase dengan BankSatu Mobile)
+- [ ] Next.js project setup dengan shadcn/ui (web dashboard)
+- [ ] RBAC middleware (role verification) di API
+- [ ] Nasabah search & 360° profile view (mobile + web)
+- [ ] Form wawancara multi-section dengan auto-calculation (mobile)
+- [ ] Approval workflow 2-level (Supervisor → Manager) — mobile + web
 - [ ] Backend API OPS dengan mock data nasabah
 - [ ] Audit trail untuk semua tindakan
 - [ ] Shared PostgreSQL schema extension untuk OPS
 
-**Deliverable:** Petugas bisa cari nasabah, isi form wawancara, submit, dan supervisor bisa approve/reject — semua tercatat di audit.
+**Deliverable:** Petugas bisa cari nasabah di mobile, isi form wawancara, submit, dan supervisor bisa approve/reject dari mobile atau web — semua tercatat di audit.
 
 ---
 
@@ -693,48 +719,50 @@ Idempotency-Key: <unique_key>
 
 ---
 
-### Phase 3 — Monitoring & CS (Weeks 6–7)
+### Phase 3 — Monitoring & CS (Weeks 7–8)
 
-**Goal:** Real-time monitoring + customer service tools.
+**Goal:** Real-time monitoring + customer service tools di mobile.
 
-- [ ] Live transaction feed dengan flag otomatis
-- [ ] Flag rules configuration
-- [ ] Bulk action: freeze, blokir
-- [ ] In-app live chat (petugas ↔ nasabah)
-- [ ] Ticket system
-- [ ] Call log
+- [ ] Live transaction feed dengan flag otomatis (mobile + web)
+- [ ] Flag rules configuration (web)
+- [ ] Bulk action: freeze, blokir (mobile)
+- [ ] In-app live chat — petugas di mobile, nasabah di BankSatu Mobile
+- [ ] Ticket system (mobile + web)
+- [ ] Call log (mobile)
 
-**Deliverable:** Petugas bisa monitor transaksi real-time dan layani nasabah via chat.
+**Deliverable:** Petugas bisa monitor transaksi real-time dari mobile dan layani nasabah via chat.
 
 ---
 
-### Phase 4 — Reporting & Admin (Weeks 8–9)
+### Phase 4 — Reporting & Admin (Weeks 9–10)
 
-**Goal:** Reporting + user management.
+**Goal:** Web reporting dashboard + user management.
 
-- [ ] Audit trail viewer dengan filter granular
-- [ ] Operational reports (pengajuan, approval, dispute, KYC)
-- [ ] Credit portfolio dashboard
-- [ ] Export PDF/CSV
-- [ ] User management + role assignment
+- [ ] Audit trail viewer dengan filter granular (web)
+- [ ] Operational reports: pengajuan, approval, dispute, KYC (web)
+- [ ] Credit portfolio dashboard (web)
+- [ ] Export PDF/CSV (web)
+- [ ] User management + role assignment (web)
 - [ ] Scheduled report via email
 
-**Deliverable:** Manajemen bisa lihat laporan dan kelola user.
+**Deliverable:** Manajemen bisa lihat laporan lengkap di web dashboard dan kelola user.
 
 ---
 
-### Phase 5 — Polish (Week 10)
+### Phase 5 — Polish (Week 11–12)
 
-**Goal:** Polish, performance, security hardening.
+**Goal:** Polish, performance, security hardening — mobile + web.
 
-- [ ] Keyboard shortcuts & power user features
-- [ ] Bulk approval untuk pengajuan rutin
-- [ ] Advanced filter di semua list view
+- [ ] Mobile offline mode (sync wawancara draft saat online)
+- [ ] KTP scanner via kamera (mobile)
+- [ ] Keyboard shortcuts & power user features (web)
+- [ ] Bulk approval untuk pengajuan rutin (web)
+- [ ] Advanced filter di semua list view (mobile + web)
 - [ ] Performance optimization (list virtual scroll, data caching)
 - [ ] Security audit & penetration testing
 - [ ] Load testing (50+ petugas concurrent)
 
-**Deliverable:** App production-ready, fast, secure.
+**Deliverable:** App mobile + web production-ready, fast, secure.
 
 ---
 
