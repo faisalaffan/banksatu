@@ -1,6 +1,6 @@
 # Product Requirements Document — BankSatu OPS
 
-**Version:** 0.5.0-draft
+**Version:** 0.5.1-draft
 **Author:** Muhammad Faisal Affan
 **Status:** Draft
 **Last Updated:** 2026-06-14
@@ -1203,6 +1203,38 @@ PT Maju Bersama (Nasabah)
 - Timeout auto-cancel < 1 menit setelah deadline
 - Override oleh petugas wajib audit trail + justifikasi tertulis
 
+---
+
+### Cross-Module Data Flow
+
+Untuk memastikan konsistensi antar modul, berikut aliran data kunci yang harus terhubung:
+
+| Flow | Source → Target | Data |
+| ---- | --------------- | ---- |
+| SLIK → Scoring | 7.11 → 7.3-G | Kolektibilitas SLIK otomatis masuk ke 15% bobot scoring kredit. Jika SLIK unavailable (mock), scoring pakai default Lancar=5. |
+| Screening → CDD/EDD | 7.12 → 7.13 | Hasil APU-PPT screening (DTTOT, sanctions, PEP, adverse media) auto-trigger risk-rating upgrade. DTTOT hit → Prohibited (X). PEP hit → High Risk. |
+| KYC → CDD/EDD | 7.5 → 7.13 | Dokumen KYC tidak lengkap → maksimum Medium Risk. KTP expired → flag untuk re-KYC sebelum approval bisa dilanjutkan. |
+| CDD/EDD → Approval | 7.13 → 7.4 | Risk rating menentukan minimum approval level. Low Risk → Supervisor cukup. High Risk → wajib Manager + Direksi. Prohibited → auto-reject. |
+| BO → APU-PPT | 7.16 → 7.12 | Setiap BO baru/berubah otomatis di-screen terhadap DTTOT, sanctions, adverse media. BO yang juga PEP → flag ke CDD/EDD. |
+| Wawancara → Approval | 7.3 → 7.4 | Hasil wawancara + skor + rekomendasi limit → masuk ke queue approval. Override petugas → flag khusus di approval. |
+| Approval → Disbursement | 7.4 → 7.19 | Setelah approval final, auto-create disbursement request. Pre-disbursement checklist harus complete sebelum dana cair. |
+| Dormant → APU-PPT | 7.14 → 7.12 | Rekening dormant yang tiba-tiba transaksi besar → auto-flag ke compliance untuk screening ulang APU-PPT. |
+| Flag → LTKM/LTKT | 7.7 → 7.15 | Flag merah (fraud, smurfing, high-risk country, unknown source) → auto-create LTKM/LTKT draft. |
+| Flag → Sengketa | 7.7 → 7.6 | Flag kuning/merah dari monitoring → bisa dikonversi jadi case sengketa oleh petugas. |
+| Card Fraud → Monitoring | 7.18 → 7.7 | Kartu blokir/reissue karena fraud → auto-flag di monitoring untuk tracking transaksi terkait. |
+| Employee Flag → Compliance | 7.21 → 7.12 | Flag internal fraud (VIP lookup, self-approval) → auto-create case untuk Compliance Reviewer. |
+| Dual Auth → Transaction | 7.22 → 7.7 | Transaksi korporat pending multi-signatory → masuk monitoring sebagai "Pending Approval" dengan timeout tracker. |
+
+**Aturan umum integrasi:**
+- Setiap perubahan status di modul upstream HARUS trigger event yang bisa dikonsumsi modul downstream (Event-Driven pattern)
+- Semua data mengalir secara immutable — setiap perubahan mencatat versi baru, tidak overwrite
+- Jika data source unavailable (mock/SLIK down), sistem harus graceful degrade dengan fallback default, bukan gagal total
+- Setiap cross-module trigger tercatat di audit trail dengan correlation ID
+
+---
+
+## 8. API Surface
+
 ### Base URL
 
 ```
@@ -1561,8 +1593,8 @@ Aplikasi menggunakan `go_router` dengan `StatefulShellRoute` untuk 5 tab:
 | OQ8 | GoAML PPATK: apakah API pelaporan elektronik tersedia untuk integrasi? | Faisal | Phase 3 |
 | OQ9 | Multi-tenant: satu instance untuk semua cabang atau per cabang? | Faisal | Phase 3 |
 | OQ10 | Apache 2.0 atau MIT untuk lisensi OPS? (BankSatu Mobile mungkin beda lisensi) | Faisal | Sebelum public |
-| OQ11 | Kapan APU-PPT screening dan SLIK akan jadi mandatory requirement untuk claim "production-ready"? Tanpa ini, PRD ini adalah compliance-ready architecture, bukan aplikasi siap produksi bank berlisensi. | Faisal | Phase 1 start |
-| OQ12 | Scope v1: apakah v1 targetnya "prototype dengan compliance UI/DB siap" atau "aplikasi operasional dengan mock regulatory data"? | Faisal | Phase 1 start |
+| OQ11 | Kapan APU-PPT screening dan SLIK akan jadi mandatory requirement untuk claim "production-ready"? | Faisal | **Resolved** — v1 = demo/pitch dengan compliance UI/DB ready (lihat MVP Scope). v2 = integrasi API eksternal + production-ready. |
+| OQ12 | Scope v1: apakah v1 targetnya "prototype dengan compliance UI/DB siap" atau "aplikasi operasional dengan mock regulatory data"? | Faisal | **Resolved** — v1 = demo/pitch (P0+P1 modules operational dengan mock data, P2 = compliance UI/DB ready tanpa integrasi API eksternal). Lihat MVP Scope Definition di Section 3. |
 
 ---
 
