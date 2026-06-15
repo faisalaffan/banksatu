@@ -4,7 +4,7 @@ part 'transaction_dto.freezed.dart';
 part 'transaction_dto.g.dart';
 
 @freezed
-class TransactionDto with _$TransactionDto {
+abstract class TransactionDto with _$TransactionDto {
   const factory TransactionDto({
     required String id,
     required String merchantName,

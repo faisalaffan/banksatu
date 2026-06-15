@@ -20,9 +20,10 @@ class _SandboxBannerState extends State<SandboxBanner>
       duration: const Duration(milliseconds: 1800),
     )..repeat(reverse: false);
 
-    _pulseAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeOut),
-    );
+    _pulseAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _pulseController, curve: Curves.easeOut));
   }
 
   @override
@@ -34,7 +35,6 @@ class _SandboxBannerState extends State<SandboxBanner>
   @override
   Widget build(BuildContext context) {
     const orangeColor = Color(0xFFFF9500);
-    const yellowColor = Color(0xFFFFCC00);
 
     return Container(
       height: 28,
@@ -45,9 +45,7 @@ class _SandboxBannerState extends State<SandboxBanner>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        border: Border(
-          bottom: BorderSide(color: Color(0x40FF9500), width: 1),
-        ),
+        border: Border(bottom: BorderSide(color: Color(0x40FF9500), width: 1)),
       ),
       alignment: Alignment.center,
       child: Row(
@@ -72,9 +70,13 @@ class _SandboxBannerState extends State<SandboxBanner>
                   );
                 },
               ),
-              const CircleAvatar(
-                radius: 3,
-                backgroundColor: orangeColor,
+              Container(
+                width: 6,
+                height: 6,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: orangeColor,
+                ),
               ),
             ],
           ),

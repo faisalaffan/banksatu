@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show DefaultMaterialLocalizations;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:banksatu_mobile/core/config/app_config.dart';
@@ -50,6 +51,11 @@ class MyApp extends StatelessWidget {
         title: 'BankSatu',
         theme: AppTheme.cupertinoTheme,
         routerConfig: appRouter,
+        localizationsDelegates: [
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
           return SessionTimeoutManager(

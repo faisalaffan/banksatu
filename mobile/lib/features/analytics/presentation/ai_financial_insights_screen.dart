@@ -304,10 +304,11 @@ class _AIFinancialInsightsScreenState extends State<AIFinancialInsightsScreen> {
                  );
                },
              ),
-             const SizedBox(height: 40),
-           ],
-         ),
-       ),
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      );
     }
 
     Widget _buildInsightActionCard(

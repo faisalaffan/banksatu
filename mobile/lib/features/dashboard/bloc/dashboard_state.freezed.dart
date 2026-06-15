@@ -55,12 +55,13 @@ extension DashboardStatePatterns on DashboardState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DashboardLoading value)?  loading,TResult Function( DashboardLoaded value)?  loaded,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DashboardLoading value)?  loading,TResult Function( DashboardLoaded value)?  loaded,TResult Function( DashboardError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case DashboardLoading() when loading != null:
 return loading(_that);case DashboardLoaded() when loaded != null:
-return loaded(_that);case _:
+return loaded(_that);case DashboardError() when error != null:
+return error(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return loaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DashboardLoading value)  loading,required TResult Function( DashboardLoaded value)  loaded,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DashboardLoading value)  loading,required TResult Function( DashboardLoaded value)  loaded,required TResult Function( DashboardError value)  error,}){
 final _that = this;
 switch (_that) {
 case DashboardLoading():
 return loading(_that);case DashboardLoaded():
-return loaded(_that);}
+return loaded(_that);case DashboardError():
+return error(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -97,12 +99,13 @@ return loaded(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DashboardLoading value)?  loading,TResult? Function( DashboardLoaded value)?  loaded,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DashboardLoading value)?  loading,TResult? Function( DashboardLoaded value)?  loaded,TResult? Function( DashboardError value)?  error,}){
 final _that = this;
 switch (_that) {
 case DashboardLoading() when loading != null:
 return loading(_that);case DashboardLoaded() when loaded != null:
-return loaded(_that);case _:
+return loaded(_that);case DashboardError() when error != null:
+return error(_that);case _:
   return null;
 
 }
@@ -119,11 +122,12 @@ return loaded(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( double balance,  List<Transaction> transactions,  List<Transaction> filteredTransactions,  String searchQuery)?  loaded,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( double balance,  List<Transaction> transactions,  List<Transaction> filteredTransactions,  String searchQuery)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case DashboardLoading() when loading != null:
 return loading();case DashboardLoaded() when loaded != null:
-return loaded(_that.balance,_that.transactions,_that.filteredTransactions,_that.searchQuery);case _:
+return loaded(_that.balance,_that.transactions,_that.filteredTransactions,_that.searchQuery);case DashboardError() when error != null:
+return error(_that.message);case _:
   return orElse();
 
 }
@@ -141,11 +145,12 @@ return loaded(_that.balance,_that.transactions,_that.filteredTransactions,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( double balance,  List<Transaction> transactions,  List<Transaction> filteredTransactions,  String searchQuery)  loaded,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( double balance,  List<Transaction> transactions,  List<Transaction> filteredTransactions,  String searchQuery)  loaded,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case DashboardLoading():
 return loading();case DashboardLoaded():
-return loaded(_that.balance,_that.transactions,_that.filteredTransactions,_that.searchQuery);}
+return loaded(_that.balance,_that.transactions,_that.filteredTransactions,_that.searchQuery);case DashboardError():
+return error(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -159,11 +164,12 @@ return loaded(_that.balance,_that.transactions,_that.filteredTransactions,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( double balance,  List<Transaction> transactions,  List<Transaction> filteredTransactions,  String searchQuery)?  loaded,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( double balance,  List<Transaction> transactions,  List<Transaction> filteredTransactions,  String searchQuery)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case DashboardLoading() when loading != null:
 return loading();case DashboardLoaded() when loaded != null:
-return loaded(_that.balance,_that.transactions,_that.filteredTransactions,_that.searchQuery);case _:
+return loaded(_that.balance,_that.transactions,_that.filteredTransactions,_that.searchQuery);case DashboardError() when error != null:
+return error(_that.message);case _:
   return null;
 
 }
@@ -280,6 +286,72 @@ balance: null == balance ? _self.balance : balance // ignore: cast_nullable_to_n
 as double,transactions: null == transactions ? _self._transactions : transactions // ignore: cast_nullable_to_non_nullable
 as List<Transaction>,filteredTransactions: null == filteredTransactions ? _self._filteredTransactions : filteredTransactions // ignore: cast_nullable_to_non_nullable
 as List<Transaction>,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class DashboardError implements DashboardState {
+  const DashboardError({required this.message});
+  
+
+ final  String message;
+
+/// Create a copy of DashboardState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DashboardErrorCopyWith<DashboardError> get copyWith => _$DashboardErrorCopyWithImpl<DashboardError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DashboardError&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
+
+@override
+String toString() {
+  return 'DashboardState.error(message: $message)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DashboardErrorCopyWith<$Res> implements $DashboardStateCopyWith<$Res> {
+  factory $DashboardErrorCopyWith(DashboardError value, $Res Function(DashboardError) _then) = _$DashboardErrorCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$DashboardErrorCopyWithImpl<$Res>
+    implements $DashboardErrorCopyWith<$Res> {
+  _$DashboardErrorCopyWithImpl(this._self, this._then);
+
+  final DashboardError _self;
+  final $Res Function(DashboardError) _then;
+
+/// Create a copy of DashboardState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(DashboardError(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

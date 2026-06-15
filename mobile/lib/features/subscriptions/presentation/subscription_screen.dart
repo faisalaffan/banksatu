@@ -8,6 +8,7 @@ import 'package:banksatu_mobile/core/theme/app_theme.dart';
 import 'package:banksatu_mobile/core/widgets/adaptive_dialog.dart';
 import 'package:banksatu_mobile/features/subscriptions/bloc/subscription_bloc.dart';
 import 'package:banksatu_mobile/features/subscriptions/models/subscription.dart';
+import 'package:banksatu_mobile/core/router/app_router.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({Key? key}) : super(key: key);
@@ -49,7 +50,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               color: AppTheme.primaryBlue,
             ),
             tooltip: 'Tagihan Berulang',
-            onPressed: () => const RecurringPaymentsRoute().push(context),
+            onPressed: () => RecurringPaymentsRoute().push(context),
           ),
         ],
       ),

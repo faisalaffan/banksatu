@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Colors;
+import 'package:flutter/cupertino.dart' show CupertinoThemeData, CupertinoTextThemeData;
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
@@ -21,6 +21,27 @@ class AppTheme {
 
   static const Color errorRed = Color(0xFFBA1A1A);
   static const Color warningAmber = Color(0xFF815000);
+
+  // Material Theme
+  static final ThemeData lightTheme = ThemeData(
+    primaryColor: primaryBlue,
+    scaffoldBackgroundColor: background,
+    colorScheme: const ColorScheme.light(
+      primary: primaryBlue,
+      secondary: shariaGreen,
+      error: errorRed,
+    ),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(fontFamily: 'Inter'),
+      bodyMedium: TextStyle(fontFamily: 'Inter'),
+      labelMedium: TextStyle(fontFamily: 'Inter'),
+    ),
+    cardTheme: CardThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+    ),
+  );
 
   // Cupertino Theme
   static final CupertinoThemeData cupertinoTheme = CupertinoThemeData(
@@ -68,4 +89,31 @@ class AppTheme {
   static const double radiusLg = 12;
   static const double radiusXl = 16;
   static const double radiusFull = 9999;
+
+  // Shared Shadows
+  static final List<BoxShadow> premiumShadow = [
+    BoxShadow(
+      color: const Color(0xFF0A0F1D).withOpacity(0.04),
+      blurRadius: 16,
+      offset: const Offset(0, 8),
+    ),
+    BoxShadow(
+      color: const Color(0xFF0A0F1D).withOpacity(0.02),
+      blurRadius: 4,
+      offset: const Offset(0, 2),
+    ),
+  ];
+
+  static final List<BoxShadow> floatingShadow = [
+    BoxShadow(
+      color: const Color(0xFF0A0F1D).withOpacity(0.08),
+      blurRadius: 24,
+      offset: const Offset(0, 12),
+    ),
+    BoxShadow(
+      color: const Color(0xFF0A0F1D).withOpacity(0.03),
+      blurRadius: 8,
+      offset: const Offset(0, 4),
+    ),
+  ];
 }

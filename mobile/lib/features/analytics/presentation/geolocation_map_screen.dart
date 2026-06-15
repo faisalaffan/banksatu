@@ -48,7 +48,9 @@ class GeolocationMapScreen extends StatelessWidget {
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 6),
                         itemCount: 48,
                         itemBuilder: (context, index) => Container(
-                          decoration: Border.all(color: AppTheme.primaryBlue),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppTheme.primaryBlue),
+                          ),
                         ),
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Colors;
+import 'package:flutter/material.dart'
+    show Colors, CircularProgressIndicator, ElevatedButton, TextField, InputDecoration, OutlineInputBorder, Icons;
 
 /// Adaptive page scaffold — Cupertino for iOS, Material for Android.
 class AdaptiveScaffold extends StatelessWidget {

@@ -80,7 +80,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }
 
             if (state is DashboardLoaded) {
-              return CustomScrollView(
+              return Material(
+                type: MaterialType.transparency,
+                child: CustomScrollView(
                 slivers: [
                   // App Bar / Premium Greeting
                   SliverPadding(
@@ -556,7 +558,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Expanded(
                                 child: _buildServiceCard(
                                   icon: Platform.isIOS
-                                      ? CupertinoIcons.trending_up
+                                      ? CupertinoIcons.graph_square
                                       : Icons.trending_up,
                                   label: 'Investasi',
                                   onTap: () => const InvestRoute().push(context),
@@ -566,7 +568,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Expanded(
                                 child: _buildServiceCard(
                                   icon: Platform.isIOS
-                                      ? CupertinoIcons.pie_chart
+                                      ? CupertinoIcons.chart_pie_fill
                                       : Icons.pie_chart_outline,
                                   label: 'Portofolio',
                                   onTap: () => const PortfolioRoute().push(context),
@@ -773,15 +775,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   // Bottom padding spacer to avoid persistent floating navigation bar clipping
                   const SliverToBoxAdapter(child: SizedBox(height: 120)),
                 ],
-              );
-            }
+              ),
+            );
+          }
 
             return const Center(child: Text('Terjadi kesalahan fatal.'));
           },
         ),
-      ),
-    );
-  }
+      );
+    }
 
   Widget _buildBalanceAction({
     required IconData icon,
@@ -908,97 +910,101 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-      child: InkWell(
-        onTap: () {
-          // Type-safe routing to Transaction Details using GoRouter Builder
-          TransactionDetailRoute(id: tx.id).go(context);
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppTheme.surfaceCard,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
-            boxShadow: AppTheme.premiumShadow,
-          ),
-          child: Row(
-            children: [
-              // Stylized Category Icon Container
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: isNegative
-                      ? AppTheme.primaryBlue.withOpacity(0.06)
-                      : AppTheme.shariaGreen.withOpacity(0.06),
-                  borderRadius: BorderRadius.circular(14),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            // Type-safe routing to Transaction Details using GoRouter Builder
+            TransactionDetailRoute(id: tx.id).go(context);
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceCard,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFE8EEFF), width: 1),
+              boxShadow: AppTheme.premiumShadow,
+            ),
+            child: Row(
+              children: [
+                // Stylized Category Icon Container
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isNegative
+                        ? AppTheme.primaryBlue.withOpacity(0.06)
+                        : AppTheme.shariaGreen.withOpacity(0.06),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    _getCategoryIcon(tx.category),
+                    color: isNegative
+                        ? AppTheme.primaryBlue
+                        : AppTheme.shariaGreen,
+                    size: 20,
+                  ),
                 ),
-                child: Icon(
-                  _getCategoryIcon(tx.category),
-                  color: isNegative
-                      ? AppTheme.primaryBlue
-                      : AppTheme.shariaGreen,
-                  size: 20,
+                const SizedBox(width: 16),
+                // Translated Human-Readable name & Acquirer String
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        tx.merchantName,
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textDark,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        tx.originalAcquirerString,
+                        style: GoogleFonts.jetBrainsMono(
+                          fontSize: 10,
+                          color: AppTheme.textLightGray,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              // Translated Human-Readable name & Acquirer String
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(width: 8),
+                // Amount (Salary Green / Spending Neutral)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      tx.merchantName,
+                      '${isNegative ? "" : "+"}${_formatCurrency(tx.amount)}',
                       style: GoogleFonts.inter(
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.textDark,
+                        fontWeight: FontWeight.w700,
+                        color: isNegative
+                            ? AppTheme.textDark
+                            : AppTheme.shariaGreen,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      tx.originalAcquirerString,
-                      style: GoogleFonts.jetBrainsMono(
+                      _formatTime(tx.timestamp),
+                      style: GoogleFonts.inter(
                         fontSize: 10,
                         color: AppTheme.textLightGray,
-                        fontWeight: FontWeight.w500,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(width: 8),
-              // Amount (Salary Green / Spending Neutral)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '${isNegative ? "" : "+"}${_formatCurrency(tx.amount)}',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: isNegative
-                          ? AppTheme.textDark
-                          : AppTheme.shariaGreen,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    _formatTime(tx.timestamp),
-                    style: GoogleFonts.inter(
-                      fontSize: 10,
-                      color: AppTheme.textLightGray,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+      ),
     );
   }
 

@@ -1,6 +1,8 @@
 part of 'accessibility_bloc.dart';
 
-sealed class AccessibilityEvent {}
+sealed class AccessibilityEvent {
+  const AccessibilityEvent();
+}
 
 class LoadAccessibility extends AccessibilityEvent {}
 

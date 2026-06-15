@@ -39,8 +39,8 @@ void main() {
     ); // allow page transition to complete
 
     // 5. We should be on KYCIdentityScreen. Verify "Ambil Foto ID" or similar text/button is present.
-    expect(find.byType(ElevatedButton), findsOneWidget);
-    await tester.tap(find.byType(ElevatedButton));
+    expect(find.text('Open Camera to Capture'), findsOneWidget);
+    await tester.tap(find.text('Open Camera to Capture'));
     await tester.pump();
     await tester.pump(
       const Duration(milliseconds: 500),
